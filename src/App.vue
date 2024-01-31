@@ -1,12 +1,22 @@
 <template>
+  <img src="./assets/WW2.png" alt="logo" />
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+
   </nav>
-  <router-view/>
+  <nav>
+    <router-link to="/">Accueil</router-link> |
+    <router-link to="/produits">Produits</router-link>
+  </nav>
+  <router-view />
 </template>
 
+
 <style lang="scss">
+img {
+  width: 100px;
+  height: 100px;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
