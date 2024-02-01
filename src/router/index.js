@@ -3,6 +3,7 @@ import MainPage from '../views/MainPage.vue'
 import ProductList from '../views/ProductList.vue'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
+import ProductDetails from '../views/ProductDetails.vue'
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/connexion',
     name: 'connexion',
     component: LoginView
+  },
+  {
+    path: '/produits-details/:id',
+    name: 'produits-details',
+    component: ProductDetails
   },
 ]
 
