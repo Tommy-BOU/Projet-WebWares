@@ -19,6 +19,7 @@
     </div>
   </div>
   <router-view />
+ 
 </template>
 
 
@@ -60,6 +61,8 @@ img {
   width: auto;
   height: 100%;
 }
+
+
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
