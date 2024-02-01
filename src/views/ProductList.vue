@@ -126,7 +126,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
 .products-section {
   margin-top: 50px;

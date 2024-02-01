@@ -197,7 +197,7 @@ export default createStore({
       { id: 4, name: 'Objets de décorations' }
     ],
     // Etat global -> propriété de données partagées par tous les composants 
-   
+
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
@@ -240,12 +240,18 @@ export default createStore({
     },
     SET_FAVORITES(state, newFavorites) {
       state.favorites = newFavorites;
-    }
+    },
   },
   actions: {
     // Actions -> méthodes asynchrone
   },
   getters: {
-    // favorites: (state) => state.favorites,
+    // Getters -> propriétés calculées partagées par tous les composants ( computed)
+    getItemsInCart(state) {
+      return state.cartItems;
+    },
+    getPriceTotal(state){
+      return state.priceTotal;
+    }
   },
 })

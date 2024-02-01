@@ -193,6 +193,7 @@ form  {
   display: flex;
   flex-wrap: wrap;
 }
+
 input[type="email"] {
   border: 0;
   padding: 0.625rem;
