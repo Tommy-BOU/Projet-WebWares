@@ -34,8 +34,12 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import GeneralButton from '@/components/GeneralButton.vue'
+
 export default {
 
+ 
 }
 </script>
 
