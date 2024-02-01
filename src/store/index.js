@@ -195,7 +195,7 @@ export default createStore({
       { id: 4, name: 'Objets de décorations' }
     ],
     // Etat global -> propriété de données partagées par tous les composants 
-   
+
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
@@ -206,7 +206,7 @@ export default createStore({
       if (existingItem) {
         existingItem.quantity++;
       } else {
-        state.cartItems.push({ ...product, quantity: 1 });
+        state.cartItems.push({ ...product, quantity: product.moq });
       }
 
       state.cartCount = state.cartItems.reduce((total, item) => total + item.quantity, 0);
@@ -230,12 +230,18 @@ export default createStore({
     },
     SET_FAVORITES(state, newFavorites) {
       state.favorites = newFavorites;
-    }
+    },
   },
   actions: {
     // Actions -> méthodes asynchrone
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)
+    getItemsInCart(state) {
+      return state.cartItems;
+    },
+    getPriceTotal(state){
+      return state.priceTotal;
+    }
   },
 })
