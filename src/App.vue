@@ -22,7 +22,6 @@
  
 </template>
 
-
 <style lang="scss">
 .top-navbar {
   position: relative;
