@@ -8,6 +8,7 @@
     <router-link to="/produits">Produits</router-link>
   </nav>
   <router-view />
+ 
 </template>
 
 
@@ -16,6 +17,8 @@ img {
   width: 100px;
   height: 100px;
 }
+
+
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
