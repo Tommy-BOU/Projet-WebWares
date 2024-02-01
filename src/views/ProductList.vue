@@ -39,7 +39,55 @@ import GeneralButton from '@/components/GeneralButton.vue'
 
 export default {
 
- 
+  components: {
+    GeneralButton,
+  },
+
+  computed: {
+    ...mapState(['produits', 'cartItems', 'favorites']),
+  },
+
+  methods: {
+    
+    isInCart(item) {
+            return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
+        },
+    addOrRemove(product) {
+            const isInCart = this.isInCart(product);
+            const mutationType = isInCart ? 'REMOVE_FROM_CART' : 'ADD_TO_CART';
+            product.quantity = product.moq
+            this.$store.commit(mutationType, product);
+
+            console.log(this.cartItems)
+            console.log(product.quantity)
+    },
+    toggleFavorite(product) {
+      // Toggle the 'isFavorite' boolean
+      product.isFavorite = !product.isFavorite;
+
+      if (product.isFavorite) {
+        this.$store.commit('ADD_TO_FAVORITES', product);
+      } else {
+        this.$store.commit('REMOVE_FROM_FAVORITES', product);
+      }
+
+      this.saveFavorites();
+    },
+    saveFavorites() {
+      localStorage.setItem('favorites', JSON.stringify(this.favorites));
+      console.log('Saved Favorites:', this.favorites);
+    },
+    loadFavorites() {
+      const storedFavorites = localStorage.getItem('favorites');
+      if (storedFavorites) {
+        this.$store.commit('SET_FAVORITES', JSON.parse(storedFavorites));
+      }
+    }
+  },
+
+  created() {
+    this.loadFavorites();
+  }
 }
 </script>
 
