@@ -253,7 +253,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 form {
   width: 600px;
   margin-left: auto;

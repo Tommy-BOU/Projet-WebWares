@@ -5,11 +5,11 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
         </svg>
-        <input type="text" id="searchInput" placeholder="Rechercher par nom de produit">
+        <input v-model="searchTerm" @input="handleSearch()" type="text" id="searchInput" placeholder="Rechercher par nom de produit">
     </div>
     <div class="products-grid">
-      <div v-for="(produit, index) in produits" :key="index" class="product">
-        <svg v-if="!produit.isFavorite" @click="toggleFavorite(produit)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+      <div v-for="(produit, index) in filteredProducts" :key="index" class="product">
+        <svg v-if="!isFavorite(produit)" @click="toggleFavorite(produit)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
         <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
         </svg>
         <svg v-else @click="toggleFavorite(produit)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -19,11 +19,11 @@
         <div class="product-info">
           <h4>{{ produit.titre }}</h4>
           <p>{{ produit.prix }} €</p>
-          <p>Quantité Minimum de Commande : {{ produit.moq }}</p>
+          <p>Commande minimum : {{ produit.moq }}</p>
         </div>
-        <GeneralButton label="Add to Cart" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
-        <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(produit)" v-else/>
-        <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Details du produit</router-link>
+        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
+        <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-else/>
+        <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
       </div>
     </div>
   </div>
@@ -47,32 +47,46 @@ export default {
     ...mapState(['produits', 'cartItems', 'favorites']),
   },
 
+  data() {
+    return {
+      searchTerm: '',
+      filteredProducts: [],
+    }
+  },
+
   methods: {
     
     isInCart(item) {
             return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
         },
     addOrRemove(product) {
-            const isInCart = this.isInCart(product);
-            const mutationType = isInCart ? 'REMOVE_FROM_CART' : 'ADD_TO_CART';
-            product.quantity = product.moq
-            this.$store.commit(mutationType, product);
-
-            console.log(this.cartItems)
-            console.log(product.quantity)
+      const isInCart = this.isInCart(product);
+      const mutationType = isInCart ? 'REMOVE_FROM_CART' : 'ADD_TO_CART';
+      product.quantity = product.moq;
+      this.$store.commit(mutationType, product);
+      this.saveCart();
+    },
+    saveCart() {
+      localStorage.setItem('cartItems', JSON.stringify(this.cartItems));
+      console.log('Saved Cart:', this.cartItems);
+    },
+    isFavorite(product) {
+      return this.favorites.some(fav => fav.id === product.id);
     },
     toggleFavorite(product) {
-      // Toggle the 'isFavorite' boolean
-      product.isFavorite = !product.isFavorite;
+    const index = this.favorites.findIndex((fav) => fav.id === product.id);
 
-      if (product.isFavorite) {
+      if (index === -1) {
+        // If the product is not in favorites, add it
         this.$store.commit('ADD_TO_FAVORITES', product);
       } else {
+        // If the product is in favorites, remove it
         this.$store.commit('REMOVE_FROM_FAVORITES', product);
       }
 
       this.saveFavorites();
     },
+
     saveFavorites() {
       localStorage.setItem('favorites', JSON.stringify(this.favorites));
       console.log('Saved Favorites:', this.favorites);
@@ -82,16 +96,41 @@ export default {
       if (storedFavorites) {
         this.$store.commit('SET_FAVORITES', JSON.parse(storedFavorites));
       }
+    },
+    handleSearch() {
+      const searchTerm = this.searchTerm.toLowerCase();
+
+      if (searchTerm.trim() === '') {
+        // If the search term is empty, show all products
+        this.filteredProducts = this.produits;
+      } else {
+        // Filter products based on the search term
+        this.filteredProducts = this.produits.filter(product =>
+          product.titre.toLowerCase().includes(searchTerm)
+        );
+      }
+    },
+    loadCart() {
+      const storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems) {
+      this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
+    }
     }
   },
 
   created() {
+    this.filteredProducts = this.produits;
     this.loadFavorites();
+    this.loadCart();
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.products-section {
+  margin-top: 50px;
+}
 
 .products-grid {
   display: flex;
@@ -161,6 +200,10 @@ h2 {
   position: absolute;
   top: 10px;
   right: 10px;
+}
+
+.removeFromCartBtn {
+  background-color: rgb(94, 25, 111);
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {

@@ -3,7 +3,7 @@
     <img :src="currentProduct.image" :alt="currentProduct.image">
     <div class="prod-description-container">
         <GeneralButton label="Add to Cart" @generalEvent="addOrRemove(currentProduct)" v-if="!isInCart(currentProduct)"/>
-        <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(currentProduct)" v-else/>
+        <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(currentProduct)" class="removeFromCartBtn" v-else/>
         <h2>{{ currentProduct.titre }}</h2>
         <p>{{ currentProduct.description }}</p>
         <p class="moq-text">Quantité minimum de commande : {{ currentProduct.moq }}</p>
@@ -48,7 +48,7 @@ export default {
 
 .product-details-container {
     display: flex;
-    margin: 0 auto;
+    margin: 50px auto;
     align-items: center;
     width: 700px;
   }
@@ -67,5 +67,9 @@ export default {
   .moq-text {
     font-style: italic;
   }
+
+  .removeFromCartBtn {
+  background-color: rgb(94, 25, 111);
+}
 
 </style>

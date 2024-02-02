@@ -4,6 +4,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     cartItems: [],
+    cartCount: 0,
     favorites: [],
     produits: [
       {
@@ -13,7 +14,7 @@ export default createStore({
         description: 'Table à manger en bois massif avec finition élégante.',
         prix: 299.99,
         moq: 5,
-        categorieId: 1
+        categorieId: 1,
       },
       {
         id: 2,
@@ -22,7 +23,7 @@ export default createStore({
         description: 'Lampe avec un design moderne et éclairage ajustable.',
         prix: 129.99,
         moq: 10,
-        categorieId: 2
+        categorieId: 2,
       },
       {
         id: 3,
@@ -31,7 +32,7 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 89.99,
         moq: 20,
-        categorieId: 3
+        categorieId: 3,
       },
       {
         id: 4,
@@ -40,7 +41,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 49.99,
         moq: 20,
-        categorieId: 4
+        categorieId: 4,
       },
       {
         id: 5,
@@ -49,7 +50,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 49.99,
         moq: 20,
-        categorieId: 4
+        categorieId: 4,
       },
       {
         id: 6,
@@ -58,7 +59,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 49.99,
         moq: 20,
-        categorieId: 4
+        categorieId: 4,
       },
       {
         id: 7,
@@ -67,7 +68,7 @@ export default createStore({
         description: 'Table à manger en bois massif avec finition élégante.',
         prix: 69.99,
         moq: 5,
-        categorieId: 1
+        categorieId: 1,
       },
       {
         id: 8,
@@ -76,7 +77,7 @@ export default createStore({
         description: 'Tapis très cool.',
         prix: 129.99,
         moq: 10,
-        categorieId: 3
+        categorieId: 3,
       },
       {
         id: 9,
@@ -85,7 +86,7 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 89.99,
         moq: 20,
-        categorieId: 3
+        categorieId: 3,
       },
       {
         id: 10,
@@ -94,7 +95,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 39.99,
         moq: 20,
-        categorieId: 2
+        categorieId: 2,
       },
       {
         id: 11,
@@ -103,7 +104,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 45.99,
         moq: 20,
-        categorieId: 2
+        categorieId: 2,
       },
       {
         id: 12,
@@ -112,7 +113,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 29.99,
         moq: 20,
-        categorieId: 1
+        categorieId: 1,
       },
       {
         id: 13,
@@ -121,7 +122,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 259.99,
         moq: 2,
-        categorieId: 1
+        categorieId: 1,
       },
       {
         id: 14,
@@ -130,7 +131,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 269.99,
         moq: 2,
-        categorieId: 1
+        categorieId: 1,
       },
       {
         id: 15,
@@ -139,7 +140,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 49.99,
         moq: 20,
-        categorieId: 4
+        categorieId: 4,
       },
       {
         id: 16,
@@ -148,7 +149,7 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 89.99,
         moq: 10,
-        categorieId: 2
+        categorieId: 2,
       },
       {
         id: 17,
@@ -157,7 +158,7 @@ export default createStore({
         description: 'Vase éthnique en argile avec motifs gravés à la main.',
         prix: 49.99,
         moq: 20,
-        categorieId: 4
+        categorieId: 4,
       },
       {
         id: 18,
@@ -166,7 +167,8 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 89.99,
         moq: 10,
-        categorieId: 2
+        categorieId: 2,
+        isFavorite: false,
       },
       {
         id: 19,
@@ -175,7 +177,7 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 59.99,
         moq: 20,
-        categorieId: 3
+        categorieId: 3,
       },
       {
         id: 20,
@@ -184,7 +186,7 @@ export default createStore({
         description: 'Tapis doux en laine avec motif géométrique.',
         prix: 59.99,
         moq: 20,
-        categorieId: 3
+        categorieId: 3,
       },
 
     ],
@@ -195,7 +197,7 @@ export default createStore({
       { id: 4, name: 'Objets de décorations' }
     ],
     // Etat global -> propriété de données partagées par tous les composants 
-   
+
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
@@ -206,10 +208,11 @@ export default createStore({
       if (existingItem) {
         existingItem.quantity++;
       } else {
-        state.cartItems.push({ ...product, quantity: 1 });
+        state.cartItems.push({ ...product, quantity: product.moq });
       }
 
       state.cartCount = state.cartItems.reduce((total, item) => total + item.quantity, 0);
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
     REMOVE_FROM_CART(state, product) {
       const index = state.cartItems.findIndex(cartItem => cartItem.id === product.id);
@@ -218,24 +221,37 @@ export default createStore({
         state.cartItems.splice(index, 1);
         state.cartCount = state.cartItems.reduce((total, item) => total + item.quantity, 0);
       }
+      localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    },
+    SET_CART_ITEMS(state, newCartItems) {
+      state.cartItems = newCartItems;
+      state.cartCount = newCartItems.reduce((total, item) => total + item.quantity, 0);
     },
     ADD_TO_FAVORITES(state, product) {
       state.favorites.push(product);
+      localStorage.setItem('favorites', JSON.stringify(state.favorites));
     },
     REMOVE_FROM_FAVORITES(state, product) {
       const index = state.favorites.findIndex((fav) => fav.id === product.id);
       if (index !== -1) {
         state.favorites.splice(index, 1);
       }
+      localStorage.setItem('favorites', JSON.stringify(state.favorites));
     },
     SET_FAVORITES(state, newFavorites) {
       state.favorites = newFavorites;
-    }
+    },
   },
   actions: {
     // Actions -> méthodes asynchrone
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)
+    getItemsInCart(state) {
+      return state.cartItems;
+    },
+    getPriceTotal(state){
+      return state.priceTotal;
+    }
   },
 })

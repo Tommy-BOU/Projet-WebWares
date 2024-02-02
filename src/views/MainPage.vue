@@ -8,7 +8,9 @@
                 <h1 class="font-weight-bold"> WEBWARES: Qualité et Confort pour tous</h1>
                 <p>De Professionnels à Professionnels</p>
                  <div class=" text-center">
-                <button type="button" class="btn btn-info text-white">Voir tous nos produits</button>
+               
+                <button type="button" class="btn btn-info text-white"><router-link to="/produits">Tous nos produits</router-link></button>
+                
                 </div>
             
    
@@ -122,6 +124,22 @@
     width: 100%;
     height: auto;
 }
+button {
+    transition: all .5s ease;
+    color: rgb(231, 67, 39);
+    border: 3px solid rgb(231, 67, 39);
+    text-align: center;
+    line-height: 1;
+    font-size: 20px;
+    background-color : transparent;
+    padding: 10px;
+    outline: none;
+    border-radius: 4px;
+}
+button:hover {
+    color: rgb(231, 67, 39);
+    background-color: #fff;
+}
 
 
 
@@ -193,6 +211,7 @@ form  {
   display: flex;
   flex-wrap: wrap;
 }
+
 input[type="email"] {
   border: 0;
   padding: 0.625rem;
@@ -207,22 +226,7 @@ input[type="submit"] {
   margin-top: 0.3125rem;
 }
 
-button {
-    transition: all .5s ease;
-    color: rgb(231, 67, 39);
-    border: 3px solid rgb(231, 67, 39);
-    text-align: center;
-    line-height: 1;
-    font-size: 20px;
-    background-color : transparent;
-    padding: 10px;
-    outline: none;
-    border-radius: 4px;
-}
-button:hover {
-    color: rgb(231, 67, 39);
-    background-color: #fff;
-}
+
 .socialmedia{
   padding: 10.25rem;
   min-width: 12.5rem;
