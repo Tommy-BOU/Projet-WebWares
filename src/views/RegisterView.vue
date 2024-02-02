@@ -1,7 +1,5 @@
 <template>
 
-  <b>Vue des utilisateurs dans le localStorage</b>
-  <br><br>
   <form v-on:submit.prevent="register">
     <h1>Inscription</h1>
     <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="newUser.raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
