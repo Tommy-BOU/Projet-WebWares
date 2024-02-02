@@ -2,6 +2,7 @@
 
   <form v-on:submit.prevent="register">
     <h1>Inscription</h1>
+    <div id="msg" v-if="registered === true" class="confirm">Inscription réussie</div>
     <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="newUser.raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
     <span v-html="msg1"></span>
     <br><br>
@@ -53,6 +54,7 @@ export default {
   data() {
     return {
       users: this.$store.state.listOfUsers,
+      registered: false,
       newUser: {},
       validInput1: false,
       validInput2: false,
@@ -61,7 +63,7 @@ export default {
       validInput5: false,
       validInput6: false,
       validInput7: false,
-      validInput8: false
+      validInput8: false,
     };
   },
 
@@ -191,6 +193,8 @@ export default {
         this.msg6 = '';
         this.msg7 = '';
         this.msg8 = '';
+
+        this.registered = true;
       }
     },
     
@@ -222,6 +226,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.confirm {
+  color: green;
+  font-weight: bold;
+}
+
 form {
   width: 600px;
   margin-left: auto;
