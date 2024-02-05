@@ -1,23 +1,8 @@
 <template>
 
-  <b>Vue des utilisateurs dans le localStorage</b>
-  <br><br>
-  -------------------------
-  <div v-for="(user, index) in users" :key="index">
-    <div>Id : <b>{{ user.id }}</b></div>
-    <div>Raison Sociale : {{ user.raisonSociale }}</div>
-    <div>Siret : {{ user.siret }}</div>
-    <div>Adresse : {{ user.adresse }}</div>
-    <div>Code Postal : {{ user.codePostal }}</div>
-    <div>Ville : {{ user.ville }}</div>
-    <div>Email : {{ user.email }}</div>
-    <div>Mot De Passe : {{ user.motDePasse }}</div>
-    <div>Role : {{ user.role }}</div>
-    -------------------------
-  </div>
-
   <form v-on:submit.prevent="register">
     <h1>Inscription</h1>
+    <div id="msg" v-if="registered === true" class="confirm">Inscription réussie</div>
     <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="newUser.raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
     <span v-html="msg1"></span>
     <br><br>
@@ -41,14 +26,15 @@
     <br><br>
     <label for="confirmationMotDePasse">Confirmation Mot De Passe :</label> <input type="password" id="confirmationMotDePasse" name="confirmationMotDePasse" v-model="newUser.confirmationMotDePasse" placeholder="5 caractères minimum" @input="verifConfirmationMotDePasse" required />
     <span v-html="msg8"></span>
-    <br><br>
-    <br><br>
+    <br><br><br>
     <input type="submit" value="S'inscrire">
   </form>
 
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 const regexMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 function isNumeric(value) {
@@ -64,35 +50,11 @@ function existeDeja(tableau, cle, element) {
   return false;
 }
 
-let listOfUsers = [
-  {
-    id: 1,
-    raisonSociale: 'Entreprise A',
-    siret: '12345678901234',
-    adresse: '123 Rue de la République',
-    codePostal: '75001',
-    ville: 'Paris',
-    email: 'entrepriseA@example.com',
-    motDePasse: 'motdepasseA',
-    role: 'USER' 
-  },
-  {
-    id: 2,
-    raisonSociale: 'Entreprise B',
-    siret: '56789012345678',
-    adresse: '456 Avenue des Champs-Élysées',
-    codePostal: '75008',
-    ville: 'Paris',
-    email: 'entrepriseB@example.com',
-    motDePasse: 'motdepasseB',
-    role: 'ADMIN' 
-  },
-];
-
 export default {
   data() {
     return {
-      users: listOfUsers,
+      users: this.$store.state.listOfUsers,
+      registered: false,
       newUser: {},
       validInput1: false,
       validInput2: false,
@@ -101,8 +63,12 @@ export default {
       validInput5: false,
       validInput6: false,
       validInput7: false,
-      validInput8: false
+      validInput8: false,
     };
+  },
+
+  computed: {
+    ...mapState(['listOfUsers']),
   },
 
   methods: {
@@ -227,6 +193,8 @@ export default {
         this.msg6 = '';
         this.msg7 = '';
         this.msg8 = '';
+
+        this.registered = true;
       }
     },
     
@@ -249,11 +217,20 @@ export default {
     if (storedUsers) {
       this.users = JSON.parse(storedUsers);
     }
+    else
+    {
+      localStorage.setItem("users", JSON.stringify(this.users));
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.confirm {
+  color: green;
+  font-weight: bold;
+}
+
 form {
   width: 600px;
   margin-left: auto;

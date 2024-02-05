@@ -3,6 +3,42 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    listOfUsers: [
+      {
+        id: 1,
+        raisonSociale: 'Admin',
+        siret: '12345678900000',
+        adresse: '1 Rue de notre site',
+        codePostal: '99999',
+        ville: 'Villesite',
+        email: 'admin@admin.com',
+        motDePasse: 'admin',
+        role: 'ADMIN'
+      },
+      {
+        id: 2,
+        raisonSociale: 'Entreprise A',
+        siret: '12345678901234',
+        adresse: '123 Rue de la République',
+        codePostal: '75001',
+        ville: 'Paris',
+        email: 'entrepriseA@example.com',
+        motDePasse: 'motdepasseA',
+        role: 'USER'
+      },
+      {
+        id: 3,
+        raisonSociale: 'Entreprise B',
+        siret: '56789012345678',
+        adresse: '456 Avenue des Champs-Élysées',
+        codePostal: '75008',
+        ville: 'Paris',
+        email: 'entrepriseB@example.com',
+        motDePasse: 'motdepasseB',
+        role: 'USER'
+      },
+    ],
+
     cartItems: [],
     cartCount: 0,
     favorites: [],
