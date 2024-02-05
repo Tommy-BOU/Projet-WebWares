@@ -4,10 +4,10 @@ import ProductList from '../views/ProductList.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import UserList from '../views/UserList.vue'
 import ProductDetails from '../views/ProductDetails.vue'
 import PanierView from '../views/PanierView.vue'
 import ManageOrders from '../views/ManageOrders.vue'
+import ManageUsers from '../views/ManageUsers.vue'
 
 const routes = [
   {
@@ -36,11 +36,6 @@ const routes = [
     component: LogoutView
   },
   {
-    path: '/utilisateurs',
-    name: 'utilisateurs',
-    component: UserList
-  },
-  {
     path: '/produits-details/:id',
     name: 'produits-details',
     component: ProductDetails
@@ -54,6 +49,11 @@ const routes = [
     path: '/gestion-commandes',
     name: 'gestion-commandes',
     component: ManageOrders
+  },
+  {
+    path: '/gestion-utilisateurs',
+    name: 'gestion-utilisateurs',
+    component: ManageUsers
   },
 ]
 
