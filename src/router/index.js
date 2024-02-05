@@ -5,7 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import ProductDetails from '../views/ProductDetails.vue'
 import PanierView from '../views/PanierView.vue'
-import ConfirmationView from '../views/ConfirmationView.vue'
+import ManageOrders from '../views/ManageOrders.vue'
 
 const routes = [
   {
@@ -39,9 +39,9 @@ const routes = [
     component: PanierView
   },
   {
-    path: '/confirmation',
-    name: 'confirmation',
-    component: ConfirmationView
+    path: '/gestion-commandes',
+    name: 'gestion-commandes',
+    component: ManageOrders
   },
 ]
 
