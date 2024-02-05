@@ -1,34 +1,46 @@
 <template>
 
-  <form v-on:submit.prevent="register">
+  <div v-if="identite === 'guest' && success === ''" class="register">
     <h1>Inscription</h1>
-    <div id="msg" v-if="registered === true" class="confirm">Inscription réussie</div>
-    <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="newUser.raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
-    <span v-html="msg1"></span>
-    <br><br>
-    <label for="siret">Siret :</label> <input type="text" id="siret" name="siret" v-model="newUser.siret" placeholder="14 chiffres" @input="verifSiret" required />
-    <span v-html="msg2"></span>
-    <br><br>
-    <label for="adresse">Adresse :</label> <input type="text" id="adresse" name="adresse" v-model="newUser.adresse" placeholder="2 caractères minimum" @input="verifAdresse" required />
-    <span v-html="msg3"></span>
-    <br><br>
-    <label for="codePostal">Code Postal :</label> <input type="text" id="codePostal" name="codePostal" v-model="newUser.codePostal" placeholder="5 chiffres" @input="verifCodePostal" required />
-    <span v-html="msg4"></span>
-    <br><br>
-    <label for="ville">Ville :</label> <input type="text" id="ville" name="ville" v-model="newUser.ville" placeholder="2 caractères minimum" @input="verifVille" required />
-    <span v-html="msg5"></span>
-    <br><br>
-    <label for="email">Email :</label> <input type="email" id="email" name="email" v-model="newUser.email" placeholder="Email valide" @input="verifEmail" required />
-    <span v-html="msg6"></span>
-    <br><br>
-    <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="newUser.motDePasse" placeholder="5 caractères minimum" @input="verifMotDePasse" required />
-    <span v-html="msg7"></span>
-    <br><br>
-    <label for="confirmationMotDePasse">Confirmation Mot De Passe :</label> <input type="password" id="confirmationMotDePasse" name="confirmationMotDePasse" v-model="newUser.confirmationMotDePasse" placeholder="5 caractères minimum" @input="verifConfirmationMotDePasse" required />
-    <span v-html="msg8"></span>
-    <br><br><br>
-    <input type="submit" value="S'inscrire">
-  </form>
+    <form v-on:submit.prevent="register">
+      <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="newUser.raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
+      <span v-html="msg1" v-if="msg1 != ''"></span>
+      <br><br>
+      <label for="siret">Siret :</label> <input type="text" id="siret" name="siret" v-model="newUser.siret" placeholder="14 chiffres" @input="verifSiret" required />
+      <span v-html="msg2" v-if="msg2 != ''"></span>
+      <br><br>
+      <label for="adresse">Adresse :</label> <input type="text" id="adresse" name="adresse" v-model="newUser.adresse" placeholder="2 caractères minimum" @input="verifAdresse" required />
+      <span v-html="msg3" v-if="msg3 != ''"></span>
+      <br><br>
+      <label for="codePostal">Code Postal :</label> <input type="text" id="codePostal" name="codePostal" v-model="newUser.codePostal" placeholder="5 chiffres" @input="verifCodePostal" required />
+      <span v-html="msg4" v-if="msg4 != ''"></span>
+      <br><br>
+      <label for="ville">Ville :</label> <input type="text" id="ville" name="ville" v-model="newUser.ville" placeholder="2 caractères minimum" @input="verifVille" required />
+      <span v-html="msg5" v-if="msg5 != ''"></span>
+      <br><br>
+      <label for="email">Email :</label> <input type="email" id="email" name="email" v-model="newUser.email" placeholder="Email valide" @input="verifEmail" required />
+      <span v-html="msg6" v-if="msg6 != ''"></span>
+      <br><br>
+      <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="newUser.motDePasse" placeholder="5 caractères minimum" @input="verifMotDePasse" required />
+      <span v-html="msg7" v-if="msg7 != ''"></span>
+      <br><br>
+      <label for="confirmationMotDePasse">Confirmation Mot De Passe :</label> <input type="password" id="confirmationMotDePasse" name="confirmationMotDePasse" v-model="newUser.confirmationMotDePasse" placeholder="5 caractères minimum" @input="verifConfirmationMotDePasse" required />
+      <span v-html="msg8" v-if="msg8 != ''"></span>
+      <br><br><br>
+      <input type="submit" value="S'inscrire">
+    </form>
+  </div>
+  <div v-else class="register">
+    <div v-if="success">
+      <span :style="{ color: textColor }"><br>{{ success }}</span>
+      <br><br>
+      Vous pouvez vous <router-link :to="'connexion'">connecter</router-link>.
+    </div>
+    <div v-else>
+      <br>
+      Vous êtes déjà connecté sous l'identité <b>{{ identite }}</b>
+    </div>
+  </div>
 
 </template>
 
@@ -54,7 +66,6 @@ export default {
   data() {
     return {
       users: this.$store.state.listOfUsers,
-      registered: false,
       newUser: {},
       validInput1: false,
       validInput2: false,
@@ -64,6 +75,17 @@ export default {
       validInput6: false,
       validInput7: false,
       validInput8: false,
+      msg1: '',
+      msg2: '',
+      msg3: '',
+      msg4: '',
+      msg5: '',
+      msg6: '',
+      msg7: '',
+      msg8: '',
+      success: '',
+      textColor: '',
+      identite: 'guest'
     };
   },
 
@@ -73,7 +95,7 @@ export default {
 
   methods: {
     verifRaisonSociale() {
-      if(this.newUser.raisonSociale.length >= 2 && existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) === false) {
+      if (this.newUser.raisonSociale.trim().length >= 2 && existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) === false) {
         this.msg1 = "Votre Raison Sociale est correcte. \u2705";
         this.validInput1 = true;
       }
@@ -88,7 +110,7 @@ export default {
     },
 
     verifSiret() {
-      if(this.newUser.siret.length === 14 && isNumeric(this.newUser.siret) === true && existeDeja(this.users, "siret", this.newUser.siret) === false) {
+      if (this.newUser.siret.length === 14 && isNumeric(this.newUser.siret) === true && existeDeja(this.users, "siret", this.newUser.siret) === false) {
         this.msg2 = "Votre Siret est correct. \u2705";
         this.validInput2 = true;
       }
@@ -103,7 +125,7 @@ export default {
     },
 
     verifAdresse() {
-      if(this.newUser.adresse.length >= 2) {
+      if (this.newUser.adresse.trim().length >= 2) {
         this.msg3 = "Votre Adresse est correcte. \u2705";
         this.validInput3 = true;
       }
@@ -114,7 +136,7 @@ export default {
     },
 
     verifCodePostal() {
-      if(this.newUser.codePostal.length === 5 && isNumeric(this.newUser.codePostal) === true) {
+      if (this.newUser.codePostal.length === 5 && isNumeric(this.newUser.codePostal) === true) {
         this.msg4 = "Votre Code Postal est correct. \u2705";
         this.validInput4 = true;
       }
@@ -125,7 +147,7 @@ export default {
     },
 
     verifVille() {
-      if(this.newUser.ville.length >= 2) {
+      if (this.newUser.ville.trim().length >= 2) {
         this.msg5 = "Votre Ville est correcte. \u2705";
         this.validInput5 = true;
       }
@@ -136,7 +158,7 @@ export default {
     },
 
     verifEmail() {
-      if(regexMail.test(this.newUser.email) && existeDeja(this.users, "email", this.newUser.email) === false) {
+      if (regexMail.test(this.newUser.email) && existeDeja(this.users, "email", this.newUser.email) === false) {
         this.msg6 = "Votre Email est valide. \u2705";
         this.validInput6 = true;
       }
@@ -151,9 +173,23 @@ export default {
     },
 
     verifMotDePasse() {
-      if(this.newUser.motDePasse.length >= 5) {
+      if (this.newUser.motDePasse.trim().length >= 5) {
         this.msg7 = "Votre Mot De Passe est correct. \u2705";
         this.validInput7 = true;
+
+        if (this.newUser.confirmationMotDePasse)
+        {
+          if (this.newUser.motDePasse === this.newUser.confirmationMotDePasse)
+          {
+            this.msg8 = "Votre Confirmation Mot De Passe est correcte. \u2705";
+            this.validInput8 = true;
+          }
+          else
+          {
+            this.msg8 = "Votre Mot De Passe doit être identique à cette confirmation. \u274C";
+            this.validInput8 = false;
+          }
+        }
       }
       else {
         this.msg7 = "Votre Mot De Passe doit contenir au moins 5 caractères. \u274C";
@@ -162,11 +198,11 @@ export default {
     },
 
     verifConfirmationMotDePasse() {
-      if(this.newUser.confirmationMotDePasse.length >= 5 && this.newUser.motDePasse === this.newUser.confirmationMotDePasse) {
+      if (this.newUser.confirmationMotDePasse.trim().length >= 5 && this.newUser.motDePasse === this.newUser.confirmationMotDePasse) {
         this.msg8 = "Votre Confirmation Mot De Passe est correcte. \u2705";
         this.validInput8 = true;
       }
-      else if(this.newUser.motDePasse != this.newUser.confirmationMotDePasse) {
+      else if (this.newUser.motDePasse != this.newUser.confirmationMotDePasse) {
         this.msg8 = "Votre Mot De Passe doit être identique à cette confirmation. \u274C";
         this.validInput8 = false;
       }
@@ -178,7 +214,6 @@ export default {
 
     register() {
       if (this.validInput1 && this.validInput2 && this.validInput3 && this.validInput4 && this.validInput5 && this.validInput6 && this.validInput7 && this.validInput8) {
-
         let newid = this.users[this.users.length-1].id+1;
         
         this.users.push(Object.assign({id:newid},this.newUser,{role:"USER"}));
@@ -194,7 +229,10 @@ export default {
         this.msg7 = '';
         this.msg8 = '';
 
-        this.registered = true;
+        this.identite = this.newUser.raisonSociale;
+
+        this.success = "Inscription réussie.";
+        this.textColor = "green";
       }
     },
     
@@ -213,6 +251,11 @@ export default {
   },
 
   created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+    }
+
     let storedUsers = localStorage.getItem("users");
     if (storedUsers) {
       this.users = JSON.parse(storedUsers);
@@ -226,17 +269,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.confirm {
-  color: green;
-  font-weight: bold;
-}
-
-form {
+.register {
   width: 600px;
   margin-left: auto;
   margin-right: auto;
   border: 1px solid rgb(231, 67, 39);
   padding: 0 40px 30px 20px;
+}
+
+.confirm {
+  color: green;
+  font-weight: bold;
 }
 
 label {
@@ -254,7 +297,7 @@ input {
 input[type="submit"] {
   width: unset;
   padding: 5px 15px;
-  color: #000;
+  color: #FFF;
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;

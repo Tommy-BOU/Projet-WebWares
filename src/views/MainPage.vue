@@ -69,7 +69,7 @@
       <p>Promo & nouveautés en avant-première!</p>
        <p>Vous pouvez vous désinscrire à tout moment</p>
       <form>
-        <input type="email" name="email" placeholder="Votre Email">
+        <input type="email" name="email" size="30" placeholder="Votre Email">
         <input type="submit" value="Abonnement">
 
       </form>
