@@ -45,9 +45,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
-const regexMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const regexMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isNumeric(value) {
   return /^-?\d+$/.test(value);
@@ -90,7 +90,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['listOfUsers']),
+    ...mapState(["listOfUsers"]),
   },
 
   methods: {
@@ -98,13 +98,16 @@ export default {
       if (this.newUser.raisonSociale.trim().length >= 2 && existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) === false) {
         this.msg1 = "Votre Raison Sociale est correcte. \u2705";
         this.validInput1 = true;
-      }
-      else if (existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) === true) {
-        this.msg1 = "Votre Raison Sociale existe déjà dans notre base de données. \u274C";
+      } else if (
+        existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) ===
+        true
+      ) {
+        this.msg1 =
+          "Votre Raison Sociale existe déjà dans notre base de données. \u274C";
         this.validInput1 = false;
-      }
-      else {
-        this.msg1 = "Votre Raison Sociale doit contenir au moins 2 caractères. \u274C";
+      } else {
+        this.msg1 =
+          "Votre Raison Sociale doit contenir au moins 2 caractères. \u274C";
         this.validInput1 = false;
       }
     },
@@ -113,12 +116,11 @@ export default {
       if (this.newUser.siret.length === 14 && isNumeric(this.newUser.siret) === true && existeDeja(this.users, "siret", this.newUser.siret) === false) {
         this.msg2 = "Votre Siret est correct. \u2705";
         this.validInput2 = true;
-      }
-      else if (existeDeja(this.users, "siret", this.newUser.siret) === true) {
-        this.msg2 = "Votre Siret existe déjà dans notre base de données. \u274C";
+      } else if (existeDeja(this.users, "siret", this.newUser.siret) === true) {
+        this.msg2 =
+          "Votre Siret existe déjà dans notre base de données. \u274C";
         this.validInput2 = false;
-      }
-      else {
+      } else {
         this.msg2 = "Votre Siret doit contenir 14 chiffres. \u274C";
         this.validInput2 = false;
       }
@@ -128,8 +130,7 @@ export default {
       if (this.newUser.adresse.trim().length >= 2) {
         this.msg3 = "Votre Adresse est correcte. \u2705";
         this.validInput3 = true;
-      }
-      else {
+      } else {
         this.msg3 = "Votre Adresse doit contenir au moins 2 caractères. \u274C";
         this.validInput3 = false;
       }
@@ -139,8 +140,7 @@ export default {
       if (this.newUser.codePostal.length === 5 && isNumeric(this.newUser.codePostal) === true) {
         this.msg4 = "Votre Code Postal est correct. \u2705";
         this.validInput4 = true;
-      }
-      else {
+      } else {
         this.msg4 = "Votre Code Postal doit contenir 5 chiffres. \u274C";
         this.validInput4 = false;
       }
@@ -150,8 +150,7 @@ export default {
       if (this.newUser.ville.trim().length >= 2) {
         this.msg5 = "Votre Ville est correcte. \u2705";
         this.validInput5 = true;
-      }
-      else {
+      } else {
         this.msg5 = "Votre Ville doit contenir au moins 2 caractères. \u274C";
         this.validInput5 = false;
       }
@@ -161,12 +160,11 @@ export default {
       if (regexMail.test(this.newUser.email) && existeDeja(this.users, "email", this.newUser.email) === false) {
         this.msg6 = "Votre Email est valide. \u2705";
         this.validInput6 = true;
-      }
-      else if (existeDeja(this.users, "email", this.newUser.email) === true) {
-        this.msg6 = "Votre Email existe déjà dans notre base de données. \u274C";
+      } else if (existeDeja(this.users, "email", this.newUser.email) === true) {
+        this.msg6 =
+          "Votre Email existe déjà dans notre base de données. \u274C";
         this.validInput6 = false;
-      }
-      else {
+      } else {
         this.msg6 = "Votre Email doit être valide. \u274C";
         this.validInput6 = false;
       }
@@ -205,9 +203,9 @@ export default {
       else if (this.newUser.motDePasse != this.newUser.confirmationMotDePasse) {
         this.msg8 = "Votre Mot De Passe doit être identique à cette confirmation. \u274C";
         this.validInput8 = false;
-      }
-      else {
-        this.msg8 = "Votre Confirmation Mot De Passe doit contenir au moins 5 caractères. \u274C";
+      } else {
+        this.msg8 =
+          "Votre Confirmation Mot De Passe doit contenir au moins 5 caractères. \u274C";
         this.validInput8 = false;
       }
     },
@@ -220,14 +218,14 @@ export default {
 
         this.newUser = {};
 
-        this.msg1 = '';
-        this.msg2 = '';
-        this.msg3 = '';
-        this.msg4 = '';
-        this.msg5 = '';
-        this.msg6 = '';
-        this.msg7 = '';
-        this.msg8 = '';
+        this.msg1 = "";
+        this.msg2 = "";
+        this.msg3 = "";
+        this.msg4 = "";
+        this.msg5 = "";
+        this.msg6 = "";
+        this.msg7 = "";
+        this.msg8 = "";
 
         this.identite = this.newUser.raisonSociale;
 
@@ -235,10 +233,10 @@ export default {
         this.textColor = "green";
       }
     },
-    
+
     saveToLocalStorage() {
       localStorage.setItem("users", JSON.stringify(this.users));
-    }
+    },
   },
 
   watch: {
@@ -246,8 +244,8 @@ export default {
       deep: true,
       handler() {
         this.saveToLocalStorage();
-      }
-    }
+      },
+    },
   },
 
   created() {
@@ -259,12 +257,10 @@ export default {
     let storedUsers = localStorage.getItem("users");
     if (storedUsers) {
       this.users = JSON.parse(storedUsers);
-    }
-    else
-    {
+    } else {
       localStorage.setItem("users", JSON.stringify(this.users));
     }
-  }
+  },
 };
 </script>
 
