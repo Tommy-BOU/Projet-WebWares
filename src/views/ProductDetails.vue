@@ -2,8 +2,14 @@
   <div class="product-details-container">
     <img :src="currentProduct.image" :alt="currentProduct.image">
     <div class="prod-description-container">
-        <GeneralButton label="Add to Cart" @generalEvent="addOrRemove(currentProduct)" v-if="!isInCart(currentProduct)"/>
-        <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(currentProduct)" class="removeFromCartBtn" v-else/>
+      
+        <div v-if="identite === 'guest'"> <button @click="general" class="general-btn">Connectez-vous pour commander!</button>
+
+
+        </div>
+        
+        <div v-else><GeneralButton label="Add to Cart" @generalEvent="addOrRemove(currentProduct)" v-if="!isInCart(currentProduct)"/> <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(currentProduct)" class="removeFromCartBtn" v-else/></div>
+       
         <h2>{{ currentProduct.titre }}</h2>
         <p>{{ currentProduct.description }}</p>
         <p class="moq-text">Quantité minimum de commande : {{ currentProduct.moq }}</p>
@@ -16,7 +22,11 @@ import { mapState } from 'vuex'
 import GeneralButton from '@/components/GeneralButton.vue'
 
 export default {
-
+  data() {
+    return {
+          identite: 'guest'
+    };
+  },
     components: {
         GeneralButton,
     },
@@ -40,8 +50,15 @@ export default {
             console.log(this.cartItems)
             console.log(product.quantity)
         },
+    },
+    created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+    }
     }
 }
+
 </script>
 
 <style scoped>
