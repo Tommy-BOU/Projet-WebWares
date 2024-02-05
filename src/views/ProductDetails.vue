@@ -20,17 +20,14 @@ import GeneralButton from '@/components/GeneralButton.vue'
 export default {
   data() {
     return {
-          identite: 'guest'
+          identite: 'guest',
+          disableButton: true
     };
   },
     components: {
         GeneralButton,
     },
-    data() {
-      return {
-        disableButton: true
-      }
-    },
+    
     computed: {
         ...mapState(['produits', 'cartItems', 'favorites']),
         currentProduct() {
