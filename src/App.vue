@@ -5,8 +5,8 @@
       <nav class="navbar">
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
-        <router-link to="/inscription">inscription</router-link> |
-        <router-link to="/connexion">connexion</router-link> |
+        <router-link to="/inscription">Inscription</router-link> |
+        <router-link to="/connexion">Connexion</router-link> |
         <router-link to="/panier">
           <div class="icon-container">
             <img src="./assets/panier.png" alt="" class="cart-icon" />
@@ -23,6 +23,18 @@
 </template>
 
 <style lang="scss">
+*,
+::before,
+::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+}
+
+html {
+  overflow-x: hidden;
+}
+
 .navbar {
   position: relative;
   display: flex;
