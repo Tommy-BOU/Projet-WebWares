@@ -38,7 +38,7 @@ export default createStore({
         role: 'USER'
       },
     ],
-
+    identite: 'guest',
     cartItems: [],
     cartCount: 0,
     favorites: [],
@@ -227,10 +227,10 @@ export default createStore({
 
     ],
     categories: [
-      { id: 1, name: 'Mobilier d\'intérieur' },
+      { id: 1, name: "Mobilier d'intérieur" },
       { id: 2, name: 'Luminaires' },
       { id: 3, name: 'Tapis' },
-      { id: 4, name: 'Objets de décorations' }
+      { id: 4, name: 'Objets de décoration' }
     ],
     // Etat global -> propriété de données partagées par tous les composants 
 
@@ -277,9 +277,15 @@ export default createStore({
     SET_FAVORITES(state, newFavorites) {
       state.favorites = newFavorites;
     },
+    LOG_IN_USER(state, loggedInUserId) {
+      state.identite = loggedInUserId;
+    }
   },
   actions: {
     // Actions -> méthodes asynchrone
+    logInUser(context, loggedInUserId) {
+      context.commit('LOG_IN_USER', loggedInUserId);
+    }
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)

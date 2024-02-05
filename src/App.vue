@@ -8,7 +8,7 @@
         <router-link to="/inscription">Inscription</router-link> |
         <router-link to="/connexion">Connexion</router-link> |
         <router-link to="/panier">
-          <div class="icon-container">
+          <div v-if="$store.state.identite !== 'guest'" class="icon-container">
             <img src="./assets/panier.png" alt="" class="cart-icon" />
             <div
               class="cart-circle"
