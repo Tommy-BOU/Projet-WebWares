@@ -3,6 +3,20 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    listOfOrders: [
+      {
+        orderNumber: 1,
+        titreProduits: ['Table à manger en bois', 'Lampe moderne'],
+        prixUnitaire: [1499.95, 1299.90],
+        quantité: [5, 10],
+        coutTotal: 2799.85,
+        entreprise: 'Entreprise A',
+        adresse: '123 Rue de la République',
+        codePostal: '75001',
+        ville: 'Paris',
+        delivered: false,
+      },
+    ],
     listOfUsers: [
       {
         id: 1,
@@ -279,12 +293,22 @@ export default createStore({
     },
     LOG_IN_USER(state, loggedInUserId) {
       state.identite = loggedInUserId;
+    },
+    PLACE_NEW_ORDER(state, object) {
+      state.listOfOrders.push(object);
     }
+
   },
   actions: {
     // Actions -> méthodes asynchrone
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
+    },
+    placeNewOrder({ commit, state }, orderData) {
+      commit('PLACE_NEW_ORDER', orderData);
+      state.cartItems.forEach((item) => {
+        commit('REMOVE_FROM_CART', item);
+      });
     }
   },
   getters: {
@@ -292,7 +316,7 @@ export default createStore({
     getItemsInCart(state) {
       return state.cartItems;
     },
-    getPriceTotal(state){
+    getPriceTotal(state) {
       return state.priceTotal;
     }
   },

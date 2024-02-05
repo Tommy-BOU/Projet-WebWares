@@ -56,20 +56,40 @@
 
   <div v-if="modalToggle" class="confirmation-modal">
     <button class="close-modal" @click="modalToggle = !modalToggle">X</button>
-    <p>Grand total HT : € {{ this.priceTotal.toFixed(2) }}</p>
-    <p>Grand total TTC : € {{ (this.priceTotal * 1.2).toFixed(2) }}</p>
-    <button>Confirmer commande</button>
+
+    <p>Informations de livraison</p>
+    <input type="text" placeholder="adresse" v-model="adress" />
+    <input type="text" placeholder="code postal" v-model="postCode" />
+    <input type="text" placeholder="ville" v-model="city" />
+
+    <div class="modal-total">
+      <p>Grand total HT : € {{ this.priceTotal.toFixed(2) }}</p>
+      <p>Grand total TTC : € {{ (this.priceTotal * 1.2).toFixed(2) }}</p>
+    </div>
+    <button class="confirmation" @click="confirmOrder();">
+      Confirmer commande
+    </button>
   </div>
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      objectsInCart: this.$store.getters.getItemsInCart,
+      objectsInCart: [],
       priceTotal: 0,
       modalToggle: false,
+      adress: "",
+      postCode: "",
+      city: "",
     };
+  },
+  computed: {
+    itemsInCart() {
+      return this.$store.getters.getItemsInCart;
+    },
+    ...mapState(["listOfOrders"]),
   },
   methods: {
     setCartData() {
@@ -84,12 +104,46 @@ export default {
         this.$store.commit("REMOVE_FROM_CART", product);
       }
     },
+    confirmOrder() {
+      let newOrder = {
+        orderNumber: null,
+        titreProduits: [],
+        prixUnitaire: [],
+        quantité: [],
+        coutTotal: 0,
+        entreprise: "",
+        adresse: this.adress,
+        codePostal: this.postCode,
+        ville: this.city,
+        delivered: false,
+      };
+
+      newOrder.orderNumber = this.listOfOrders.length + 1;
+      for (let data of this.objectsInCart) {
+        newOrder.titreProduits.push(data.titre);
+        newOrder.prixUnitaire.push(data.prix);
+        newOrder.quantité.push(data.quantity);
+        newOrder.coutTotal += data.prix * data.quantity;
+      }
+
+      this.$store.dispatch("placeNewOrder", newOrder);
+      this.modalToggle = false;
+    },
+    loadCart() {
+      const storedCartItems = localStorage.getItem("cartItems");
+      if (storedCartItems) {
+        this.$store.commit("SET_CART_ITEMS", JSON.parse(storedCartItems));
+        this.objectsInCart = JSON.parse(storedCartItems);
+        this.setCartData();
+      }
+    },
   },
-  mounted() {
-    this.setCartData();
+  created() {
+    this.loadCart();
   },
+  mounted() {},
   updated() {
-    this.setCartData();
+    // this.loadCart();
   },
 };
 </script>
@@ -101,14 +155,14 @@ export default {
   left: 0;
   height: 100%;
   width: 100%;
-  background: rgb(231, 67, 39) ;
+  background: rgb(231, 67, 39);
   z-index: 100;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
-  .close-modal{
+  .close-modal {
     position: absolute;
     top: 0;
     right: 0;
@@ -117,6 +171,19 @@ export default {
     cursor: pointer;
     margin: 10px;
     font-size: 35px;
+  }
+
+  .modal-total {
+    font-weight: bold;
+  }
+
+  .confirmation {
+    background-color: #4caf50;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    padding: 10px 25px;
+    cursor: pointer;
   }
 }
 
@@ -212,7 +279,8 @@ export default {
 
   button {
     cursor: pointer;
-    background-color: lawngreen;
+    color: white;
+    background-color: #4caf50;
     border: 1px solid lightgrey;
     border-radius: 5px;
     padding: 10px 25px;

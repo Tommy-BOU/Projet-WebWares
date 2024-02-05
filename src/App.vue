@@ -1,7 +1,12 @@
 <template>
   <div class="header">
-    <img src="./assets/WW2.png" alt="logo" />
+    <router-link class="logoContainer" to="/"
+      ><img src="./assets/WW2.png" alt="logo"
+    /></router-link>
     <div class="nav-container">
+      <nav class="navbar2">
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link>
+      </nav>
       <nav class="navbar">
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
@@ -35,43 +40,57 @@ html {
   overflow-x: hidden;
 }
 
-.navbar {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  .icon-container {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    top: -10px;
-    .cart-icon {
-      position: relative;
-      height: 30px;
-      width: 30px;
-    }
-    .cart-circle {
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background-color: red;
-    }
-  }
-}
 
 .header {
   display: flex;
-  justify-content: center;
   height: 150px;
-  width: 100vw;
+  width: 100%;
   padding: 20px 0;
-}
 
-img {
-  width: auto;
-  height: 100%;
+  .logoContainer {
+    width: auto;
+    height: 100%;
+  }
+
+  img {
+    width: auto;
+    height: 100%;
+  }
+
+  .nav-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    .navbar {
+      position: relative;
+      display: flex;
+      gap: 10px;
+      .icon-container {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        top: -10px;
+        .cart-icon {
+          position: relative;
+          height: 30px;
+          width: 30px;
+        }
+        .cart-circle {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: red;
+        }
+      }
+    }
+  }
 }
 
 #app {
@@ -96,9 +115,15 @@ nav {
 }
 
 @media (max-width: 600px) {
-  img {
-    width: auto;
-    height: 50%;
+  .header {
+    flex-direction: column;
+    height: 200px;
+
+    img {
+      align-self: center;
+      width: 100px;
+      height: 100px;
+    }
   }
 
   nav {
@@ -108,6 +133,7 @@ nav {
   .navbar {
     gap: 3px;
     padding: 15px;
+    flex-wrap: wrap;
   }
 }
 </style>
