@@ -5,10 +5,10 @@
       <nav class="navbar">
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
-        <router-link to="/inscription">inscription</router-link> |
-        <router-link to="/connexion">connexion</router-link> |
+        <router-link to="/inscription">Inscription</router-link> |
+        <router-link to="/connexion">Connexion</router-link> |
         <router-link to="/panier">
-          <div class="icon-container">
+          <div v-if="$store.state.identite !== 'guest'" class="icon-container">
             <img src="./assets/panier.png" alt="" class="cart-icon" />
             <div
               class="cart-circle"
@@ -23,6 +23,11 @@
 </template>
 
 <style lang="scss">
+
+body {
+  overflow-x: hidden;
+}
+
 .navbar {
   position: relative;
   display: flex;

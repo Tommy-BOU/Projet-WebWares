@@ -2,7 +2,9 @@
   <div class="product-details-container">
     <img :src="currentProduct.image" :alt="currentProduct.image">
     <div class="prod-description-container">
-        <GeneralButton label="Add to Cart" @generalEvent="addOrRemove(currentProduct)" v-if="!isInCart(currentProduct)"/>
+        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="$store.state.identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
+        <p v-if="$store.state.identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
+        <GeneralButton label="Add to Cart" @generalEvent="addOrRemove(currentProduct)" v-else-if="!isInCart(currentProduct)"/>
         <GeneralButton label="Remove from Cart" @generalEvent="addOrRemove(currentProduct)" class="removeFromCartBtn" v-else/>
         <h2>{{ currentProduct.titre }}</h2>
         <p>{{ currentProduct.description }}</p>
@@ -19,6 +21,11 @@ export default {
 
     components: {
         GeneralButton,
+    },
+    data() {
+      return {
+        disableButton: true
+      }
     },
     computed: {
         ...mapState(['produits', 'cartItems', 'favorites']),
@@ -70,6 +77,19 @@ export default {
 
   .removeFromCartBtn {
   background-color: rgb(94, 25, 111);
+}
+
+.disabledButton {
+  background-color: #ccc;
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.6;  
+}
+
+.guestMessage {
+  font-size: .8em;
+  font-style: italic;
+  color: rgb(231, 67, 39)
 }
 
 </style>

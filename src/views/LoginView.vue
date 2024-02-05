@@ -75,6 +75,8 @@ export default {
         this.msg = "Connexion réussie.";
         this.textColor = "green";
         this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+
+        this.$store.dispatch('logInUser', 'myIdentity');
       }
     }
   },
