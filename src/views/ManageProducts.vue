@@ -4,6 +4,7 @@
     <div class="product-inventory-container">
         <h1>Produits</h1>
         <br><br>
+        <GeneralButton label="Ajouter un produit" @generalEvent="openModal" />
         <table>
           <thead>
               <tr>
@@ -49,30 +50,30 @@
     <!-- Modal -->
     <div v-if="openedModal" class="modal">
       <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
+        <span class="close" @click="closeModal">X</span>
         <h2>{{ editingProduct ? 'Modifier un produit' : 'Ajouter un produit' }}</h2>
 
         <!-- Form fields -->
-        <form @submit.prevent="add(newProduct)">
+        <form @submit.prevent="editingProduct ? edit() : add()">
           <label for="productName">Nom du produit:</label>
           <br>
-          <input type="text" id="productName" v-model="newProduct.titre" required>
+          <input type="text" id="productName" v-model="form.titre" required>
             <br>
           <label for="productDescription">Description:</label>
           <br>
-          <textarea id="productDescription" v-model="newProduct.description" required></textarea>
+          <textarea id="productDescription" v-model="form.description" required></textarea>
             <br>
           <label for="productPrice">Prix:</label>
           <br>
-          <input type="number" id="productPrice" v-model="newProduct.prix" required>
+          <input type="number" id="productPrice" v-model="form.prix" required>
             <br>
           <label for="productMoq">MOQ (Quantité minimale de commande):</label>
           <br>
-          <input type="number" id="productMoq" v-model="newProduct.moq" required>
+          <input type="number" id="productMoq" v-model="form.moq" required>
             <br>
           <label for="productCategory">Catégorie:</label>
           <br>
-          <select name="category" id="category" v-model="newProduct.categorieId">
+          <select name="category" id="category" v-model="form.categorieId">
             <option value="1">1 - Mobilier d'intérieur</option>
             <option value="2">2 - Luminaires</option>
             <option value="3">3 - Tapis</option>
