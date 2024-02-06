@@ -6,15 +6,6 @@
     <div class="nav-container">
       <nav class="navbar2" v-if="groupe === 'ADMIN'">
         <h1>PANEL ADMIN</h1>
-        <br />
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link>
-        |
-        <router-link to="/gestion-utilisateurs"
-          >Gestion des utilisateurs</router-link
-        >|
-        <router-link to="/gestion-produits"
-          >Gestion des produits</router-link
-        >
         <br>
         <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-produits">Gestion des produits</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
       </nav>
