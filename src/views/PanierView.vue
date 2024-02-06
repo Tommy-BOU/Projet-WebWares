@@ -226,7 +226,16 @@ export default {
     },
   },
   created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+
+      this.$store.commit("CHANGE_GROUP", this.groupe);
+    }
+
     this.loadCart();
+
+    this.setCartData();
   },
   mounted() {},
   beforeUpdate() {
