@@ -7,7 +7,8 @@ export default createStore({
       {
         orderNumber: 1,
         titreProduits: ['Table à manger en bois', 'Lampe moderne'],
-        prixUnitaire: [1499.95, 1299.90],
+        prixArticles: [1499.95, 1299.90],
+        prixUnitaire:[299.99, 129.99],
         quantité: [5, 10],
         coutTotal: 2799.85,
         entreprise: 'Entreprise A',
@@ -251,6 +252,9 @@ export default createStore({
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
+    CHANGE_IDENTITY(state, newIdentity) {
+      state.identite = newIdentity;
+    },
 
     ADD_TO_CART(state, product) {
       const existingItem = state.cartItems.find(item => item.id === product.id);
@@ -272,6 +276,10 @@ export default createStore({
         state.cartCount = state.cartItems.reduce((total, item) => total + item.quantity, 0);
       }
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    },
+    EMPTY_CART(state) {
+      state.cartItems = [];
+      localStorage.setItem('cartItems', []);
     },
     SET_CART_ITEMS(state, newCartItems) {
       state.cartItems = newCartItems;
@@ -304,11 +312,9 @@ export default createStore({
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
     },
-    placeNewOrder({ commit, state }, orderData) {
+    placeNewOrder({ commit }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
-      state.cartItems.forEach((item) => {
-        commit('REMOVE_FROM_CART', item);
-      });
+      commit('EMPTY_CART');
     }
   },
   getters: {

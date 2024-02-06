@@ -5,13 +5,19 @@
     /></router-link>
     <div class="nav-container">
       <nav class="navbar2">
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link>
+        |
+        <router-link to="/gestion-utilisateurs"
+          >Gestion des utilisateurs</router-link
+        >
       </nav>
       <nav class="navbar">
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
         <router-link to="/inscription">Inscription</router-link> |
         <router-link to="/connexion">Connexion</router-link> |
+        <router-link to="/deconnexion">Deconnexion</router-link> |
+        <img src="./assets/user.png" alt="" />
         <router-link to="/panier">
           <div v-if="$store.state.identite !== 'guest'" class="icon-container">
             <img src="./assets/panier.png" alt="" class="cart-icon" />
@@ -27,19 +33,29 @@
   <router-view />
 </template>
 
+<script>
+
+
+export default ({
+data() {
+    return
+  },
+})
+</script>
+
+
 <style lang="scss">
 *,
 ::before,
 ::after {
   margin: 0;
   padding: 0;
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
 html {
   overflow-x: hidden;
 }
-
 
 .header {
   display: flex;
@@ -69,11 +85,18 @@ html {
       position: relative;
       display: flex;
       gap: 10px;
+
+      img {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        top: -10px;
+      }
       .icon-container {
         position: relative;
         width: 40px;
         height: 40px;
-        top: -10px;
+
         .cart-icon {
           position: relative;
           height: 30px;
@@ -81,7 +104,7 @@ html {
         }
         .cart-circle {
           position: absolute;
-          top: 0;
+          top: -10px;
           right: 0;
           width: 10px;
           height: 10px;

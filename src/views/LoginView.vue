@@ -153,6 +153,7 @@ export default {
         this.success = "Connexion réussie.";
         this.textColor = "green";
         this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+        this.$store.commit('CHANGE_IDENTITY', this.identite);
 
         setTimeout( () => this.$router.push({ path: '/'}), 2000);
       }
