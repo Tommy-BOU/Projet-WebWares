@@ -338,7 +338,7 @@ export default createStore({
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
     },
-    placeNewOrder({ commit, state }, orderData) {
+    placeNewOrder({ commit }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
       commit('EMPTY_CART');
     },

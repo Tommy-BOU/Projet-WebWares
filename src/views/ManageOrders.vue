@@ -119,14 +119,60 @@
       </button>
     </div>
   </div>
-
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      currentOrder: {
+        orderNumber: 0,
+        titreProduits: [],
+        prixUnitaire: [],
+        quantité: [],
+        coutTotal: 0,
+        entreprise: "",
+        adresse: "",
+        codePostal: "",
+        ville: "",
+        delivered: false,
+      },
+      toggleCard: false,
+      ordersList: [],
+      groupe: "GUEST",
+    };
+  },
+  methods: {
+    reverseOrders() {
+      this.ordersList = this.listOfOrders.reverse();
+      console.log(this.listOfOrders, this.ordersList);
+    },
+    confirmDelivery() {
+      if (confirm("Êtes-vous sûr de vouloir valider cette commande ?")) {
+        this.currentOrder.delivered = true;
+      }
+    },
+    showDetail(orderId) {
+      this.toggleCard = !this.toggleCard;
+      for (let order of this.listOfOrders) {
+        if (order.orderNumber === orderId) {
+          this.currentOrder = order;
+        }
+      }
+    },
+  },
   computed: {
     ...mapState(["listOfOrders"]),
+  },
+  created() {
+    this.reverseOrders();
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+
+      this.$store.commit("CHANGE_GROUP", this.groupe);
+    }
   },
 };
 </script>

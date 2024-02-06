@@ -57,13 +57,17 @@
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
-  <div class="empty-cart" v-else-if="this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'"
+  <div
+    class="empty-cart"
+    v-else-if="
+      this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'
+    "
   >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
   </div>
   <div class="empty-cart" v-else>
-    <br>
+    <br />
     Vous n'êtes pas autorisé à afficher cette page !
   </div>
 
@@ -103,7 +107,6 @@
       <input class="confirmation" type="submit" value="Confirmer commande" />
     </form>
   </div>
-
 </template>
 
 <script>
@@ -119,9 +122,6 @@ export default {
       objectsInCart: [],
       priceTotal: 0,
       modalToggle: false,
-      // adress: "",
-      // postCode: "",
-      // city: "",
       validInput3: false,
       validInput4: false,
       validInput5: false,
@@ -140,7 +140,7 @@ export default {
         ville: "",
         delivered: false,
       },
-      groupe: 'GUEST',
+      groupe: "GUEST",
     };
   },
   computed: {
@@ -226,7 +226,15 @@ export default {
     },
   },
   created() {
-    this.loadCart();
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.$store.commit("CHANGE_GROUP", this.groupe);
+
+      this.loadCart();
+      
+      this.setCartData();
+    }
   },
   mounted() {},
   beforeUpdate() {
@@ -270,7 +278,6 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 10px;
-
     }
 
     .confirmation {
