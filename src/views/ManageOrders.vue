@@ -119,10 +119,7 @@
       </button>
     </div>
   </div>
-  <div v-else class="order-container">
-    <br>
-    Vous n'êtes pas autorisé à afficher cette page !
-  </div>
+
 </template>
 
 <script>
