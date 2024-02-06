@@ -1,11 +1,24 @@
 <template>
   <div class="products-section">
-    <h2>Tous produits</h2>
-    <div class="input-group">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-        </svg>
-        <input v-model="searchTerm" @input="handleSearch()" type="text" id="searchInput" placeholder="Rechercher par nom de produit">
+    <h2> {{ chosenCategory }} </h2>
+    <div class="filter-section">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag" viewBox="0 0 16 16">
+        <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0"/>
+        <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1m0 5.586 7 7L13.586 9l-7-7H2z"/>
+      </svg>
+      <select v-model="chosenCategory" @change="filterProductsByCategory()" name="categories" id="categories">
+        <option value="Tous produits">Tous produits</option>
+        <option value="Mobilier d'intérieur">Mobilier d'intérieur</option>
+        <option value="Luminaires">Luminaires</option>
+        <option value="Tapis">Tapis</option>
+        <option value="Objets de décoration">Objets de décoration</option>
+      </select>
+      <div class="input-group">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+          </svg>
+          <input v-model="searchTerm" @input="handleSearch()" type="text" id="searchInput" placeholder="Rechercher par nom de produit">
+      </div>
     </div>
     <div class="products-grid">
       <div v-for="(produit, index) in filteredProducts" :key="index" class="product">
@@ -18,10 +31,12 @@
         <img :src="produit.image" :alt="produit.titre">
         <div class="product-info">
           <h4>{{ produit.titre }}</h4>
-          <p>{{ produit.prix }} €</p>
+          <p v-if="$store.state.identite !== 'guest'">{{ produit.prix }} €</p>
           <p>Commande minimum : {{ produit.moq }}</p>
         </div>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
+        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="$store.state.identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
+        <p v-if="$store.state.identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
+        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-else-if="!isInCart(produit)"/>
         <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-else/>
         <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
       </div>
@@ -44,13 +59,15 @@ export default {
   },
 
   computed: {
-    ...mapState(['produits', 'cartItems', 'favorites']),
+    ...mapState(['produits', 'cartItems', 'favorites', 'categories']),
   },
 
   data() {
     return {
       searchTerm: '',
       filteredProducts: [],
+      chosenCategory: 'Tous produits',
+      disableButton: true
     }
   },
 
@@ -74,17 +91,23 @@ export default {
       return this.favorites.some(fav => fav.id === product.id);
     },
     toggleFavorite(product) {
-    const index = this.favorites.findIndex((fav) => fav.id === product.id);
-
-      if (index === -1) {
-        // If the product is not in favorites, add it
-        this.$store.commit('ADD_TO_FAVORITES', product);
+      if (this.$store.state.identite === 'guest') {
+        alert('Vous devez être connecté pour accéder aux Favoris ; veuillez vous connecter.')
+        return
       } else {
-        // If the product is in favorites, remove it
-        this.$store.commit('REMOVE_FROM_FAVORITES', product);
-      }
 
-      this.saveFavorites();
+      const index = this.favorites.findIndex((fav) => fav.id === product.id);
+
+        if (index === -1) {
+          // If the product is not in favorites, add it
+          this.$store.commit('ADD_TO_FAVORITES', product);
+        } else {
+          // If the product is in favorites, remove it
+          this.$store.commit('REMOVE_FROM_FAVORITES', product);
+        }
+
+        this.saveFavorites();
+      }
     },
 
     saveFavorites() {
@@ -97,18 +120,27 @@ export default {
         this.$store.commit('SET_FAVORITES', JSON.parse(storedFavorites));
       }
     },
-    handleSearch() {
-      const searchTerm = this.searchTerm.toLowerCase();
+    filterProductsByCategory() {
+      const selectedCategory = this.categories.find(category => category.name === this.chosenCategory);
+      this.filterProducts(selectedCategory);
+    },
 
-      if (searchTerm.trim() === '') {
-        // If the search term is empty, show all products
-        this.filteredProducts = this.produits;
-      } else {
-        // Filter products based on the search term
-        this.filteredProducts = this.produits.filter(product =>
-          product.titre.toLowerCase().includes(searchTerm)
-        );
-      }
+    handleSearch() {
+      const selectedCategory = this.categories.find(category => category.name === this.chosenCategory);
+
+      this.filterProducts(selectedCategory);
+    },
+
+    filterProducts(selectedCategory) {
+      this.filteredProducts = selectedCategory
+        ? this.produits
+            .filter(product => product.categorieId === selectedCategory.id)
+            .filter(product =>
+              product.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+            )
+        : this.produits.filter(product =>
+            product.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
     },
     loadCart() {
       const storedCartItems = localStorage.getItem('cartItems');
@@ -119,6 +151,11 @@ export default {
   },
 
   created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+      this.$store.dispatch('logInUser', 'myIdentity');
+    }
     this.filteredProducts = this.produits;
     this.loadFavorites();
     this.loadCart();
@@ -131,13 +168,19 @@ export default {
 .products-section {
   margin-top: 50px;
 }
+  h2 {
+    width: 80%;
+    margin: 0 auto;
+    text-align: left;
+    // line-height: 0;
+  }
 
 .products-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin: 0 auto;
+  margin: 20px auto;
   width: 80%;
 }
 
@@ -171,8 +214,27 @@ h2 {
   margin-bottom: 20px;
 }
 
+.filter-section {
+  width: 80%;
+  margin: 0 auto;
+  text-align: left;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+}
+
+#categories {
+  font-size: 1em;
+  width: 250px;
+  line-height: 1;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
 .input-group {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .input-group svg {
@@ -181,11 +243,11 @@ h2 {
 
 #searchInput {
   font-size: 1em;
-  width: 300px;
+  width: 250px;
   line-height: 1;
   border: 1px solid black;
   border-radius: 5px;
-  padding: 8px;
+  padding: 5px;
 }
 
 .details-link {
@@ -204,6 +266,19 @@ h2 {
 
 .removeFromCartBtn {
   background-color: rgb(94, 25, 111);
+}
+
+.disabledButton {
+  background-color: #ccc;
+  color: #555;
+  cursor: not-allowed;
+  opacity: 0.6;  
+}
+
+.guestMessage {
+  font-size: .8em;
+  font-style: italic;
+  color: rgb(231, 67, 39)
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {

@@ -3,6 +3,20 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    listOfOrders: [
+      {
+        orderNumber: 1,
+        titreProduits: ['Table à manger en bois', 'Lampe moderne'],
+        prixUnitaire: [1499.95, 1299.90],
+        quantité: [5, 10],
+        coutTotal: 2799.85,
+        entreprise: 'Entreprise A',
+        adresse: '123 Rue de la République',
+        codePostal: '75001',
+        ville: 'Paris',
+        delivered: false,
+      },
+    ],
     listOfUsers: [
       {
         id: 1,
@@ -38,7 +52,7 @@ export default createStore({
         role: 'USER'
       },
     ],
-
+    identite: 'guest',
     cartItems: [],
     cartCount: 0,
     favorites: [],
@@ -227,10 +241,10 @@ export default createStore({
 
     ],
     categories: [
-      { id: 1, name: 'Mobilier d\'intérieur' },
+      { id: 1, name: "Mobilier d'intérieur" },
       { id: 2, name: 'Luminaires' },
       { id: 3, name: 'Tapis' },
-      { id: 4, name: 'Objets de décorations' }
+      { id: 4, name: 'Objets de décoration' }
     ],
     // Etat global -> propriété de données partagées par tous les composants 
 
@@ -277,16 +291,32 @@ export default createStore({
     SET_FAVORITES(state, newFavorites) {
       state.favorites = newFavorites;
     },
+    LOG_IN_USER(state, loggedInUserId) {
+      state.identite = loggedInUserId;
+    },
+    PLACE_NEW_ORDER(state, object) {
+      state.listOfOrders.push(object);
+    }
+
   },
   actions: {
     // Actions -> méthodes asynchrone
+    logInUser(context, loggedInUserId) {
+      context.commit('LOG_IN_USER', loggedInUserId);
+    },
+    placeNewOrder({ commit, state }, orderData) {
+      commit('PLACE_NEW_ORDER', orderData);
+      state.cartItems.forEach((item) => {
+        commit('REMOVE_FROM_CART', item);
+      });
+    }
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)
     getItemsInCart(state) {
       return state.cartItems;
     },
-    getPriceTotal(state){
+    getPriceTotal(state) {
       return state.priceTotal;
     }
   },
