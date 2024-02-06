@@ -81,7 +81,7 @@
         </div>
         <div class="prices">
           <p v-for="prix in this.currentOrder.prixArticles" :key="prix">
-            Total : €{{ prix }}
+            Total HT : €{{ prix }}
           </p>
         </div>
       </div>
@@ -130,6 +130,7 @@ export default {
         orderNumber: 0,
         titreProduits: [],
         prixUnitaire: [],
+        prixArticles: [],
         quantité: [],
         coutTotal: 0,
         entreprise: "",
@@ -141,12 +142,15 @@ export default {
       toggleCard: false,
       ordersList: [],
       groupe: "GUEST",
+      identite: "guest",
     };
   },
   methods: {
     reverseOrders() {
-      this.ordersList = this.listOfOrders.reverse();
-      console.log(this.listOfOrders, this.ordersList);
+      // Create a copy of the array using spread syntax
+      const reversedOrders = [...this.listOfOrders];
+      // Reverse the copied array
+      this.ordersList = reversedOrders.reverse();
     },
     confirmDelivery() {
       if (confirm("Êtes-vous sûr de vouloir valider cette commande ?")) {
@@ -167,10 +171,15 @@ export default {
   },
   created() {
     this.reverseOrders();
+
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.identite = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).raisonSociale;
+      this.$store.commit("CHANGE_IDENTITY", this.identite);
 
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
       this.$store.commit("CHANGE_GROUP", this.groupe);
     }
   },
@@ -265,7 +274,7 @@ export default {
     .order-recap {
       display: flex;
       justify-content: center;
-      gap: 50px;
+      gap: 25px;
     }
 
     .status-pending {
