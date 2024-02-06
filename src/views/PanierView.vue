@@ -1,7 +1,7 @@
 <template>
   <div
     class="panier-container"
-    v-if="this.$store.getters.getItemsInCart.length !== 0"
+    v-if="this.$store.getters.getItemsInCart.length !== 0 && groupe === 'USER'"
   >
     <div
       class="panier-item-card"
@@ -49,9 +49,14 @@
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
-  <div class="empty-cart" v-else>
+  <div class="empty-cart" v-else-if="this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'"
+  >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
+  </div>
+  <div class="empty-cart" v-else>
+    <br>
+    Vous n'êtes pas autorisé à afficher cette page !
   </div>
 
   <div v-if="modalToggle" class="confirmation-modal">
@@ -70,6 +75,7 @@
       Confirmer commande
     </button>
   </div>
+
 </template>
 
 <script>
@@ -83,6 +89,7 @@ export default {
       adress: "",
       postCode: "",
       city: "",
+      groupe: 'GUEST',
     };
   },
   computed: {
@@ -140,6 +147,12 @@ export default {
   },
   created() {
     this.loadCart();
+
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.$store.commit('CHANGE_GROUP', this.groupe);
+    }
   },
   mounted() {},
   updated() {

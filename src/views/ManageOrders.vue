@@ -1,5 +1,5 @@
 <template>
-  <div class="order-container">
+  <div v-if="groupe === 'ADMIN'" class="order-container">
     <div class="order-card" v-for="(data, index) in listOfOrders" :key="index">
       <h2>Commande N° {{ data.orderNumber }}</h2>
       <div class="order-recap">
@@ -48,14 +48,33 @@
       </button>
     </div>
   </div>
+  <div v-else class="order-container">
+    <br>
+    Vous n'êtes pas autorisé à afficher cette page !
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      groupe: 'GUEST'
+    };
+  },
+
   computed: {
     ...mapState(["listOfOrders"]),
   },
+
+  created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      
+      this.$store.commit('CHANGE_GROUP', this.groupe);
+    }
+  }
 };
 </script>
 

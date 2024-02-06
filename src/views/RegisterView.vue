@@ -102,12 +102,10 @@ export default {
         existeDeja(this.users, "raisonSociale", this.newUser.raisonSociale) ===
         true
       ) {
-        this.msg1 =
-          "Votre Raison Sociale existe déjà dans notre base de données. \u274C";
+        this.msg1 = "Votre Raison Sociale existe déjà dans notre base de données. \u274C";
         this.validInput1 = false;
       } else {
-        this.msg1 =
-          "Votre Raison Sociale doit contenir au moins 2 caractères. \u274C";
+        this.msg1 = "Votre Raison Sociale doit contenir au moins 2 caractères. \u274C";
         this.validInput1 = false;
       }
     },
@@ -252,6 +250,8 @@ export default {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
 
     let storedUsers = localStorage.getItem("users");
