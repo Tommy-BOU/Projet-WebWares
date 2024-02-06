@@ -40,16 +40,7 @@
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
         <router-link to="/inscription">Inscription</router-link> |
-        <router-link to="/connexion">Connexion</router-link> |
-        <router-link to="/panier">
-          <div v-if="$store.state.identite !== 'guest'" class="icon-container">
-            <img src="./assets/panier.png" alt="" class="cart-icon" />
-            <div
-              class="cart-circle"
-              v-if="this.$store.getters.getItemsInCart.length !== 0"
-            ></div>
-          </div>
-        </router-link>
+        <router-link to="/connexion">Connexion</router-link>
       </nav>
     </div>
   </div>

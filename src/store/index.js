@@ -330,7 +330,6 @@ export default createStore({
       state.actualProducts.splice(index, 1, product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
-    
 
   },
   actions: {
