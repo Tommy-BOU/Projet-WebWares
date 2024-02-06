@@ -63,11 +63,6 @@ const routes = [
     component: ManageProducts
 
   },
-  {
-    path: '/gestion-produits',
-    name: 'gestion-produits',
-    component: ManageProducts
-  },
 ]
 
 const router = createRouter({
