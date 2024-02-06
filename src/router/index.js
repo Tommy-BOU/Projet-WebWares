@@ -10,6 +10,9 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 
+import ManageProducts from '../views/ManageProducts.vue'
+
+
 const routes = [
   {
     path: '/',
@@ -55,6 +58,13 @@ const routes = [
     path: '/gestion-utilisateurs',
     name: 'gestion-utilisateurs',
     component: ManageUsers
+
+  },
+  {
+    path: '/gestion-produits' ,
+    name: 'gestion-produits' ,
+    component: ManageProducts
+
   },
   {
     path: '/gestion-produits',
