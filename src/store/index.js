@@ -57,6 +57,7 @@ export default createStore({
     cartItems: [],
     cartCount: 0,
     favorites: [],
+    actualProducts: [],
     produits: [
       {
         id: 1,
@@ -304,7 +305,30 @@ export default createStore({
     },
     PLACE_NEW_ORDER(state, object) {
       state.listOfOrders.push(object);
-    }
+    },
+    SET_ACTUAL_PRODUCTS(state, newActualProducts) {
+      state.actualProducts = newActualProducts;
+    },
+    REMOVE_FROM_STOCK(state, index) {
+      const updatedActualProducts = [...state.actualProducts];
+      updatedActualProducts.splice(index, 1);
+      state.actualProducts = updatedActualProducts;
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    ADD_NEW_PRODUCT(state, newProduct) {
+      const id = state.actualProducts.length + 1;
+      const product = {
+        id,
+        ...newProduct,
+      };
+      state.actualProducts.push(product);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    EDIT_PRODUCT(state, { index, product }) {
+      state.actualProducts.splice(index, 1, product);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    
 
   },
   actions: {
@@ -315,6 +339,10 @@ export default createStore({
     placeNewOrder({ commit }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
       commit('EMPTY_CART');
+    },
+    setActualProducts({ commit, state }, newActualProducts) {
+      commit('SET_ACTUAL_PRODUCTS', newActualProducts);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     }
   },
   getters: {

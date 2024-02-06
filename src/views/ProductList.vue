@@ -59,7 +59,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['produits', 'cartItems', 'favorites', 'categories']),
+    ...mapState(['produits', 'cartItems', 'favorites', 'categories', 'actualProducts']),
   },
 
   data() {
@@ -133,12 +133,12 @@ export default {
 
     filterProducts(selectedCategory) {
       this.filteredProducts = selectedCategory
-        ? this.produits
+        ? this.actualProducts
             .filter(product => product.categorieId === selectedCategory.id)
             .filter(product =>
               product.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
             )
-        : this.produits.filter(product =>
+        : this.actualProducts.filter(product =>
             product.titre.toLowerCase().includes(this.searchTerm.toLowerCase())
           );
     },
@@ -156,7 +156,7 @@ export default {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
       this.$store.dispatch('logInUser', 'myIdentity');
     }
-    this.filteredProducts = this.produits;
+    this.filteredProducts = this.actualProducts;
     this.loadFavorites();
     this.loadCart();
   }
@@ -172,7 +172,6 @@ export default {
     width: 80%;
     margin: 0 auto;
     text-align: left;
-    // line-height: 0;
   }
 
 .products-grid {
