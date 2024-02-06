@@ -119,53 +119,17 @@
       </button>
     </div>
   </div>
+  <div v-else class="order-container">
+    <br>
+    Vous n'êtes pas autorisé à afficher cette page !
+  </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
 export default {
-  data() {
-    return {
-      currentOrder: {
-        orderNumber: 0,
-        titreProduits: [],
-        prixUnitaire: [],
-        quantité: [],
-        coutTotal: 0,
-        entreprise: "",
-        adresse: "",
-        codePostal: "",
-        ville: "",
-        delivered: false,
-      },
-      toggleCard: false,
-      ordersList: [],
-    };
-  },
-  methods: {
-    reverseOrders() {
-      this.ordersList = this.listOfOrders.reverse();
-      console.log(this.listOfOrders, this.ordersList);
-    },
-    confirmDelivery() {
-      if (confirm("Êtes-vous sûr de vouloir valider cette commande ?")) {
-        this.currentOrder.delivered = true;
-      }
-    },
-    showDetail(orderId) {
-      this.toggleCard = !this.toggleCard;
-      for (let order of this.listOfOrders) {
-        if (order.orderNumber === orderId) {
-          this.currentOrder = order;
-        }
-      }
-    },
-  },
   computed: {
     ...mapState(["listOfOrders"]),
-  },
-  created() {
-    this.reverseOrders();
   },
 };
 </script>

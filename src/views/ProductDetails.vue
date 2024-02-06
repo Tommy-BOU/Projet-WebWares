@@ -5,12 +5,12 @@
       <GeneralButton
         label="Ajouter au panier"
         @generalEvent="addOrRemove(produit)"
-        v-if="$store.state.identite === 'guest'"
+        v-if="identite === 'guest'"
         :disabled="disableButton"
         class="disabledButton"
         title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."
       />
-      <p v-if="$store.state.identite === 'guest'" class="guestMessage">
+      <p v-if="identite === 'guest'" class="guestMessage">
         Vous connecter pour accéder au panier.
       </p>
       <GeneralButton
@@ -72,9 +72,9 @@ export default {
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.identite = JSON.parse(
-        localStorage.getItem("myIdentity")
-      ).raisonSociale;
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
   },
 };

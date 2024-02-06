@@ -1,6 +1,5 @@
 import { createStore } from 'vuex'
 
-
 export default createStore({
   state: {
     listOfOrders: [
@@ -54,6 +53,7 @@ export default createStore({
       },
     ],
     identite: 'guest',
+    groupe: 'GUEST',
     cartItems: [],
     cartCount: 0,
     favorites: [],
@@ -256,7 +256,9 @@ export default createStore({
     CHANGE_IDENTITY(state, newIdentity) {
       state.identite = newIdentity;
     },
-
+    CHANGE_GROUP(state, newGroup) {
+      state.groupe = newGroup;
+    },
     ADD_TO_CART(state, product) {
       const existingItem = state.cartItems.find(item => item.id === product.id);
 
@@ -336,7 +338,7 @@ export default createStore({
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
     },
-    placeNewOrder({ commit }, orderData) {
+    placeNewOrder({ commit, state }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
       commit('EMPTY_CART');
     },
