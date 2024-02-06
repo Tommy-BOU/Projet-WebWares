@@ -151,15 +151,18 @@ export default {
   },
 
   created() {
-    let identity = localStorage.getItem("myIdentity");
-    if (identity) {
-      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
-      this.$store.dispatch('logInUser', 'myIdentity');
-    }
-    this.filteredProducts = this.actualProducts;
-    this.loadFavorites();
-    this.loadCart();
+  let identity = localStorage.getItem("myIdentity");
+  if (identity) {
+    this.identite = JSON.parse(identity).raisonSociale;
+    this.$store.dispatch('logInUser', JSON.parse(identity));
   }
+
+  this.filteredProducts = [...this.actualProducts];
+  this.loadFavorites();
+  this.loadCart();
+}
+
+
 }
 </script>
 
@@ -217,9 +220,6 @@ h2 {
   width: 80%;
   margin: 0 auto;
   text-align: left;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
 }
 
 #categories {

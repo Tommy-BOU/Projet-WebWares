@@ -316,10 +316,10 @@ export default createStore({
       state.actualProducts.push(product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
-    EDIT_PRODUCT(state, { index, product }) {
-      state.actualProducts.splice(index, 1, product);
-      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
-    },
+    // EDIT_PRODUCT(state, { index, product }) {
+    //   state.actualProducts.splice(index, 1, product);
+    //   localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    // },
     
 
   },
