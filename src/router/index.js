@@ -10,9 +10,6 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 
-import ManageProducts from '../views/ManageProducts.vue'
-
-
 const routes = [
   {
     path: '/',
