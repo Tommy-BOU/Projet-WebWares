@@ -67,12 +67,12 @@ export default {
       searchTerm: '',
       filteredProducts: [],
       chosenCategory: 'Tous produits',
-      disableButton: true,
-      identite: 'guest'
+      disableButton: true
     }
   },
 
   methods: {
+    
     isInCart(item) {
             return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
         },
@@ -153,11 +153,11 @@ export default {
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
-    this.filteredProducts = this.actualProducts;
+    this.filteredProducts = this.produits;
     this.loadFavorites();
     this.loadCart();
   }
@@ -218,9 +218,6 @@ h2 {
   width: 80%;
   margin: 0 auto;
   text-align: left;
-  // display: flex;
-  // justify-content: center;
-  // align-items: center;
 }
 
 #categories {
