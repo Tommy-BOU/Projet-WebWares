@@ -117,13 +117,26 @@
 
 
 <script>
+export default {
+  data() {
+    return {
+      identite: 'guest',
+      groupe: 'GUEST'
+    };
+  },
 
+  created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
-
-
 #myVideo {
   position: relative;
     left: 0;

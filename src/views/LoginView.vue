@@ -15,27 +15,27 @@
     <br><br>
     <a @click="openModal()">Mot De Passe oublié</a>
 
-        <!-- MODAL  -->
-        <div id="editModal" class="modal" v-if="openedModal" v-cloak>
-            <div class="modal-content">
-              <span class="close" @click="closeModal">X</span>
-              <div v-if="success === ''">
-                <h2>Mot De Passe oublié</h2>
-                <form v-on:submit.prevent="forgot">
-                  <label for="email">Email :</label> <input type="email" id="email2" name="email2" v-model="email2" style="width:460px" placeholder="Veuillez saisir votre Email" @input="verifEmail" required />
-                  <span v-html="msg" v-if="msg != ''"></span>
-                  <br><br>
-                  <p>Un nouveau mot de passe ainsi que le lien pour l'activer vont être envoyés à cette adresse.</p>
-                  <br>
-                  <input type="submit" value="Envoyer l'email">
-                </form>
-              </div>
-              <div v-else>
-                <span :style="{ color: textColor }"><br>{{ success }}</span>
-              </div>
-            </div>
+    <!-- MODAL  -->
+    <div id="editModal" class="modal" v-if="openedModal" v-cloak>
+        <div class="modal-content">
+          <span class="close" @click="closeModal">X</span>
+          <div v-if="success === ''">
+            <h2>Mot De Passe oublié</h2>
+            <form v-on:submit.prevent="forgot">
+              <label for="email">Email :</label> <input type="email" id="email2" name="email2" v-model="email2" style="width:460px" placeholder="Veuillez saisir votre Email" @input="verifEmail" required />
+              <span v-html="msg" v-if="msg != ''"></span>
+              <br><br>
+              <p>Un nouveau mot de passe ainsi que le lien pour l'activer vont être envoyés à cette adresse.</p>
+              <br>
+              <input type="submit" value="Envoyer l'email">
+            </form>
+          </div>
+          <div v-else>
+            <span :style="{ color: textColor }"><br>{{ success }}</span>
+          </div>
         </div>
-        <!-- MODAL  -->
+    </div>
+    <!-- MODAL  -->
 
   </div>
   <div v-else class="connect">
@@ -103,6 +103,7 @@ export default {
       success: '',
       textColor: '',
       identite: 'guest',
+      groupe: 'GUEST',
       openedModal: false,
       msg: '',
       validEmail: false
@@ -152,8 +153,17 @@ export default {
       else {
         this.success = "Connexion réussie.";
         this.textColor = "green";
-        this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
 
+        this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+        this.$store.commit('CHANGE_IDENTITY', this.identite);
+
+        this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+        this.$store.commit('CHANGE_GROUP', this.groupe);
+
+        // Transmission du groupe de l'utilisateur dans App.vue
+        this.$emit('updateGroup', this.groupe);
+
+        // Redirection vers l'accueil
         setTimeout( () => this.$router.push({ path: '/'}), 2000);
       }
     }
@@ -163,6 +173,8 @@ export default {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+      
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
 
     let storedUsers = localStorage.getItem("users");

@@ -31,11 +31,11 @@
         <img :src="produit.image" :alt="produit.titre">
         <div class="product-info">
           <h4>{{ produit.titre }}</h4>
-          <p v-if="$store.state.identite !== 'guest'">{{ produit.prix }} €</p>
+          <p v-if="identite !== 'guest'">{{ produit.prix }} €</p>
           <p>Commande minimum : {{ produit.moq }}</p>
         </div>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="$store.state.identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
-        <p v-if="$store.state.identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
+        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
+        <p v-if="identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
         <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-else-if="!isInCart(produit)"/>
         <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-else/>
         <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
@@ -91,7 +91,7 @@ export default {
       return this.favorites.some(fav => fav.id === product.id);
     },
     toggleFavorite(product) {
-      if (this.$store.state.identite === 'guest') {
+      if (this.identite === 'guest') {
         alert('Vous devez être connecté pour accéder aux Favoris ; veuillez vous connecter.')
         return
       } else {
@@ -151,18 +151,16 @@ export default {
   },
 
   created() {
-  let identity = localStorage.getItem("myIdentity");
-  if (identity) {
-    this.identite = JSON.parse(identity).raisonSociale;
-    this.$store.dispatch('logInUser', JSON.parse(identity));
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
+    }
+    this.filteredProducts = this.produits;
+    this.loadFavorites();
+    this.loadCart();
   }
-
-  this.filteredProducts = [...this.actualProducts];
-  this.loadFavorites();
-  this.loadCart();
-}
-
-
 }
 </script>
 

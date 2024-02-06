@@ -55,13 +55,11 @@ const routes = [
     path: '/gestion-utilisateurs',
     name: 'gestion-utilisateurs',
     component: ManageUsers
-
   },
   {
     path: '/gestion-produits' ,
     name: 'gestion-produits' ,
     component: ManageProducts
-
   },
 ]
 

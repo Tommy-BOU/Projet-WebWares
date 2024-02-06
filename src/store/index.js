@@ -1,13 +1,13 @@
 import { createStore } from 'vuex'
 
-
 export default createStore({
   state: {
     listOfOrders: [
       {
         orderNumber: 1,
         titreProduits: ['Table à manger en bois', 'Lampe moderne'],
-        prixUnitaire: [1499.95, 1299.90],
+        prixArticles: [1499.95, 1299.90],
+        prixUnitaire:[299.99, 129.99],
         quantité: [5, 10],
         coutTotal: 2799.85,
         entreprise: 'Entreprise A',
@@ -53,6 +53,7 @@ export default createStore({
       },
     ],
     identite: 'guest',
+    groupe: 'GUEST',
     cartItems: [],
     cartCount: 0,
     favorites: [],
@@ -252,7 +253,12 @@ export default createStore({
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
-
+    CHANGE_IDENTITY(state, newIdentity) {
+      state.identite = newIdentity;
+    },
+    CHANGE_GROUP(state, newGroup) {
+      state.groupe = newGroup;
+    },
     ADD_TO_CART(state, product) {
       const existingItem = state.cartItems.find(item => item.id === product.id);
 
@@ -273,6 +279,10 @@ export default createStore({
         state.cartCount = state.cartItems.reduce((total, item) => total + item.quantity, 0);
       }
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
+    },
+    EMPTY_CART(state) {
+      state.cartItems = [];
+      localStorage.setItem('cartItems', []);
     },
     SET_CART_ITEMS(state, newCartItems) {
       state.cartItems = newCartItems;
@@ -316,11 +326,10 @@ export default createStore({
       state.actualProducts.push(product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
-    // EDIT_PRODUCT(state, { index, product }) {
-    //   state.actualProducts.splice(index, 1, product);
-    //   localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
-    // },
-    
+    EDIT_PRODUCT(state, { index, product }) {
+      state.actualProducts.splice(index, 1, product);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
 
   },
   actions: {
@@ -328,11 +337,9 @@ export default createStore({
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
     },
-    placeNewOrder({ commit, state }, orderData) {
+    placeNewOrder({ commit }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
-      state.cartItems.forEach((item) => {
-        commit('REMOVE_FROM_CART', item);
-      });
+      commit('EMPTY_CART');
     },
     setActualProducts({ commit, state }, newActualProducts) {
       commit('SET_ACTUAL_PRODUCTS', newActualProducts);
