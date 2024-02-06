@@ -5,7 +5,9 @@
     /></router-link>
     <div class="nav-container">
       <nav class="navbar2">
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | 
+        <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link> |
+        <router-link to="/gestion-produits">Gestion des produits</router-link>
       </nav>
       <nav class="navbar">
         <router-link to="/">Accueil</router-link> |
