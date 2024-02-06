@@ -16,7 +16,7 @@
     <a @click="openModal()">Mot De Passe oublié</a>
 
     <!-- MODAL  -->
-    <div id="editModal" class="modal" v-if="openedModal" v-cloak>
+    <div class="modal" v-if="openedModal" v-cloak>
         <div class="modal-content">
           <span class="close" @click="closeModal">X</span>
           <div v-if="success === ''">
@@ -261,5 +261,9 @@ a:hover {
   font-size: 18px;
   color: #333;
   z-index: 2; 
+}
+
+[v-cloak] {
+  display: none;
 }
 </style>
