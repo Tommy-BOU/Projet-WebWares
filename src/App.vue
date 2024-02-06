@@ -6,15 +6,8 @@
     <div class="nav-container">
       <nav class="navbar2" v-if="groupe === 'ADMIN'">
         <h1>PANEL ADMIN</h1>
-        <br />
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link>
-        |
-        <router-link to="/gestion-utilisateurs"
-          >Gestion des utilisateurs</router-link
-        >|
-        <router-link to="/gestion-produits"
-          >Gestion des produits</router-link
-        >
+        <br>
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-produits">Gestion des produits</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
       </nav>
       <nav class="navbar" v-if="groupe === 'ADMIN'">
         <router-link to="/">Accueil</router-link> |
@@ -25,6 +18,7 @@
       <nav class="navbar" v-else-if="groupe === 'USER'">
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
+        <router-link to="/profil">Profil</router-link> |
         <router-link to="/deconnexion">Déconnexion</router-link> |
         <router-link to="/panier">
           <div class="icon-container">

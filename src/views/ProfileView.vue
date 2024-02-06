@@ -1,36 +1,16 @@
 <template>
 
-  <div v-if="groupe === 'ADMIN'" class="users">
-    <h1>Utilisateurs</h1>
+  <div v-if="groupe === 'USER'" class="user">
+    <h1>Profil</h1>
     <br><br>
-    <table>
-      <thead>
-          <tr>
-              <th>Id</th>
-              <th>Raison Sociale</th>
-              <th>Rôle</th>
-              <th>Actions</th>
-          </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(user, index) in users" :key="index">
-          <td>{{ user.id }}</td>
-          <td>{{ user.raisonSociale }}</td>
-          <td>{{ user.role }}</td>
-          <td>
-            <button type="button" @click="openModal(index)">Modifier</button>
-            <button type="button" @click="remove(index)">Supprimer</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <button type="button" @click="openModal(id)">Modifier mes informations</button>
 
       <!-- MODAL  -->
       <div id="editModal" class="modal" v-if="openedModal" v-cloak>
           <div class="modal-content">
             <span class="close" @click="closeModal">X</span>
             <div v-if="success === ''">
-              <h2>Modification de l'utilisateur <b>{{ raisonSociale }}</b></h2>
+              <h2>Modification de vos informations :<br><b>{{ raisonSociale }}</b></h2>
               <br>
               <form v-on:submit.prevent="update">
                 <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
@@ -53,13 +33,6 @@
                 <br><br>
                 <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="motDePasse" placeholder="5 caractères minimum" @input="verifMotDePasse" required />
                 <span v-html="msg7" v-if="msg7 != ''"></span>
-                <br><br>
-                <label for="role">Rôle :</label><br><select id="role" name="role" v-model="role" @change="verifRole">
-                  <option value="ADMIN">ADMIN</option>
-                  <option value="USER">USER</option>
-                </select>
-                <br>
-                <span v-html="msg8" v-if="msg8 != ''"></span>
                 <br><br><br>
                 <input type="submit" value="Enregistrer">
               </form>
@@ -72,7 +45,7 @@
       <!-- MODAL  -->
 
   </div>
-  <div v-else class="users">
+  <div v-else class="user">
     <br>
     Vous n'êtes pas autorisé à afficher cette page !
   </div>
@@ -103,7 +76,6 @@ export default {
       validInput5: true,
       validInput6: true,
       validInput7: true,
-      validInput8: true,
       msg1: "La Raison Sociale est correcte. \u2705",
       msg2: "Le Siret est correct. \u2705",
       msg3: "L'Adresse est correcte. \u2705",
@@ -111,7 +83,6 @@ export default {
       msg5: "La Ville est correcte. \u2705",
       msg6: "L'Email est valide. \u2705",
       msg7: "Le Mot De Passe est correct. \u2705",
-      msg8: "Le Rôle est correct. \u2705",
       success: '',
       textColor: ''
     };
@@ -199,45 +170,22 @@ export default {
       }
     },
 
-    verifRole() {
-      if (this.role === "ADMIN" || this.role === "USER") {
-        this.msg8 = "Le Rôle est correct. \u2705";
-        this.validInput8 = true;
-      }
-      else {
-        this.msg8 = "Le Rôle doit être ADMIN ou USER. \u274C";
-        this.validInput8 = false;
-      }
-    },
-
-    remove(index) {
-      if (confirm("Etes-vous certain de vouloir supprimer cet utilisateur ?")) {
-        this.users.splice(index, 1);
-      }
-    },
-
     update() {
-      if (this.validInput1 && this.validInput2 && this.validInput3 && this.validInput4 && this.validInput5 && this.validInput6 && this.validInput7 && this.validInput8) {
-        this.index.raisonSociale = this.raisonSociale;
-				this.index.siret = this.siret;
-				this.index.adresse = this.adresse;
-        this.index.codePostal = this.codePostal;
-        this.index.ville = this.ville;
-        this.index.email = this.email;
-        this.index.motDePasse = this.motDePasse;
-        this.index.role = this.role;
+      if (this.validInput1 && this.validInput2 && this.validInput3 && this.validInput4 && this.validInput5 && this.validInput6 && this.validInput7) {
 
-        if (this.index.id === this.id)
-        {
-          this.success = "Modification sur votre propre profil réussie.";
+        let id = this.users.findIndex(element => element.id === this.id);
+        
+        this.users[id].raisonSociale = this.raisonSociale;
+        this.users[id].siret = this.siret;
+				this.users[id].adresse = this.adresse;
+        this.users[id].codePostal = this.codePostal;
+        this.users[id].ville = this.ville;
+        this.users[id].email = this.email;
+        this.users[id].motDePasse = this.motDePasse;
 
-          localStorage.setItem("myIdentity", JSON.stringify(this.index));
-        }
-        else
-        {
-          this.success = "Modification réussie.";
-        }
+        localStorage.setItem("myIdentity", JSON.stringify(this.users[id]));
 
+        this.success = "Modification réussie.";
         this.textColor = "green";
 
         setTimeout(() => this.openedModal = !this.openedModal, 2000);
@@ -249,18 +197,18 @@ export default {
       localStorage.setItem("users", JSON.stringify(this.users));
     },
 
-    openModal(index) {
+    openModal(id) {
       this.openedModal = !this.openedModal;
 
-      this.index = this.users[index];
-      this.raisonSociale = this.users[index].raisonSociale;
-      this.siret = this.users[index].siret;
-      this.adresse = this.users[index].adresse;
-      this.codePostal = this.users[index].codePostal;
-      this.ville = this.users[index].ville;
-      this.email = this.users[index].email;
-      this.motDePasse = this.users[index].motDePasse;
-      this.role = this.users[index].role;
+      id = this.users.findIndex(element => element.id === this.id);
+
+      this.raisonSociale = this.users[id].raisonSociale;
+      this.siret = this.users[id].siret;
+      this.adresse = this.users[id].adresse;
+      this.codePostal = this.users[id].codePostal;
+      this.ville = this.users[id].ville;
+      this.email = this.users[id].email;
+      this.motDePasse = this.users[id].motDePasse;
     },
 
     closeModal() {
@@ -298,7 +246,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.users {
+.user {
   width: 600px;
   margin-left: auto;
   margin-right: auto;
