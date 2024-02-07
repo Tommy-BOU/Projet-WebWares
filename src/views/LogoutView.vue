@@ -1,9 +1,9 @@
 <template>
 
     <div class="deconnect">
-        <span :style="{ color: textColor }"><br>{{ success }}</span>
-        <br><br>
-        Redirection en cours ...
+      <span :style="{ color: textColor }"><br>{{ success }}</span>
+      <br><br>
+      Redirection en cours ...
     </div>
 
 </template>
@@ -20,6 +20,14 @@ export default {
   created() {
     localStorage.removeItem('myIdentity');
 
+    this.$store.commit('CHANGE_IDENTITY', 'guest');
+
+    this.$store.commit('CHANGE_GROUP', 'GUEST');
+
+    // Transmission du groupe de l'utilisateur dans App.vue
+    this.$emit('updateGroup', 'GUEST');
+
+    // Redirection vers l'accueil
     setTimeout( () => this.$router.push({ path: '/'}), 2000);
   }
 };

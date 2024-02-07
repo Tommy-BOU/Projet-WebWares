@@ -92,7 +92,8 @@ export default {
   data() {
     return {
       users: this.$store.state.listOfUsers,
-      groupe: 'USER',
+      identite: 'guest',
+      groupe: 'GUEST',
       openedModal: false,
       validInput1: true,
       validInput2: true,
@@ -267,7 +268,11 @@ export default {
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
+
       this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.$store.commit('CHANGE_GROUP', 'ADMIN');
     }
 
     let storedUsers = localStorage.getItem("users");
@@ -352,7 +357,9 @@ button {
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   max-width: 600px;
+  max-height: 600px;
   width: 100%;
+  overflow-y: scroll;
   position: relative;
 }
 

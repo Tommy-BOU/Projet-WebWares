@@ -8,9 +8,8 @@ import ProductDetails from '../views/ProductDetails.vue'
 import PanierView from '../views/PanierView.vue'
 import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
-
 import ManageProducts from '../views/ManageProducts.vue'
-
+import ManageCategory from '../views/ManageCategory.vue'
 
 const routes = [
   {
@@ -57,13 +56,16 @@ const routes = [
     path: '/gestion-utilisateurs',
     name: 'gestion-utilisateurs',
     component: ManageUsers
-
   },
   {
     path: '/gestion-produits' ,
     name: 'gestion-produits' ,
     component: ManageProducts
-
+  },
+  {
+    path: '/gestion-categories' ,
+    name: 'gestion-categories' ,
+    component: ManageCategory
   },
 ]
 
