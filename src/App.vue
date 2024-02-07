@@ -4,9 +4,16 @@
       ><img src="./assets/WW2.png" alt="logo"
     /></router-link>
     <div class="nav-container">
-      <nav class="navbar2">
-
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link> | <router-link to="/gestion-produits">Gestion des produits</router-link> 
+      <nav class="navbar2" v-if="groupe === 'ADMIN'">
+        <h1>PANEL ADMIN</h1>
+        <br>
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link> | <router-link to="/gestion-produits">Gestion des produits</router-link> | <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
+      </nav>
+      <nav class="navbar" v-if="groupe === 'ADMIN'">
+        <router-link to="/">Accueil</router-link> |
+        <router-link to="/produits">Produits</router-link> |
+        <router-link to="/deconnexion">Déconnexion</router-link>
+      </nav>
 
       <nav class="navbar" v-else-if="groupe === 'USER'">
         <router-link to="/">Accueil</router-link> |
@@ -18,7 +25,8 @@
             <div class="cart-circle" v-if="this.$store.getters.getItemsInCart.length !== 0"></div>
         </router-link>
       </nav>
-      <nav class="navbar">
+
+      <nav class="navbar" v-else>
         <router-link to="/">Accueil</router-link> |
         <router-link to="/produits">Produits</router-link> |
         <router-link to="/inscription">Inscription</router-link> |
@@ -92,15 +100,25 @@ html {
     align-items: center;
     flex-direction: column;
 
+    .navbar2 {
+      border: 1px solid rgb(231, 67, 39);
+    }
     .navbar {
       position: relative;
       display: flex;
       gap: 10px;
+
+      img {
+        position: relative;
+        width: 30px;
+        height: 30px;
+        top: -10px;
+      }
       .icon-container {
         position: relative;
         width: 40px;
         height: 40px;
-        top: -10px;
+
         .cart-icon {
           position: relative;
           height: 30px;
@@ -108,7 +126,7 @@ html {
         }
         .cart-circle {
           position: absolute;
-          top: 0;
+          top: -10px;
           right: 0;
           width: 10px;
           height: 10px;
