@@ -68,7 +68,7 @@ export default {
     return {
       identite: 'guest',
       searchTerm: '',
-      // actualProducts: [...this.$store.state.produits],
+      actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
       chosenCategory: 'Tous produits',
       disableButton: true
