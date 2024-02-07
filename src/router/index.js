@@ -67,7 +67,11 @@ const routes = [
     path: '/gestion-produits' ,
     name: 'gestion-produits' ,
     component: ManageProducts
-
+  },
+  {
+    path: '/gestion-categories' ,
+    name: 'gestion-categories' ,
+    component: ManageCategory
   },
 ]
 

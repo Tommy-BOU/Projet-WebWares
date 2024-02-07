@@ -94,8 +94,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import GeneralButton from '@/components/GeneralButton.vue';
 
 import { mapState } from 'vuex';
 import GeneralButton from '@/components/GeneralButton.vue';
