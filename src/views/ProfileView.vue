@@ -5,44 +5,44 @@
     <br><br>
     <button type="button" @click="openModal(id)">Modifier mes informations</button>
 
-      <!-- MODAL  -->
-      <div class="modal" v-if="openedModal" v-cloak>
-          <div class="modal-content">
-            <span class="close" @click="closeModal">X</span>
-            <div v-if="success === ''">
-              <h2>Modification de vos informations :<br><b>{{ raisonSociale }}</b></h2>
-              <br>
-              <form v-on:submit.prevent="update">
-                <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
-                <span v-html="msg1" v-if="msg1 != ''"></span>
-                <br><br>
-                <label for="siret">Siret :</label> <input type="text" id="siret" name="siret" v-model="siret" placeholder="14 chiffres" @input="verifSiret" required />
-                <span v-html="msg2" v-if="msg2 != ''"></span>
-                <br><br>
-                <label for="adresse">Adresse :</label> <input type="text" id="adresse" name="adresse" v-model="adresse" placeholder="2 caractères minimum" @input="verifAdresse" required />
-                <span v-html="msg3" v-if="msg3 != ''"></span>
-                <br><br>
-                <label for="codePostal">Code Postal :</label> <input type="text" id="codePostal" name="codePostal" v-model="codePostal" placeholder="5 chiffres" @input="verifCodePostal" required />
-                <span v-html="msg4" v-if="msg4 != ''"></span>
-                <br><br>
-                <label for="ville">Ville :</label> <input type="text" id="ville" name="ville" v-model="ville" placeholder="2 caractères minimum" @input="verifVille" required />
-                <span v-html="msg5" v-if="msg5 != ''"></span>
-                <br><br>
-                <label for="email">Email :</label> <input type="email" id="email" name="email" v-model="email" placeholder="Email valide" @input="verifEmail" required />
-                <span v-html="msg6" v-if="msg6 != ''"></span>
-                <br><br>
-                <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="motDePasse" placeholder="5 caractères minimum" @input="verifMotDePasse" required />
-                <span v-html="msg7" v-if="msg7 != ''"></span>
-                <br><br><br>
-                <input type="submit" value="Enregistrer">
-              </form>
-            </div>
-            <div v-else>
-              <span :style="{ color: textColor }"><br>{{ success }}</span>
-            </div>
-          </div>
+    <!-- MODAL  -->
+    <div class="modal" v-if="openedModal" v-cloak>
+      <div class="modal-content">
+        <span class="close" @click="closeModal">X</span>
+        <div v-if="success === ''">
+          <h2>Modification de vos informations :<br><b>{{ raisonSociale }}</b></h2>
+          <br>
+          <form v-on:submit.prevent="update">
+            <label for="raisonSociale">Raison Sociale :</label> <input type="text" id="raisonSociale" name="raisonSociale" v-model="raisonSociale" placeholder="2 caractères minimum" @input="verifRaisonSociale" required />
+            <span v-html="msg1" v-if="msg1 != ''"></span>
+            <br><br>
+            <label for="siret">Siret :</label> <input type="text" id="siret" name="siret" v-model="siret" placeholder="14 chiffres" @input="verifSiret" required />
+            <span v-html="msg2" v-if="msg2 != ''"></span>
+            <br><br>
+            <label for="adresse">Adresse :</label> <input type="text" id="adresse" name="adresse" v-model="adresse" placeholder="2 caractères minimum" @input="verifAdresse" required />
+            <span v-html="msg3" v-if="msg3 != ''"></span>
+            <br><br>
+            <label for="codePostal">Code Postal :</label> <input type="text" id="codePostal" name="codePostal" v-model="codePostal" placeholder="5 chiffres" @input="verifCodePostal" required />
+            <span v-html="msg4" v-if="msg4 != ''"></span>
+            <br><br>
+            <label for="ville">Ville :</label> <input type="text" id="ville" name="ville" v-model="ville" placeholder="2 caractères minimum" @input="verifVille" required />
+            <span v-html="msg5" v-if="msg5 != ''"></span>
+            <br><br>
+            <label for="email">Email :</label> <input type="email" id="email" name="email" v-model="email" placeholder="Email valide" @input="verifEmail" required />
+            <span v-html="msg6" v-if="msg6 != ''"></span>
+            <br><br>
+            <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="motDePasse" placeholder="5 caractères minimum" @input="verifMotDePasse" required />
+            <span v-html="msg7" v-if="msg7 != ''"></span>
+            <br><br><br>
+            <input type="submit" value="Enregistrer">
+          </form>
+        </div>
+        <div v-else>
+          <span :style="{ color: textColor }"><br>{{ success }}</span>
+        </div>
       </div>
-      <!-- MODAL  -->
+    </div>
+    <!-- MODAL  -->
 
   </div>
   <div v-else class="user">
