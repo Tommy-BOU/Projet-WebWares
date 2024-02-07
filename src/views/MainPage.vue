@@ -26,7 +26,8 @@
 </div>
 <div class="bloc-images">
   <div class="bloc-image">
-          <router-link :to="'produits-details/5'" class="details-link"><img src="../assets/mobilier-1.jpg" alt="Table de nuit" /></router-link>
+
+          <router-link :to="'produits-details/6'" class="details-link"><img src="../assets/mobilier-1.jpg" alt="Table de nuit" /></router-link>
           <br>
           <span><strong >Table de nuit en bois massif</strong></span>
   </div>
@@ -153,7 +154,8 @@ export default {
     position:absolute;
     left: 0;
     right: 0;
-    top: 30%;
+
+    top: 35%;
     bottom: 0;
     width: 100%;
     height: auto;
@@ -209,8 +211,8 @@ button:hover {
 }
 img{
   margin: 20px;
-  width:240px;
-  height: 240px;
+  width:300px;
+  height: 300px;
 }
 h2{
   color: rgb(231, 67, 39);

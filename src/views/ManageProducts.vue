@@ -4,6 +4,7 @@
     <div class="product-inventory-container">
         <h1>Produits</h1>
         <br><br>
+        <GeneralButton label="Ajouter un produit" @generalEvent="openModal" />
         <table>
           <thead>
               <tr>
@@ -49,34 +50,35 @@
     <!-- Modal -->
     <div v-if="openedModal" class="modal">
       <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
+        <span class="close" @click="closeModal">X</span>
         <h2>{{ editingProduct ? 'Modifier un produit' : 'Ajouter un produit' }}</h2>
 
         <!-- Form fields -->
-        <form @submit.prevent="add(newProduct)">
+        <form @submit.prevent="editingProduct ? edit() : add()">
           <label for="productName">Nom du produit:</label>
           <br>
-          <input type="text" id="productName" v-model="newProduct.titre" required>
+          <input type="text" id="productName" v-model="form.titre" required>
             <br>
           <label for="productDescription">Description:</label>
           <br>
-          <textarea id="productDescription" v-model="newProduct.description" required></textarea>
+          <textarea id="productDescription" v-model="form.description" required></textarea>
             <br>
           <label for="productPrice">Prix:</label>
           <br>
-          <input type="number" id="productPrice" v-model="newProduct.prix" required>
+          <input type="number" id="productPrice" v-model="form.prix" required>
             <br>
           <label for="productMoq">MOQ (Quantité minimale de commande):</label>
           <br>
-          <input type="number" id="productMoq" v-model="newProduct.moq" required>
+          <input type="number" id="productMoq" v-model="form.moq" required>
             <br>
           <label for="productCategory">Catégorie:</label>
           <br>
-          <select name="category" id="category" v-model="newProduct.categorieId">
-            <option value="1">1 - Mobilier d'intérieur</option>
+          <select name="category" id="category" v-model="form.categorieId">
+            <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+            <!-- <option value="1">1 - Mobilier d'intérieur</option>
             <option value="2">2 - Luminaires</option>
             <option value="3">3 - Tapis</option>
-            <option value="4">4 - Objets de décorations</option>
+            <option value="4">4 - Objets de décorations</option> -->
           </select>
             <br>
             <br>
@@ -84,7 +86,7 @@
           <br>
           <input type="file" id="productImage" @change="handleImageUpload" accept="image/*">
             <br>
-          <button id="addImageBtn" type="submit">Ajouter ce produit</button>
+          <button type="submit">{{ editingProduct ? 'Modifier' : 'Ajouter' }}</button>
         </form>
       </div>
     </div>
@@ -92,6 +94,7 @@
 </template>
 
 <script>
+
 import { mapState } from 'vuex';
 import GeneralButton from '@/components/GeneralButton.vue';
 
@@ -102,13 +105,15 @@ export default {
     data() {
         return {
             openedModal: false,
-            newProduct: {
+            editingProduct: false,
+            form: {
+                id: null,
                 image: null,
                 titre: '',
                 description: '',
-                prix: 0,
-                moq: 0,
-                categorieId: '',
+                prix: null,
+                moq: null,
+                categorieId: null,
             },
         }
     },
@@ -122,34 +127,52 @@ export default {
             this.$store.commit('REMOVE_FROM_STOCK', index);
             }
         },
-        add(newProduct) {
-            this.$store.commit('ADD_NEW_PRODUCT', newProduct);
+        add() {
+            this.$store.commit('ADD_NEW_PRODUCT', this.form);
+            localStorage.setItem('actualProducts', JSON.stringify(this.actualProducts));
             this.closeModal();
         },
-        openModal() {
-            this.openedModal = true;
+        edit() {
+            const index = this.actualProducts.findIndex(product => product.id === this.form.id);
+            if (index !== -1) {
+                this.$store.commit('EDIT_PRODUCT', { index, product: this.form });
+            }
+            this.closeModal();
         },
-        closeModal() {
-        this.openedModal = false;
-        
-        this.newProduct = {
+        openModal(index) {
+        if (index !== undefined) {
+            this.editingProduct = true;
+            const product = this.actualProducts[index];
+            this.form = { ...product }; // populates form with product data, enters edit mode
+        } else {
+            this.editingProduct = false;
+            this.form = { // Reset form for adding new product
+            id: null,
             image: null,
             titre: '',
             description: '',
-            prix: 0,
-            moq: 0,
-            categorieId: '',
-        };
-    },
+            prix: null,
+            moq: null,
+            categorieId: null,
+            };
+        }
+        this.openedModal = true;
+        },
+        closeModal() {
+        this.openedModal = false;
+        },
     },
     created() {
-        const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
-        if (storedActualProducts) {
-            this.$store.dispatch('setActualProducts', storedActualProducts);
-        } else {
-            this.$store.dispatch('setActualProducts', [...this.produits]);
-        }
+    if (!this.actualProducts) {
+        // If actualProducts doesn't exist in the Vuex store, set it to an empty array
+        this.$store.dispatch('setActualProducts', [...this.produits]);
     }
+    const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
+    if (storedActualProducts) {
+        this.$store.dispatch('setActualProducts', storedActualProducts);
+    }
+}
+
 }
 </script>
 
