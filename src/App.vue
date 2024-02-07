@@ -20,14 +20,10 @@
         <router-link to="/produits">Produits</router-link> |
         <router-link to="/profil">Profil</router-link> |
         <router-link to="/deconnexion">Déconnexion</router-link> |
-        <router-link to="/panier">
-          <div class="icon-container">
+        <router-link to="/panier" class="icon-container">
             <img src="./assets/panier.png" alt="" class="cart-icon" />
-            <div
-              class="cart-circle"
-              v-if="this.$store.getters.getItemsInCart.length !== 0"
-            ></div></div
-        ></router-link>
+            <div class="cart-circle" v-if="this.$store.getters.getItemsInCart.length !== 0"></div>
+        </router-link>
       </nav>
 
       <nav class="navbar" v-else>
@@ -36,6 +32,7 @@
         <router-link to="/inscription">Inscription</router-link> |
         <router-link to="/connexion">Connexion</router-link>
       </nav>
+
     </div>
   </div>
   <router-view @updateGroup="updateGroupFunction"></router-view>
@@ -45,14 +42,14 @@
 export default {
   data() {
     return {
-      groupe: "GUEST",
+      groupe: 'GUEST'
     };
   },
 
   methods: {
     updateGroupFunction(newValue) {
       this.groupe = newValue;
-    },
+    }
   },
 
   created() {
@@ -60,10 +57,10 @@ export default {
     if (identity) {
       this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
 
-      this.$store.commit("CHANGE_GROUP", this.groupe);
+      this.$store.commit('CHANGE_GROUP', this.groupe);
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss">

@@ -57,17 +57,13 @@
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
-  <div
-    class="empty-cart"
-    v-else-if="
-      this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'
-    "
+  <div class="empty-cart" v-else-if="this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'"
   >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
   </div>
   <div class="empty-cart" v-else>
-    <br />
+    <br>
     Vous n'êtes pas autorisé à afficher cette page !
   </div>
 
@@ -76,30 +72,36 @@
 
     <p>Informations de livraison</p>
     <form v-on:submit.prevent="confirmOrder">
-      <input
-        type="text"
-        placeholder="adresse"
-        v-model="newOrder.adresse"
-        @input="verifAdresse"
-        required
-      />
-      <span v-html="msg3" v-if="msg3 != ''"></span>
-      <input
-        type="text"
-        placeholder="code postal"
-        v-model="newOrder.codePostal"
-        @input="verifCodePostal"
-        required
-      />
-      <span v-html="msg4" v-if="msg4 != ''"></span>
-      <input
-        type="text"
-        placeholder="ville"
-        v-model="newOrder.ville"
-        @input="verifVille"
-        required
-      />
-      <span v-html="msg5" v-if="msg5 != ''"></span>
+      <div class="input-container">
+        <h1>informations de livraison</h1>
+        <p>Adresse :</p>
+        <input
+          type="text"
+          placeholder="adresse"
+          v-model="newOrder.adresse"
+          @input="verifAdresse"
+          required
+        />
+        <span v-html="msg3" v-if="msg3 != ''"></span>
+        <p>Code postal :</p>
+        <input
+          type="text"
+          placeholder="code postal"
+          v-model="newOrder.codePostal"
+          @input="verifCodePostal"
+          required
+        />
+        <span v-html="msg4" v-if="msg4 != ''"></span>
+        <p>Ville :</p>
+        <input
+          type="text"
+          placeholder="ville"
+          v-model="newOrder.ville"
+          @input="verifVille"
+          required
+        />
+        <span v-html="msg5" v-if="msg5 != ''"></span>
+      </div>
       <div class="modal-total">
         <p>Grand total HT : € {{ this.priceTotal.toFixed(2) }}</p>
         <p>Grand total TTC : € {{ (this.priceTotal * 1.2).toFixed(2) }}</p>
@@ -107,6 +109,7 @@
       <input class="confirmation" type="submit" value="Confirmer commande" />
     </form>
   </div>
+
 </template>
 
 <script>
@@ -122,9 +125,9 @@ export default {
       objectsInCart: [],
       priceTotal: 0,
       modalToggle: false,
-      validInput3: false,
-      validInput4: false,
-      validInput5: false,
+      validInput3: true,
+      validInput4: true,
+      validInput5: true,
       msg3: " ",
       msg4: " ",
       msg5: " ",
@@ -132,6 +135,7 @@ export default {
         orderNumber: null,
         titreProduits: [],
         prixUnitaire: [],
+        prixArticles: [],
         quantité: [],
         coutTotal: 0,
         entreprise: "",
@@ -141,6 +145,10 @@ export default {
         delivered: false,
       },
       groupe: "GUEST",
+      identite: "guest",
+      adresse: "",
+      postCode: "",
+      city: "",
     };
   },
   computed: {
@@ -204,11 +212,18 @@ export default {
       }
     },
     confirmOrder() {
-      if (this.validInput3 && this.validInput4 && this.validInput5) {
+      if (
+        this.validInput3 &&
+        this.validInput4 &&
+        this.validInput5 &&
+        confirm("Voulez-vous valider la commande ?")
+      ) {
         this.newOrder.orderNumber = this.listOfOrders.length + 1;
+        this.newOrder.entreprise = this.identite;
         for (let data of this.objectsInCart) {
           this.newOrder.titreProduits.push(data.titre);
           this.newOrder.prixUnitaire.push(data.prix);
+          this.newOrder.prixArticles.push(data.prix*data.quantity);
           this.newOrder.quantité.push(data.quantity);
           this.newOrder.coutTotal += data.prix * data.quantity;
         }
@@ -228,9 +243,23 @@ export default {
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.identite = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).raisonSociale;
+      this.$store.commit("CHANGE_IDENTITY", this.identite);
 
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
       this.$store.commit("CHANGE_GROUP", this.groupe);
+
+      this.newOrder.adresse = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).adresse;
+      this.newOrder.codePostal = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).codePostal;
+      this.newOrder.ville = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).ville;
     }
 
     this.loadCart();
@@ -263,6 +292,22 @@ export default {
     align-items: center;
     flex-direction: column;
 
+    .input-container {
+      width: 30%;
+      color: white;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      align-items: flex-start;
+      flex-direction: column;
+
+      input{
+        width: 100%;
+        padding: 5px 10px;
+        border-radius: 5px;
+      }
+    }
+
     .close-modal {
       position: absolute;
       top: 0;
@@ -279,6 +324,7 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 10px;
+
     }
 
     .confirmation {
