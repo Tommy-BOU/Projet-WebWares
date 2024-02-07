@@ -57,17 +57,13 @@
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
-  <div
-    class="empty-cart"
-    v-else-if="
-      this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'
-    "
+  <div class="empty-cart" v-else-if="this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'"
   >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
   </div>
   <div class="empty-cart" v-else>
-    <br />
+    <br>
     Vous n'êtes pas autorisé à afficher cette page !
   </div>
 
@@ -113,6 +109,7 @@
       <input class="confirmation" type="submit" value="Confirmer commande" />
     </form>
   </div>
+
 </template>
 
 <script>
@@ -327,6 +324,7 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 10px;
+
     }
 
     .confirmation {
