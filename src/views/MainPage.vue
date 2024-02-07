@@ -24,13 +24,29 @@
   <h2> NOS MEILLEURES VENTES </h2>
   
 </div>
-
-        <router-link :to="'produits-details/5'" class="details-link"><img src="../assets/deco-5.jpg" alt="mv" /></router-link>
-        <router-link :to="'produits-details/13'" class="details-link"><img src="../assets/mobilier-4.jpg" alt="canape"/></router-link>
-        <router-link :to="'produits-details/3'" class="details-link"><img src="../assets/deco-3.jpg" alt="vases" /></router-link>
-        <router-link :to="'produits-details/2'" class="details-link"><img src="../assets/tapis-2.jpg" alt="tapis" /></router-link>
-        <router-link :to="'produits-details/1'" class="details-link"><img src="../assets/luminaire-1.jpg" alt="lampe" /></router-link>
-     
+<div class="bloc-images">
+  <div class="bloc-image">
+          <router-link :to="'produits-details/6'" class="details-link"><img src="../assets/mobilier-1.jpg" alt="Table de nuit" /></router-link>
+          <br>
+          <span><strong >Table de nuit en bois massif</strong></span>
+  </div>
+          
+  <div class="bloc-image">
+          <router-link :to="'produits-details/13'" class="details-link"><img src="../assets/mobilier-4.jpg" alt="canape"/></router-link>
+          <br>
+          <span><strong>Canapé comfortable</strong></span>
+    </div>
+    <div class="bloc-image">
+          <router-link :to="'produits-details/3'" class="details-link"><img src="../assets/deco-3.jpg" alt="vases" /></router-link>
+          <br>
+          <span><strong>Vases ethnique en argile</strong></span>
+    </div>
+    <div class="bloc-image">
+          <router-link :to="'produits-details/2'" class="details-link"><img src="../assets/tapis-2.jpg" alt="tapis" /></router-link>
+          <br>
+          <span><strong>Tapis en laine</strong></span>
+  </div>
+</div>    
 
 
 <!-- ----Footer---- -->
@@ -101,13 +117,26 @@
 
 
 <script>
+export default {
+  data() {
+    return {
+      identite: 'guest',
+      groupe: 'GUEST'
+    };
+  },
 
+  created() {
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+
+      this.$store.commit('CHANGE_IDENTITY', this.identite);
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-
-
-
 #myVideo {
   position: relative;
     left: 0;
@@ -124,7 +153,7 @@
     position:absolute;
     left: 0;
     right: 0;
-    top: 30%;
+    top: 35%;
     bottom: 0;
     width: 100%;
     height: auto;
@@ -158,10 +187,30 @@ button:hover {
 
 
 // ----nos meilleures ventes
-img {
-  margin: 30px;
-	width: 180px;
-	height: 180px;
+.bloc-images{
+  display:inline-block;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  
+}
+
+.bloc-image{
+  display:inline; 
+  float: left;
+   margin-left: 60px;
+}
+
+.bloc-image img{
+  box-shadow: 3px 3px 6px  #E74327;
+  margin:5px;
+}
+.bloc-image span{
+  display: inline-block
+}
+img{
+  margin: 20px;
+  width:300px;
+  height: 300px;
 }
 h2{
   color: rgb(231, 67, 39);

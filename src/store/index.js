@@ -1,8 +1,22 @@
 import { createStore } from 'vuex'
 
-
 export default createStore({
   state: {
+    listOfOrders: [
+      {
+        orderNumber: 1,
+        titreProduits: ['Table à manger en bois', 'Lampe moderne'],
+        prixArticles: [1499.95, 1299.90],
+        prixUnitaire:[299.99, 129.99],
+        quantité: [5, 10],
+        coutTotal: 2799.85,
+        entreprise: 'Entreprise A',
+        adresse: '123 Rue de la République',
+        codePostal: '75001',
+        ville: 'Paris',
+        delivered: false,
+      },
+    ],
     listOfUsers: [
       {
         id: 1,
@@ -39,9 +53,11 @@ export default createStore({
       },
     ],
     identite: 'guest',
+    groupe: 'GUEST',
     cartItems: [],
     cartCount: 0,
     favorites: [],
+    actualProducts: [],
     produits: [
       {
         id: 1,
@@ -237,7 +253,12 @@ export default createStore({
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
-
+    CHANGE_IDENTITY(state, newIdentity) {
+      state.identite = newIdentity;
+    },
+    CHANGE_GROUP(state, newGroup) {
+      state.groupe = newGroup;
+    },
     ADD_TO_CART(state, product) {
       const existingItem = state.cartItems.find(item => item.id === product.id);
 
@@ -259,6 +280,10 @@ export default createStore({
       }
       localStorage.setItem('cartItems', JSON.stringify(state.cartItems));
     },
+    EMPTY_CART(state) {
+      state.cartItems = [];
+      localStorage.setItem('cartItems', []);
+    },
     SET_CART_ITEMS(state, newCartItems) {
       state.cartItems = newCartItems;
       state.cartCount = newCartItems.reduce((total, item) => total + item.quantity, 0);
@@ -279,12 +304,45 @@ export default createStore({
     },
     LOG_IN_USER(state, loggedInUserId) {
       state.identite = loggedInUserId;
-    }
+    },
+    PLACE_NEW_ORDER(state, object) {
+      state.listOfOrders.push(object);
+    },
+    SET_ACTUAL_PRODUCTS(state, newActualProducts) {
+      state.actualProducts = newActualProducts;
+    },
+    REMOVE_FROM_STOCK(state, index) {
+      const updatedActualProducts = [...state.actualProducts];
+      updatedActualProducts.splice(index, 1);
+      state.actualProducts = updatedActualProducts;
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    ADD_NEW_PRODUCT(state, newProduct) {
+      const id = state.actualProducts.length + 1;
+      const product = {
+        id,
+        ...newProduct,
+      };
+      state.actualProducts.push(product);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    EDIT_PRODUCT(state, { index, product }) {
+      state.actualProducts.splice(index, 1, product);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
   },
   actions: {
     // Actions -> méthodes asynchrone
     logInUser(context, loggedInUserId) {
       context.commit('LOG_IN_USER', loggedInUserId);
+    },
+    placeNewOrder({ commit }, orderData) {
+      commit('PLACE_NEW_ORDER', orderData);
+      commit('EMPTY_CART');
+    },
+    setActualProducts({ commit, state }, newActualProducts) {
+      commit('SET_ACTUAL_PRODUCTS', newActualProducts);
+      localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     }
   },
   getters: {
@@ -292,7 +350,7 @@ export default createStore({
     getItemsInCart(state) {
       return state.cartItems;
     },
-    getPriceTotal(state){
+    getPriceTotal(state) {
       return state.priceTotal;
     }
   },

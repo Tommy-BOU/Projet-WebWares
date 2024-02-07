@@ -4,10 +4,12 @@ import ProductList from '../views/ProductList.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RegisterView from '../views/RegisterView.vue'
-import UserList from '../views/UserList.vue'
 import ProductDetails from '../views/ProductDetails.vue'
 import PanierView from '../views/PanierView.vue'
-import ConfirmationView from '../views/ConfirmationView.vue'
+import ManageOrders from '../views/ManageOrders.vue'
+import ManageUsers from '../views/ManageUsers.vue'
+import ManageProducts from '../views/ManageProducts.vue'
+import ManageCategory from '../views/ManageCategory.vue'
 
 const routes = [
   {
@@ -36,11 +38,6 @@ const routes = [
     component: LogoutView
   },
   {
-    path: '/utilisateurs',
-    name: 'utilisateurs',
-    component: UserList
-  },
-  {
     path: '/produits-details/:id',
     name: 'produits-details',
     component: ProductDetails
@@ -51,9 +48,24 @@ const routes = [
     component: PanierView
   },
   {
-    path: '/confirmation',
-    name: 'confirmation',
-    component: ConfirmationView
+    path: '/gestion-commandes',
+    name: 'gestion-commandes',
+    component: ManageOrders
+  },
+  {
+    path: '/gestion-utilisateurs',
+    name: 'gestion-utilisateurs',
+    component: ManageUsers
+  },
+  {
+    path: '/gestion-produits' ,
+    name: 'gestion-produits' ,
+    component: ManageProducts
+  },
+  {
+    path: '/gestion-categories' ,
+    name: 'gestion-categories' ,
+    component: ManageCategory
   },
 ]
 
