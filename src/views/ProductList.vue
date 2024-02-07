@@ -1,6 +1,7 @@
 <template>
   <div class="products-section">
     <h2> {{ chosenCategory }} </h2>
+
     <div class="filter-section">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag" viewBox="0 0 16 16">
         <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0"/>
@@ -20,6 +21,7 @@
           <input v-model="searchTerm" @input="handleSearch()" type="text" id="searchInput" placeholder="Rechercher par nom de produit">
       </div>
     </div>
+
     <div class="products-grid">
       <div v-for="(produit, index) in filteredProducts" :key="index" class="product">
         <svg v-if="!isFavorite(produit)" @click="toggleFavorite(produit)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
@@ -64,7 +66,9 @@ export default {
 
   data() {
     return {
+      identite: 'guest',
       searchTerm: '',
+      // actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
       chosenCategory: 'Tous produits',
       disableButton: true
@@ -151,16 +155,17 @@ export default {
   },
 
   created() {
+    console.log('Component created');
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
-    this.filteredProducts = this.produits;
+    this.filteredProducts = this.actualProducts;
     this.loadFavorites();
     this.loadCart();
-  }
+  },
 }
 </script>
 

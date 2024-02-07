@@ -353,6 +353,6 @@ export default createStore({
     },
     getPriceTotal(state) {
       return state.priceTotal;
-    }
+    },
   },
 })
