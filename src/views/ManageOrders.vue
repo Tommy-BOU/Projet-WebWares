@@ -16,7 +16,7 @@
           <tr v-for="(data, index) in ordersList" :key="index">
             <td>{{ data.orderNumber }}</td>
             <td>{{ data.entreprise }}</td>
-            <td>€ {{ (data.coutTotal * 1.2).toFixed(2) }}</td>
+            <td>{{ (data.coutTotal * 1.2).toFixed(2) }} €</td>
             <td
               class="status-pending"
               :class="
@@ -72,7 +72,7 @@
         </div>
         <div class="unit-price">
           <p v-for="prix in this.currentOrder.prixUnitaire" :key="prix">
-            €{{ prix }}
+            {{ prix }} €
           </p>
         </div>
         <div class="quantities">
@@ -82,16 +82,16 @@
         </div>
         <div class="prices">
           <p v-for="prix in this.currentOrder.prixArticles" :key="prix">
-            Total HT : €{{ prix.toFixed(2) }}
+            Total HT : {{ prix.toFixed(2) }} €
           </p>
         </div>
       </div>
       <div class="bold">
-        <p>Total commande HT : €{{ this.currentOrder.coutTotal.toFixed(2) }}</p>
+        <p>Total commande HT : {{ this.currentOrder.coutTotal.toFixed(2) }} €</p>
         <p>
-          Total commande TTC : €{{
+          Total commande TTC : {{
             (this.currentOrder.coutTotal * 1.2).toFixed(2)
-          }}
+          }} €
         </p>
       </div>
 

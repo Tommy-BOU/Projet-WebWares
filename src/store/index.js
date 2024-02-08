@@ -7,7 +7,7 @@ export default createStore({
         orderNumber: 1,
         titreProduits: ['Table à manger en bois', 'Lampe moderne'],
         prixArticles: [1499.95, 1299.90],
-        prixUnitaire:[299.99, 129.99],
+        prixUnitaire: [299.99, 129.99],
         quantité: [5, 10],
         coutTotal: 2799.85,
         entreprise: 'Entreprise A',
@@ -68,6 +68,7 @@ export default createStore({
         prix: 299.99,
         moq: 5,
         categorieId: 1,
+        stock: 500,
       },
       {
         id: 2,
@@ -77,6 +78,7 @@ export default createStore({
         prix: 129.99,
         moq: 10,
         categorieId: 2,
+        stock: 200,
       },
       {
         id: 3,
@@ -86,6 +88,7 @@ export default createStore({
         prix: 89.99,
         moq: 20,
         categorieId: 3,
+        stock: 30,
       },
       {
         id: 4,
@@ -95,6 +98,7 @@ export default createStore({
         prix: 49.99,
         moq: 20,
         categorieId: 4,
+        stock: 2000,
       },
       {
         id: 5,
@@ -104,6 +108,7 @@ export default createStore({
         prix: 49.99,
         moq: 20,
         categorieId: 4,
+        stock: 100,
       },
       {
         id: 6,
@@ -113,6 +118,7 @@ export default createStore({
         prix: 49.99,
         moq: 20,
         categorieId: 4,
+        stock: 2000,
       },
       {
         id: 7,
@@ -122,6 +128,7 @@ export default createStore({
         prix: 69.99,
         moq: 5,
         categorieId: 1,
+        stock: 2000,
       },
       {
         id: 8,
@@ -131,6 +138,7 @@ export default createStore({
         prix: 129.99,
         moq: 10,
         categorieId: 3,
+        stock: 2000,
       },
       {
         id: 9,
@@ -140,6 +148,7 @@ export default createStore({
         prix: 89.99,
         moq: 20,
         categorieId: 3,
+        stock: 2000,
       },
       {
         id: 10,
@@ -149,6 +158,7 @@ export default createStore({
         prix: 39.99,
         moq: 20,
         categorieId: 2,
+        stock: 2000,
       },
       {
         id: 11,
@@ -158,6 +168,7 @@ export default createStore({
         prix: 45.99,
         moq: 20,
         categorieId: 2,
+        stock: 2000,
       },
       {
         id: 12,
@@ -167,6 +178,7 @@ export default createStore({
         prix: 29.99,
         moq: 20,
         categorieId: 1,
+        stock: 2000,
       },
       {
         id: 13,
@@ -176,6 +188,7 @@ export default createStore({
         prix: 259.99,
         moq: 2,
         categorieId: 1,
+        stock: 2000,
       },
       {
         id: 14,
@@ -185,6 +198,7 @@ export default createStore({
         prix: 269.99,
         moq: 2,
         categorieId: 1,
+        stock: 2000,
       },
       {
         id: 15,
@@ -194,6 +208,7 @@ export default createStore({
         prix: 49.99,
         moq: 20,
         categorieId: 4,
+        stock: 2000,
       },
       {
         id: 16,
@@ -203,6 +218,7 @@ export default createStore({
         prix: 89.99,
         moq: 10,
         categorieId: 2,
+        stock: 2000,
       },
       {
         id: 17,
@@ -212,6 +228,7 @@ export default createStore({
         prix: 49.99,
         moq: 20,
         categorieId: 4,
+        stock: 2000,
       },
       {
         id: 18,
@@ -222,6 +239,7 @@ export default createStore({
         moq: 10,
         categorieId: 2,
         isFavorite: false,
+        stock: 2000,
       },
       {
         id: 19,
@@ -231,6 +249,7 @@ export default createStore({
         prix: 59.99,
         moq: 20,
         categorieId: 3,
+        stock: 2000,
       },
       {
         id: 20,
@@ -240,6 +259,7 @@ export default createStore({
         prix: 59.99,
         moq: 20,
         categorieId: 3,
+        stock: 2000,
       },
 
     ],
@@ -255,6 +275,25 @@ export default createStore({
   },
   mutations: {
     // Mutations -> méthodes qui modifient les propriétés de l'état global, synchrone
+    UPDATE_STOCK(state, order) {
+      const storageProducts = JSON.parse(localStorage.getItem("actualProducts"));
+      if (storageProducts) {
+        for (let product of storageProducts) {
+          if (product.id === order.id) {
+            product.stock -= order.quantity;
+          }
+        }
+        localStorage.setItem("actualProducts", JSON.stringify(storageProducts));
+      }
+      else {
+        for (let product of state.produits) {
+          if (product.id === order.id) {
+            product.stock -= order.quantity;
+          }
+        }
+        localStorage.setItem("actualProducts", JSON.stringify(state.produits));
+      }
+    },
     CHANGE_IDENTITY(state, newIdentity) {
       state.identite = newIdentity;
     },
@@ -329,12 +368,12 @@ export default createStore({
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
       localStorage.setItem('productIdCounter', id);
     },
-    
+
     EDIT_PRODUCT(state, { index, product }) {
       state.actualProducts.splice(index, 1, product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
-    SET_ORDERS(state){
+    SET_ORDERS(state) {
       state.listOfOrders = JSON.parse(localStorage.getItem("orders"));
     },
     ADD_NEW_CATEGORY(state, newCategory) {

@@ -14,6 +14,7 @@
             <th>Prix</th>
             <th>MOQ</th>
             <th>Catégorie</th>
+            <th>Stock restant</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -24,9 +25,10 @@
             </td>
             <td>{{ actualProduct.id }}</td>
             <td>{{ actualProduct.titre }}</td>
-            <td>{{ actualProduct.prix }}</td>
+            <td>{{ actualProduct.prix }} €</td>
             <td>{{ actualProduct.moq }}</td>
             <td>{{ actualProduct.categorieId }}</td>
+            <td>{{ actualProduct.stock }}</td>
             <td>
               <button
                 class="action-btns modify"
@@ -77,7 +79,7 @@
             required
           ></textarea>
           <br />
-          <label for="productPrice">Prix:</label>
+          <label for="productPrice">Prix (€):</label>
           <br>
           <input type="number" id="productPrice" v-model="form.prix" step=".01" required>
             <br>
@@ -85,6 +87,10 @@
           <br />
           <input type="number" id="productMoq" v-model="form.moq" required />
           <br />
+          <label for="productStock" >Stock :</label>
+          <br>
+          <input type="number" id="productStock" v-model="form.stock" required>
+          <br>
           <label for="productCategory">Catégorie:</label>
           <br />
           <select name="category" id="category" v-model="form.categorieId">

@@ -269,7 +269,7 @@ a:hover {
 
 @media screen and (max-width: 400px) {
   .connect{
-    width: 300px;
+    width: 200px;
   }
 }
 </style>

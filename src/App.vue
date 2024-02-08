@@ -19,30 +19,42 @@
         >
       </nav>
       <nav class="navbar" v-if="groupe === 'ADMIN'">
-        <router-link to="/">Accueil</router-link> |
-        <router-link to="/produits">Produits</router-link> |
-        <router-link to="/deconnexion">Déconnexion</router-link>
+        <div class="navlink">
+          <router-link to="/">Accueil</router-link> |
+          <router-link to="/produits">Produits</router-link>
+        </div>
+        <div class="userlink">
+          <router-link to="/deconnexion">Déconnexion</router-link>
+        </div>
       </nav>
 
       <nav class="navbar" v-else-if="groupe === 'USER'">
-        <router-link to="/">Accueil</router-link> |
-        <router-link to="/produits">Produits</router-link> |
-        <router-link to="/profil">Profil</router-link> |
-        <router-link to="/deconnexion">Déconnexion</router-link> |
-        <router-link to="/panier" class="icon-container">
-          <img src="./assets/panier.png" alt="" class="cart-icon" />
-          <div
-            class="cart-circle"
-            v-if="this.$store.getters.getItemsInCart.length !== 0"
-          ></div>
-        </router-link>
+        <div class="navlink">
+          <router-link to="/">Accueil</router-link> |
+          <router-link to="/produits">Produits</router-link>
+        </div>
+        <div class="userlink">
+          <router-link to="/profil">Profil</router-link> |
+          <router-link to="/deconnexion">Déconnexion</router-link> |
+          <router-link to="/panier" class="icon-container">
+            <img src="./assets/panier.png" alt="" class="cart-icon" />
+            <div
+              class="cart-circle"
+              v-if="this.$store.getters.getItemsInCart.length !== 0"
+            ></div>
+          </router-link>
+        </div>
       </nav>
 
       <nav class="navbar" v-else>
-        <router-link to="/">Accueil</router-link> |
-        <router-link to="/produits">Produits</router-link> |
-        <router-link to="/inscription">Inscription</router-link> |
-        <router-link to="/connexion">Connexion</router-link>
+        <div class="navlink">
+          <router-link to="/">Accueil</router-link> |
+          <router-link to="/produits">Produits</router-link>
+        </div>
+        <div class="guestlink">
+          <router-link to="/inscription">Inscription</router-link> |
+          <router-link to="/connexion">Connexion</router-link>
+        </div>
       </nav>
     </div>
   </div>
@@ -119,35 +131,53 @@ html {
       border: 1px solid rgb(231, 67, 39);
     }
     .navbar {
+      align-self: flex-end;
+      width: 90%;
       position: relative;
       display: flex;
-      gap: 10px;
+      align-items: center;
 
-      img {
-        position: relative;
-        width: 30px;
-        height: 30px;
-        top: -10px;
+      .navlink {
+        position: inherit;
+        top: 22px;
+        height: 50px;
+        width: 100%;
       }
-      .icon-container {
-        position: relative;
-        width: 40px;
-        height: 40px;
 
-        .cart-icon {
+      .userlink {
+        width: 100%;
+        img {
           position: relative;
-          height: 30px;
           width: 30px;
+          height: 30px;
         }
-        .cart-circle {
-          position: absolute;
-          top: -10px;
-          right: 0;
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background-color: red;
+        .icon-container {
+          position: relative;
+          width: 40px;
+          height: 40px;
+
+          .cart-icon {
+            position: relative;
+            height: 30px;
+            width: 30px;
+          }
+          .cart-circle {
+            position: absolute;
+            top: -15px;
+            right: -5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: red;
+          }
         }
+      }
+
+      .guestlink {
+        width: 100%;
+        height: 50px;
+        position: inherit;
+        top: 22px;
       }
     }
   }
@@ -198,16 +228,15 @@ nav {
       width: 100px;
       height: 100px;
     }
-  }
 
-  nav {
-    font-size: 0.7em;
-  }
+    .nav-container {
+      height: 30px;
+      position: relative;
 
-  .navbar {
-    gap: 3px;
-    padding: 15px;
-    flex-wrap: wrap;
+      .navbar {
+        width: 100% !important;
+      }
+    }
   }
 }
 </style>
