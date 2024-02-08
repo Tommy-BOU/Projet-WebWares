@@ -125,11 +125,6 @@ export default {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
-
-      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
-
-      this.loadFavorites();
-      this.loadCart();
     }
   },
 };
