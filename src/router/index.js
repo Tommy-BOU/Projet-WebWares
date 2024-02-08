@@ -11,6 +11,7 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 import ManageCategory from '../views/ManageCategory.vue'
+import FavoritesView from '../views/FavoritesView.vue'
 
 const routes = [
   {
@@ -72,6 +73,11 @@ const routes = [
     path: '/gestion-categories' ,
     name: 'gestion-categories' ,
     component: ManageCategory
+  },
+  {
+    path: '/favoris' ,
+    name: 'favoris' ,
+    component: FavoritesView
   },
 ]
 

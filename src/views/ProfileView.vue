@@ -2,8 +2,17 @@
 
   <div v-if="groupe === 'USER'" class="user">
     <h1>Profil</h1>
-    <br><br>
-    <button type="button" @click="openModal(id)">Modifier mes informations</button>
+    <br>
+    <br>
+    <div class="profile-links">
+      <router-link to="/favoris" class="favorites-link">Favoris <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+      <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+      </svg></router-link>
+      <br>
+      <button type="button" @click="openModal(id)">Modifier mes informations</button>
+    </div>
+    <br>
+    <br>
 
     <!-- MODAL  -->
     <div class="modal" v-if="openedModal" v-cloak>
@@ -338,4 +347,23 @@ button {
 [v-cloak] {
   display: none;
 }
+
+.profile-links button {
+  margin-top: 15px;
+}
+
+.favorites-link {
+  border: 2px solid rgb(231, 67, 39);
+  border-radius: 5px;
+  padding: 5px 15px 5px 20px;
+  text-decoration: none;
+  color: rgb(231, 67, 39);
+  font-weight: bold;
+  font-size: .9em;
+}
+
+.bi-heart-fill {
+  padding-top: 3px;
+}
+
 </style>

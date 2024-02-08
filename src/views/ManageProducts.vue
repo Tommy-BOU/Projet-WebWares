@@ -5,7 +5,7 @@
         <h1>Produits</h1>
         <br><br>
         <GeneralButton label="Ajouter un produit" @generalEvent="openModal" />
-        <table>
+        <table id="productInventory">
           <thead>
               <tr>
                   <th>Image</th>
@@ -31,7 +31,7 @@
               </td>
             </tr>
           </tbody>
-          <tfoot>
+          <!-- <tfoot>
             <tr>
                 <td></td>
                 <td></td>
@@ -43,8 +43,10 @@
                     <GeneralButton label="Ajouter un produit" @generalEvent="openModal" />
                 </td>
             </tr>
-          </tfoot>
+          </tfoot> -->
         </table>
+        <br>
+        <GeneralButton label="Ajouter un produit" @generalEvent="openModal" />
     </div>
 
     <!-- Modal -->
@@ -65,7 +67,7 @@
             <br>
           <label for="productPrice">Prix:</label>
           <br>
-          <input type="number" id="productPrice" v-model="form.prix" required>
+          <input type="number" id="productPrice" v-model="form.prix" step=".01" required>
             <br>
           <label for="productMoq">MOQ (Quantité minimale de commande):</label>
           <br>
@@ -84,8 +86,10 @@
             <br>
           <label for="productImage">Image:</label>
           <br>
-          <input type="file" id="productImage" @change="handleImageUpload" accept="image/*">
-            <br>
+          <input type="file" id="productImage" @change="convertImageToBase64" accept="image/*">
+          <br>
+          <textarea id="productImageBase64" v-model="form.image" hidden></textarea>
+          <br>
           <button type="submit">{{ editingProduct ? 'Modifier' : 'Ajouter' }}</button>
         </form>
       </div>
@@ -94,7 +98,6 @@
 </template>
 
 <script>
-
 import { mapState } from 'vuex';
 import GeneralButton from '@/components/GeneralButton.vue';
 
@@ -106,6 +109,8 @@ export default {
         return {
             openedModal: false,
             editingProduct: false,
+            productIdCounter: 20,
+            // actualProducts: [...this.$store.state.produits],
             form: {
                 id: null,
                 image: null,
@@ -113,7 +118,7 @@ export default {
                 description: '',
                 prix: null,
                 moq: null,
-                categorieId: null,
+                categorieId: null
             },
         }
     },
@@ -121,7 +126,20 @@ export default {
         ...mapState(['produits', 'categories', 'actualProducts'])
     },
     methods: {
-        
+        convertImageToBase64(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const base64String = reader.result;
+                this.form.image = base64String;
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        },
+
         remove(index) {
             if (confirm("Etes-vous certain de vouloir supprimer ce produit ?")) {
             this.$store.commit('REMOVE_FROM_STOCK', index);
@@ -129,7 +147,6 @@ export default {
         },
         add() {
             this.$store.commit('ADD_NEW_PRODUCT', this.form);
-            localStorage.setItem('actualProducts', JSON.stringify(this.actualProducts));
             this.closeModal();
         },
         edit() {
@@ -147,7 +164,7 @@ export default {
         } else {
             this.editingProduct = false;
             this.form = { // Reset form for adding new product
-            id: null,
+            // id: null,
             image: null,
             titre: '',
             description: '',
@@ -162,16 +179,26 @@ export default {
         this.openedModal = false;
         },
     },
+    // initializeActualProducts({ commit, state }) {
+    //   if (!state.actualProducts.length) {
+    //     commit('SET_ACTUAL_PRODUCTS', [...state.produits]);
+    //   }
+    // },
     created() {
-    if (!this.actualProducts) {
-        // If actualProducts doesn't exist in the Vuex store, set it to an empty array
-        this.$store.dispatch('setActualProducts', [...this.produits]);
+        const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
+        if (storedActualProducts) {
+            this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
+        } else {
+            this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
+        }
+        let productIdCounter = localStorage.getItem("productIdCounter");
+        if (productIdCounter) {
+            productIdCounter = JSON.parse(localStorage.getItem("productIdCounter")).value
+        } else {
+            localStorage.setItem('productIdCounter', 20)
+        }
     }
-    const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
-    if (storedActualProducts) {
-        this.$store.dispatch('setActualProducts', storedActualProducts);
-    }
-}
+
 
 }
 </script>
@@ -236,6 +263,10 @@ tbody tr:nth-child(even) {
 
 .product-inventory-container {
     margin-bottom: 40px;
+}
+
+#productInventory {
+    border-bottom: 1px solid lightgrey;
 }
 
 .modal {
