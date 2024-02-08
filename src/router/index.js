@@ -97,6 +97,11 @@ const routes = [
     name: 'mentions-legales',
     component: MentionsLegales
   },
+  {
+    path: '/favoris' ,
+    name: 'favoris' ,
+    component: FavoritesView
+  },
 
 ]
 
