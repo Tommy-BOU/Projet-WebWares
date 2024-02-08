@@ -54,7 +54,6 @@ export default {
       identite: "guest",
       groupe: 'GUEST',
       disableButton: true,
-      // productId: this.$route.params.id
     };
   },
 
@@ -135,18 +134,8 @@ export default {
       this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
 
       this.loadFavorites();
-      this.loadCart();
-<<<<<<< HEAD
 
-      const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
-        if (storedActualProducts) {
-            this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
-        } else {
-            this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
-        }
-      }
-  },
-=======
+      this.loadCart();
     }
     
     const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
@@ -157,7 +146,6 @@ export default {
       this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
     }
   }
->>>>>>> 6b77e929a9b528556ecfe2eed470b0daa2e01225
 };
 </script>
 
