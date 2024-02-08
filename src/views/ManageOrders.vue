@@ -82,7 +82,7 @@
         </div>
         <div class="prices">
           <p v-for="prix in this.currentOrder.prixArticles" :key="prix">
-            Total HT : €{{ prix }}
+            Total HT : €{{ prix.toFixed(2) }}
           </p>
         </div>
       </div>

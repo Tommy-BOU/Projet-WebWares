@@ -180,7 +180,6 @@ nav {
   }
 
   .header {
-
     img {
       align-self: center;
       width: auto;
