@@ -1,9 +1,8 @@
 <template>
   <div>
-    <br><br>
     <div class="category">
       <h1>Catégories</h1>
-      <br><br>
+      <br /><br />
       <table>
         <thead>
           <tr>
@@ -17,13 +16,31 @@
             <td>{{ categorie.id }}</td>
             <td>{{ categorie.name }}</td>
             <td>
-              <button class="action-btns" type="button" @click="openModal(index)">Modifier</button>
-              <button class="action-btns" type="button" @click="remove(index)">Supprimer</button>
+              <button
+                class="action-btns modify"
+                type="button"
+                @click="openModal(index)"
+              >
+                Modifier
+              </button>
+              <button
+                class="action-btns remove"
+                type="button"
+                @click="remove(index)"
+              >
+                Supprimer
+              </button>
             </td>
           </tr>
         </tbody>
       </table>
-      <button class="action-btns" type="button" @click="openModalAdd()">Ajouter nouvelle catégorie</button>
+      <button
+        class="action-btns add-category"
+        type="button"
+        @click="openModalAdd()"
+      >
+        Ajouter nouvelle catégorie
+      </button>
     </div>
     <!-- Modal -->
     <div v-if="openedModal" class="modal" v-cloak>
@@ -31,20 +48,36 @@
         <span class="close" @click="closeModal">&times;</span>
         <div v-if="typeof index === 'undefined'">
           <h2>Ajouter nouvelle catégorie</h2>
-          <br>
+          <br />
           <form v-on:submit.prevent="add">
-            <label for="name">Name :</label> <input type="text" id="name" name="name" v-model="name" placeholder="2 caractères minimum" required />
-            <br><br><br>
-            <input type="submit" value="Enregistrer">
+            <label for="name">Name :</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              v-model="name"
+              placeholder="2 caractères minimum"
+              required
+            />
+            <br /><br /><br />
+            <input type="submit" value="Enregistrer" />
           </form>
         </div>
         <div v-else>
           <h2>Modifier catégorie : {{ name }}</h2>
-          <br>
+          <br />
           <form v-on:submit.prevent="update">
-            <label for="name">Name :</label> <input type="text" id="name" name="name" v-model="name" placeholder="2 caractères minimum" required />
-            <br><br><br>
-            <input type="submit" value="Enregistrer">
+            <label for="name">Name :</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              v-model="name"
+              placeholder="2 caractères minimum"
+              required
+            />
+            <br /><br /><br />
+            <input type="submit" value="Enregistrer" />
           </form>
         </div>
       </div>
@@ -53,7 +86,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
 export default {
   data() {
@@ -61,14 +94,14 @@ export default {
       categories: this.$store.state.categories,
       openedModal: false,
       newCategory: {
-          categorieId: ''
+        categorieId: "",
       },
-      editingCategory: ''
-    }
+      editingCategory: "",
+    };
   },
 
   computed: {
-    ...mapState(['categories'])
+    ...mapState(["categories"]),
   },
 
   methods: {
@@ -78,17 +111,17 @@ export default {
       }
     },
 
-    update(){
-      if (this.name != ""){
+    update() {
+      if (this.name != "") {
         this.index.name = this.name;
-        setTimeout(() => this.openedModal = !this.openedModal, 1000);
+        setTimeout(() => (this.openedModal = !this.openedModal), 1000);
       }
     },
 
     add() {
-      let newid = this.categories[this.categories.length-1].id+1;
-      this.categories.push(Object.assign({id:newid,name:this.name}));
-      setTimeout(() => this.openedModal = !this.openedModal, 1000);
+      let newid = this.categories[this.categories.length - 1].id + 1;
+      this.categories.push(Object.assign({ id: newid, name: this.name }));
+      setTimeout(() => (this.openedModal = !this.openedModal), 1000);
     },
 
     saveToLocalStorage() {
@@ -107,10 +140,10 @@ export default {
 
     closeModal() {
       this.openedModal = false;
-      
+
       this.newCategory = {
-        Id: '',
-        name: '',
+        Id: "",
+        name: "",
       };
     },
   },
@@ -120,8 +153,8 @@ export default {
       deep: true,
       handler() {
         this.saveToLocalStorage();
-      }
-    }
+      },
+    },
   },
 
   created() {
@@ -129,8 +162,8 @@ export default {
     if (storedCategories) {
       this.categories = JSON.parse(storedCategories);
     }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
@@ -139,7 +172,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   border: 1px solid rgb(231, 67, 39);
-  padding: 0 40px 30px 20px;
+  padding: 10px 40px 30px 20px;
 }
 
 table {
@@ -148,12 +181,18 @@ table {
   font-size: 14px;
 }
 
-td, th {
-  padding: 8px;
-  border-collapse: collapse;
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
 }
 
+tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+td,
 th {
+  padding: 8px;
+  border-collapse: collapse;
   border-bottom: 1px solid lightgrey;
 }
 
@@ -173,14 +212,31 @@ select {
   float: left;
 }
 
-input[type="submit"], button {
+input[type="submit"],
+button {
   width: unset;
   padding: 5px 15px;
-  color: #FFF;
-  font-weight: bold;
+  color: #fff;
   cursor: pointer;
+  border: none;
   border-radius: 5px;
-  background-color: rgb(231, 67, 39);
+  border: 1px solid #4caf50;
+  color: #4caf50;
+}
+
+.modify {
+  border: 1px solid rgb(94, 25, 111);
+  color: rgb(94, 25, 111);
+}
+
+.remove {
+  border: 1px solid red;
+  color: red;
+}
+
+.add-category {
+  border: 1px solid #4caf50;
+  color: #4caf50;
 }
 
 button {
@@ -188,15 +244,15 @@ button {
 }
 
 .modal {
-  display: flex; 
+  display: flex;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 1; 
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
   justify-content: center;
   align-items: center;
 }
@@ -220,6 +276,6 @@ button {
   cursor: pointer;
   font-size: 18px;
   color: #333;
-  z-index: 2; 
+  z-index: 2;
 }
 </style>

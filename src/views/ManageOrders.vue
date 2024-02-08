@@ -1,6 +1,7 @@
 <template>
   <div class="order-container">
     <div class="order-list" v-if="!toggleCard">
+      <h1>Commandes</h1>
       <table>
         <thead>
           <tr>
@@ -11,8 +12,8 @@
             <th></th>
           </tr>
         </thead>
-        <tbody v-for="(data, index) in ordersList" :key="index">
-          <tr>
+        <tbody>
+          <tr v-for="(data, index) in ordersList" :key="index">
             <td>{{ data.orderNumber }}</td>
             <td>{{ data.entreprise }}</td>
             <td>€ {{ (data.coutTotal * 1.2).toFixed(2) }}</td>
@@ -119,7 +120,6 @@
       </button>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -156,6 +156,7 @@ export default {
     confirmDelivery() {
       if (confirm("Êtes-vous sûr de vouloir valider cette commande ?")) {
         this.currentOrder.delivered = true;
+        localStorage.setItem("orders", JSON.stringify(this.listOfOrders));
       }
     },
     showDetail(orderId) {
@@ -171,6 +172,10 @@ export default {
     ...mapState(["listOfOrders"]),
   },
   created() {
+    let orders = localStorage.getItem("orders");
+    if (orders) {
+      this.$store.commit("SET_ORDERS");
+    }
     this.reverseOrders();
 
     let identity = localStorage.getItem("myIdentity");
@@ -194,15 +199,16 @@ export default {
   justify-content: center;
 
   .order-list {
+    border: 1px solid rgb(231, 67, 39);
+    padding: 10px 40px 30px 20px;
+
     table {
-      border: 1px solid lightgrey;
-      border-collapse: collapse;
+      // border-collapse: collapse;
 
       thead {
         th {
           padding: 10px;
-
-          border: 2px solid lightgrey;
+          border-bottom: 1px solid lightgrey;
         }
       }
 
@@ -215,19 +221,24 @@ export default {
         }
         tr {
           td {
-            border: 1px solid lightgrey;
             padding: 10px;
-
+            border-bottom: 1px solid lightgrey;
             button {
-              background-color: rgb(94, 25, 111);
-              color: white;
-              border: none;
+              border: 1px solid rgb(94, 25, 111);
+              color: rgb(94, 25, 111);
               border-radius: 5px;
               padding: 10px 25px;
               cursor: pointer;
             }
           }
         }
+      }
+      tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #ffffff;
       }
     }
   }
@@ -238,7 +249,8 @@ export default {
     display: flex;
     flex-direction: column;
     width: 50%;
-    border: 1px solid lightgrey;
+    border: 1px solid rgb(231, 67, 39);
+    margin-bottom: 50px;
     gap: 50px;
 
     .close-card {
@@ -288,9 +300,9 @@ export default {
     .delivery-btn {
       border: none;
       align-self: center;
-      background-color: #4caf50;
+      color: #4caf50;
+      border: 1px solid #4caf50;
       border-radius: 5px;
-      color: white;
       width: 30%;
       cursor: pointer;
       padding: 10px 25px;

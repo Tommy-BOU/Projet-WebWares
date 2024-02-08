@@ -26,6 +26,8 @@ export default {
         border-radius: 5px;
         cursor: pointer;
         margin-bottom: 5px;
+        width: 80%;
+        align-self: center;
     }
 
 </style>

@@ -269,8 +269,9 @@ export default {
   width: 600px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 50px;
   border: 1px solid rgb(231, 67, 39);
-  padding: 0 40px 30px 20px;
+  padding: 10px 40px 30px 20px;
 }
 
 .confirm {
