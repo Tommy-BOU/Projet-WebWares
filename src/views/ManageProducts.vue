@@ -45,24 +45,14 @@
             </td>
           </tr>
         </tbody>
-        <tfoot>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td class="addNewProduct">
-              <GeneralButton
+      </table>
+      <div class="top-button">
+      <GeneralButton
               class="admin-general"
                 label="Ajouter un produit"
                 @generalEvent="openModal"
               />
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      </div>
     </div>
 
     <!-- Modal -->
