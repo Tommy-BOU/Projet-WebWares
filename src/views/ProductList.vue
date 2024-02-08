@@ -7,13 +7,23 @@
         <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0"/>
         <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1m0 5.586 7 7L13.586 9l-7-7H2z"/>
       </svg>
-      <select v-model="chosenCategory" @change="filterProductsByCategory()" name="categories" id="categories">
-        <option value="Tous produits">Tous produits</option>
+      <select v-model="chosenCategory" @change="filterProductsByCategory" name="category" id="category">
+            <option value="Tous produits">Catégorie</option>
+            <option
+              v-for="category in categoriesV"
+              :key="category.id"
+              :value="category.name"
+            >
+              {{ category.name }}
+            </option>
+      </select>
+      <!-- <select v-model="chosenCategory" @change="filterProductsByCategory()" name="categories" id="categories">
+        <option value="Tous produits">Catégorie</option>
         <option value="Mobilier d'intérieur">Mobilier d'intérieur</option>
         <option value="Luminaires">Luminaires</option>
         <option value="Tapis">Tapis</option>
         <option value="Objets de décoration">Objets de décoration</option>
-      </select>
+      </select> -->
       <div class="input-group">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
               <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
@@ -68,7 +78,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['produits', 'cartItems', 'favorites', 'categories', 'actualProducts']),
+    ...mapState(['produits', 'cartItems', 'favorites', 'categories', 'categoriesV', 'actualProducts']),
   },
 
   data() {
@@ -76,7 +86,6 @@ export default {
       identite: 'guest',
       groupe: 'GUEST',
       searchTerm: '',
-      // actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
       chosenCategory: 'Tous produits',
       disableButton: true
@@ -131,12 +140,12 @@ export default {
       }
     },
     filterProductsByCategory() {
-      const selectedCategory = this.categories.find(category => category.name === this.chosenCategory);
+      const selectedCategory = this.categoriesV.find(category => category.name === this.chosenCategory);
       this.filterProducts(selectedCategory);
     },
 
     handleSearch() {
-      const selectedCategory = this.categories.find(category => category.name === this.chosenCategory);
+      const selectedCategory = this.categoriesV.find(category => category.name === this.chosenCategory);
 
       this.filterProducts(selectedCategory);
     },
@@ -180,6 +189,7 @@ export default {
 
     this.$store.dispatch('initializeActualProducts');
     this.filteredProducts = this.actualProducts;
+    this.$store.dispatch('updateCategoriesV');
     this.loadFavorites();
     this.loadCart();
   },
@@ -298,6 +308,16 @@ h2 {
   font-size: .8em;
   font-style: italic;
   color: rgb(231, 67, 39)
+}
+
+#category {
+  font-size: 1em;
+  width: 250px;
+  line-height: 1;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
 }
 
 @media screen and (min-width: 768px) and (max-width: 1023px) {

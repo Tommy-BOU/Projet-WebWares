@@ -12,7 +12,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(categorie, index) in categories" :key="index">
+          <tr v-for="(categorie, index) in categoriesV" :key="index">
             <td>{{ categorie.id }}</td>
             <td>{{ categorie.name }}</td>
             <td>
@@ -37,7 +37,7 @@
       <button
         class="action-btns add-category"
         type="button"
-        @click="openModalAdd()"
+        @click="openModalAdd(index='addCat')"
       >
         Ajouter nouvelle catégorie
       </button>
@@ -46,10 +46,10 @@
     <div v-if="openedModal" class="modal" v-cloak>
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
-        <div v-if="typeof index === 'undefined'">
+        <div v-if="index === 'addCat'">
           <h2>Ajouter nouvelle catégorie</h2>
           <br />
-          <form v-on:submit.prevent="add">
+          <form v-on:submit.prevent="addCategory">
             <label for="name">Name :</label>
             <input
               type="text"
@@ -86,13 +86,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-
 export default {
   data() {
     return {
-      // categoriesV: this.$store.state.categories,
       openedModal: false,
+      name: "",
+      // index: null,
       newCategory: {
         categorieId: "",
       },
@@ -101,55 +100,61 @@ export default {
   },
 
   computed: {
-    ...mapState(['categories', 'categoriesV'])
+    categoriesV() {
+      return this.$store.state.categoriesV;
+    }
   },
 
   methods: {
     remove(index) {
       if (confirm("Etes-vous certain de vouloir supprimer cette catégorie?")) {
-        this.categories.splice(index, 1);
+        this.categoriesV.splice(index, 1);
+        this.saveToLocalStorage();
       }
     },
 
     update() {
-      if (this.name != "") {
-        this.index.name = this.name;
-        setTimeout(() => (this.openedModal = !this.openedModal), 1000);
+      if (this.name !== "") {
+        this.categoriesV[this.index].name = this.name;
+        this.saveToLocalStorage();
+        this.closeModal();
       }
     },
 
-    add() {
-      let newid = this.categories[this.categories.length - 1].id + 1;
-      this.categories.push(Object.assign({ id: newid, name: this.name }));
-      setTimeout(() => (this.openedModal = !this.openedModal), 1000);
-    },
+    addCategory() {
+  if (this.name.trim() !== "") {
+    let newId = this.categoriesV[this.categoriesV.length - 1].id + 1;
+    this.categoriesV.push({ id: newId, name: this.name });
+    this.saveToLocalStorage();
+    this.closeModal();
+  }
+},
+
 
     saveToLocalStorage() {
-      localStorage.setItem("categories", JSON.stringify(this.categories));
+      localStorage.setItem("categoriesV", JSON.stringify(this.categoriesV));
     },
 
     openModal(index) {
       this.openedModal = true;
-      this.index = this.categories[index];
-      this.name = this.categories[index].name;
+      this.index = index;
+      this.name = this.categoriesV[index].name;
     },
 
     openModalAdd() {
       this.openedModal = true;
+      // this.index = -1; 
+      this.name = "";
     },
 
     closeModal() {
       this.openedModal = false;
-
-      this.newCategory = {
-        Id: "",
-        name: "",
-      };
-    },
+      this.name = ""; 
+    }
   },
 
   watch: {
-    categories: {
+    categoriesV: {
       deep: true,
       handler() {
         this.saveToLocalStorage();
@@ -158,14 +163,21 @@ export default {
   },
 
   created() {
-    let storedCategories = localStorage.getItem("categories");
-    if (storedCategories) {
-      this.categories = JSON.parse(storedCategories);
+    let storedCategoriesV = JSON.parse(localStorage.getItem("categoriesV"));
+    if (storedCategoriesV) {
+      this.$store.commit('SET_CATEGORIESV', storedCategoriesV);
+    } else {
+      // If categoriesV is not stored in localStorage, initialize it as a replica of categories
+      this.$store.commit('SET_CATEGORIESV', [...this.$store.state.categories]);
+      // Save to localStorage for future use
+      this.saveToLocalStorage();
     }
+
     this.$store.dispatch('initializeCategories');
   }
 }
 </script>
+
 
 <style scoped>
 .category {

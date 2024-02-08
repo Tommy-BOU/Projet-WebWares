@@ -338,15 +338,15 @@ export default createStore({
       state.listOfOrders = JSON.parse(localStorage.getItem("orders"));
     },
     ADD_NEW_CATEGORY(state, newCategory) {
-      const id = state.categories[state.categories.length - 1].id + 1;
-      state.categories.push({ id, name: newCategory });
-      localStorage.setItem('categories', JSON.stringify(state.categories));
+      const id = state.categoriesV[state.categoriesV.length - 1].id + 1;
+      state.categoriesV.push({ id, name: newCategory });
+      localStorage.setItem('categoriesV', JSON.stringify(state.categoriesV));
     },
     REMOVE_CATEGORY(state, index) {
-      state.categories.splice(index, 1);
-      localStorage.setItem('categories', JSON.stringify(state.categories));
+      state.categoriesV.splice(index, 1);
+      localStorage.setItem('categoriesV', JSON.stringify(state.categoriesV));
     },
-    SET_CATEGORIES(state, newCategories) {
+    SET_CATEGORIESV(state, newCategories) {
       state.categoriesV = newCategories;
     },
 
@@ -369,12 +369,24 @@ export default createStore({
       commit('SET_ACTUAL_PRODUCTS', newActualProducts);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
-    initializeCategories({ commit }) {
-      const storedCategories = JSON.parse(localStorage.getItem('categories'));
-      if (storedCategories) {
-        commit('SET_CATEGORIES', storedCategories);
+    initializeCategories({ commit, state }) {
+      if (!state.categoriesV.length) {
+        commit('SET_CATEGORIESV', [...state.categories]);
       }
     },
+    addNewCategory({ commit, state }, newCategoryName) {
+      if (newCategoryName.trim() !== "") {
+        const newId = state.categoriesV.length > 0 ? state.categoriesV[state.categoriesV.length - 1].id + 1 : 1;
+        const newCategory = { id: newId, name: newCategoryName };
+        commit('ADD_NEW_CATEGORY', newCategory);
+      }
+    },
+    updateCategoriesV({ commit }) {
+      let storedCategoriesV = JSON.parse(localStorage.getItem("categoriesV"));
+      if (storedCategoriesV) {
+        commit('SET_CATEGORIESV', storedCategoriesV);
+      }
+    }
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)

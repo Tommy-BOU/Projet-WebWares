@@ -87,9 +87,9 @@
           <br />
           <label for="productCategory">Catégorie:</label>
           <br />
-          <select name="category" id="category" v-model="form.categorieId">
+          <select name="category" id="category" v-model="form.categorieId" class="category-options">
             <option
-              v-for="category in categories"
+              v-for="category in categoriesV"
               :key="category.id"
               :value="category.id"
             >
@@ -149,7 +149,7 @@ export default {
         }
     },
     computed: {
-        ...mapState(['produits', 'categories', 'actualProducts'])
+        ...mapState(['produits', 'categoriesV', 'actualProducts'])
     },
     methods: {
         convertImageToBase64(event) {
@@ -223,6 +223,8 @@ export default {
         } else {
             localStorage.setItem('productIdCounter', 20)
         }
+
+        this.$store.dispatch('updateCategoriesV');
     }
 
 
@@ -395,4 +397,5 @@ h2 {
   margin-top: 20px;
   font-size: 0.9em;
 }
+
 </style>
