@@ -58,6 +58,7 @@ export default createStore({
     cartCount: 0,
     favorites: [],
     actualProducts: [],
+    productIdCounter: 20,
     produits: [
       {
         id: 1,
@@ -318,14 +319,16 @@ export default createStore({
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
     ADD_NEW_PRODUCT(state, newProduct) {
-      const id = state.actualProducts.length + 1;
+      const id = parseInt(localStorage.getItem('productIdCounter')) + 1;
       const product = {
         id,
         ...newProduct,
       };
       state.actualProducts.push(product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+      localStorage.setItem('productIdCounter', id);
     },
+    
     EDIT_PRODUCT(state, { index, product }) {
       state.actualProducts.splice(index, 1, product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
@@ -340,6 +343,11 @@ export default createStore({
     placeNewOrder({ commit }, orderData) {
       commit('PLACE_NEW_ORDER', orderData);
       commit('EMPTY_CART');
+    },
+    initializeActualProducts({ commit, state }) {
+      if (!state.actualProducts.length) {
+        commit('SET_ACTUAL_PRODUCTS', [...state.produits]);
+      }
     },
     setActualProducts({ commit, state }, newActualProducts) {
       commit('SET_ACTUAL_PRODUCTS', newActualProducts);
