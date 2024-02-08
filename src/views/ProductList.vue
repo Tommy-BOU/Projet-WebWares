@@ -77,7 +77,7 @@ export default {
       identite: 'guest',
       groupe: 'GUEST',
       searchTerm: '',
-      actualProducts: [...this.$store.state.produits],
+      // actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
       chosenCategory: 'Tous produits',
       disableButton: true
