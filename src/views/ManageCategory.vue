@@ -124,9 +124,9 @@ export default {
       setTimeout(() => (this.openedModal = !this.openedModal), 1000);
     },
 
-    // saveToLocalStorage() {
-    //   localStorage.setItem("categories", JSON.stringify(this.categories));
-    // },
+    saveToLocalStorage() {
+      localStorage.setItem("categories", JSON.stringify(this.categories));
+    },
 
     openModal(index) {
       this.openedModal = true;
@@ -148,14 +148,14 @@ export default {
     },
   },
 
-  // watch: {
-  //   categories: {
-  //     deep: true,
-  //     handler() {
-  //       this.saveToLocalStorage();
-  //     }
-  //   }
-  // },
+  watch: {
+    categories: {
+      deep: true,
+      handler() {
+        this.saveToLocalStorage();
+      }
+    }
+  },
 
   created() {
     let storedCategories = localStorage.getItem("categories");
