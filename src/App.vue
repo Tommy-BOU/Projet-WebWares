@@ -6,11 +6,17 @@
     <div class="nav-container">
       <nav class="navbar2" v-if="groupe === 'ADMIN'">
         <h1>PANEL ADMIN</h1>
-        <br>
-        <router-link to="/gestion-categories">Gestion des catégories</router-link> |
-        <router-link to="/gestion-commandes">Gestion des commandes</router-link> |
+        <br />
+        <router-link to="/gestion-categories"
+          >Gestion des catégories</router-link
+        >
+        |
+        <router-link to="/gestion-commandes">Gestion des commandes</router-link>
+        |
         <router-link to="/gestion-produits">Gestion des produits</router-link> |
-        <router-link to="/gestion-utilisateurs">Gestion des utilisateurs</router-link>
+        <router-link to="/gestion-utilisateurs"
+          >Gestion des utilisateurs</router-link
+        >
       </nav>
       <nav class="navbar" v-if="groupe === 'ADMIN'">
         <router-link to="/">Accueil</router-link> |
@@ -24,8 +30,11 @@
         <router-link to="/profil">Profil</router-link> |
         <router-link to="/deconnexion">Déconnexion</router-link> |
         <router-link to="/panier" class="icon-container">
-            <img src="./assets/panier.png" alt="" class="cart-icon" />
-            <div class="cart-circle" v-if="this.$store.getters.getItemsInCart.length !== 0"></div>
+          <img src="./assets/panier.png" alt="" class="cart-icon" />
+          <div
+            class="cart-circle"
+            v-if="this.$store.getters.getItemsInCart.length !== 0"
+          ></div>
         </router-link>
       </nav>
 
@@ -35,7 +44,6 @@
         <router-link to="/inscription">Inscription</router-link> |
         <router-link to="/connexion">Connexion</router-link>
       </nav>
-
     </div>
   </div>
   <router-view @updateGroup="updateGroupFunction"></router-view>
@@ -45,14 +53,14 @@
 export default {
   data() {
     return {
-      groupe: 'GUEST'
+      groupe: "GUEST",
     };
   },
 
   methods: {
     updateGroupFunction(newValue) {
       this.groupe = newValue;
-    }
+    },
   },
 
   created() {
@@ -60,13 +68,15 @@ export default {
     if (identity) {
       this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
 
-      this.$store.commit('CHANGE_GROUP', this.groupe);
+      this.$store.commit("CHANGE_GROUP", this.groupe);
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css?family=Roboto+Condensed");
+
 *,
 ::before,
 ::after {
@@ -97,11 +107,13 @@ html {
 
   .nav-container {
     width: 100%;
-    height: 100%;
+    height: 10%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    position: absolute;
+    top: 10%;
 
     .navbar2 {
       border: 1px solid rgb(231, 67, 39);
@@ -142,7 +154,7 @@ html {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -158,6 +170,21 @@ nav {
 
     &.router-link-exact-active {
       color: rgb(231, 67, 39);
+    }
+  }
+}
+
+@media (max-width: 1000px) {
+  .navbar2 {
+    width: 400px;
+  }
+
+  .header {
+
+    img {
+      align-self: center;
+      width: auto;
+      height: 75%;
     }
   }
 }

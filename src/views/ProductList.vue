@@ -206,6 +206,9 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .product img {
@@ -217,6 +220,9 @@ export default {
 
 .product-info {
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .product:hover {

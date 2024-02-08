@@ -1,56 +1,60 @@
 <template>
- <!-- Video -->
-        <video autoplay muted loop id="myVideo">
-            <source src="../assets/video.mp4" type="video/mp4">
-        </video>
-        <div class="overlay">
-            <div class="text-center">
-                <h1 class="font-weight-bold"> WEBWARES: Qualité et Confort pour tous</h1>
-                <p>De Professionnels à Professionnels</p>
-                 <div class=" text-center">
-               
-                <button type="button" ><router-link to="/inscription" class="btn">Rejoignez-nous pour consulter notre catalogue</router-link></button>
-                
-                </div>
-            
-   
-        
-            </div>
-        </div>
-
-<!-- ---------Nos meilleures ventes --> 
-
-<div>
-  <h2> NOS MEILLEURES VENTES </h2>
-  
-</div>
-<div class="bloc-images">
-  <div class="bloc-image">
-
-          <router-link :to="'produits-details/6'" class="details-link"><img src="../assets/mobilier-1.jpg" alt="Table de nuit" /></router-link>
-          <br>
-          <span><strong >Table de nuit en bois massif</strong></span>
+  <!-- Video -->
+  <video autoplay muted loop id="myVideo">
+    <source src="../assets/video.mp4" type="video/mp4" />
+  </video>
+  <div class="overlay">
+    <div class="text-center">
+      <h1 class="font-weight-bold">WEBWARES: Qualité et Confort pour tous</h1>
+      <p>De Professionnels à Professionnels</p>
+      <div class="text-center">
+        <button type="button">
+          <router-link to="/inscription" class="btn"
+            >Rejoignez-nous pour consulter notre catalogue</router-link
+          >
+        </button>
+      </div>
+    </div>
   </div>
-          
-  <div class="bloc-image">
-          <router-link :to="'produits-details/13'" class="details-link"><img src="../assets/mobilier-4.jpg" alt="canape"/></router-link>
-          <br>
-          <span><strong>Canapé comfortable</strong></span>
+
+  <!-- ---------Nos meilleures ventes -->
+
+  <div>
+    <h2>NOS MEILLEURES VENTES</h2>
+  </div>
+  <div class="bloc-images">
+    <div class="bloc-image">
+      <router-link :to="'produits-details/6'" class="details-link"
+        ><img src="../assets/mobilier-1.jpg" alt="Table de nuit"
+      /></router-link>
+      <br />
+      <span><strong>Table de nuit en bois massif</strong></span>
+    </div>
+
+    <div class="bloc-image">
+      <router-link :to="'produits-details/13'" class="details-link"
+        ><img src="../assets/mobilier-4.jpg" alt="canape"
+      /></router-link>
+      <br />
+      <span><strong>Canapé comfortable</strong></span>
     </div>
     <div class="bloc-image">
-          <router-link :to="'produits-details/3'" class="details-link"><img src="../assets/deco-3.jpg" alt="vases" /></router-link>
-          <br>
-          <span><strong>Vases ethnique en argile</strong></span>
+      <router-link :to="'produits-details/3'" class="details-link"
+        ><img src="../assets/deco-3.jpg" alt="vases"
+      /></router-link>
+      <br />
+      <span><strong>Vases ethnique en argile</strong></span>
     </div>
     <div class="bloc-image">
-          <router-link :to="'produits-details/2'" class="details-link"><img src="../assets/tapis-2.jpg" alt="tapis" /></router-link>
-          <br>
-          <span><strong>Tapis en laine</strong></span>
+      <router-link :to="'produits-details/2'" class="details-link"
+        ><img src="../assets/tapis-2.jpg" alt="tapis"
+      /></router-link>
+      <br />
+      <span><strong>Tapis en laine</strong></span>
+    </div>
   </div>
-</div>    
 
-
-<!-- ----Footer---- -->
+  <!-- ----Footer---- -->
 
 <div class="container"></div>
 <footer>
@@ -80,19 +84,23 @@
         <li><a href="#">Assemblage des produits</a></li>
         <li><a href="#">Commande/Livraison/Retour</a></li>
           <li><a href="#">Moyens de paiement</a></li>
-      </ul>
-    </div>
-    
-    <div class="ft-main-item">
-      <h2 class="ft-title">RESTEZ EN CONTACT</h2>
-      <p>Promo & nouveautés en avant-première!</p>
-       <p>Vous pouvez vous désinscrire à tout moment</p>
-      <form>
-        <input type="email" name="email" size="30" placeholder="Votre Email">
-        <input type="submit" value="Abonnement">
+        </ul>
+      </div>
 
-      </form>
-      <br><br>
+      <div class="ft-main-item">
+        <h2 class="ft-title">RESTEZ EN CONTACT</h2>
+        <p>Promo & nouveautés en avant-première!</p>
+        <p>Vous pouvez vous désinscrire à tout moment</p>
+        <form>
+          <input
+            type="email"
+            name="email"
+            size="30"
+            placeholder="Votre Email"
+          />
+          <input type="submit" value="Abonnement" />
+        </form>
+        <br /><br />
 
   <a href="https://fr.linkedin.com/" ><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-linkedin" viewBox="0 0 16 16">
   <path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"/>
@@ -115,103 +123,106 @@
 
 
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
-      identite: 'guest',
-      groupe: 'GUEST'
+      identite: "guest",
+      groupe: "GUEST",
     };
   },
-
+  computed: {
+    ...mapState(["listOfOrders"]),
+  },
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale
+      this.identite = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).raisonSociale;
 
-      this.$store.commit('CHANGE_IDENTITY', this.identite);
+      this.$store.commit("CHANGE_IDENTITY", this.identite);
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 #myVideo {
   position: relative;
-    left: 0;
-    top: 0;
-    max-width:100%;
-    max-height:0%;
-    opacity: 60%;
-  }
+  left: 0;
+  top: 0;
+  max-width: 100%;
+  max-height: 0%;
+  opacity: 60%;
+}
 
-  .overlay {
-    color: rgb(231, 67, 39);
-    padding: 5px 15px;
-    text-align: center;
-    position:absolute;
-    left: 0;
-    right: 0;
+.overlay {
+  color: rgb(231, 67, 39);
+  padding: 5px 15px;
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
 
-    top: 35%;
-    bottom: 0;
-    width: 100%;
-    height: auto;
+  top: 35%;
+  bottom: 0;
+  width: 100%;
+  height: auto;
 }
 button {
-    transition: all .7s ease;
-    color: rgb(231, 67, 39);
-    border: 3px solid rgb(231, 67, 39);
-    text-align: center;
-    line-height: 1,5;
-    font-size: 25px;
-    background-color : transparent;
-    padding: 10px;
-    outline: none;
-    border-radius: 4px;
+  transition: all 0.7s ease;
+  color: rgb(231, 67, 39);
+  border: 3px solid rgb(231, 67, 39);
+  text-align: center;
+  line-height: 1, 5;
+  font-size: 25px;
+  background-color: transparent;
+  padding: 10px;
+  outline: none;
+  border-radius: 4px;
 }
 
 button:hover {
-    color: rgb(231, 67, 39);
-    background-color: #fff;
+  color: rgb(231, 67, 39);
+  background-color: #fff;
 }
 
-.btn{
-  text-decoration:none;
-   color: rgb(231, 67, 39);
+.btn {
+  text-decoration: none;
+  color: rgb(231, 67, 39);
 }
-.btn:hover{
-  text-decoration:none;
-   color: rgb(231, 67, 39);
+.btn:hover {
+  text-decoration: none;
+  color: rgb(231, 67, 39);
 }
-
 
 // ----nos meilleures ventes
-.bloc-images{
-  display:inline-block;
+.bloc-images {
+  display: inline-block;
   margin-top: 60px;
   margin-bottom: 60px;
-  
 }
 
-.bloc-image{
-  display:inline; 
+.bloc-image {
+  display: inline;
   float: left;
-   margin-left: 60px;
+  margin-left: 60px;
 }
 
-.bloc-image img{
-  box-shadow: 3px 3px 6px  #E74327;
-  margin:5px;
+.bloc-image img {
+  box-shadow: 3px 3px 6px #e74327;
+  margin: 5px;
 }
-.bloc-image span{
-  display: inline-block
+.bloc-image span {
+  display: inline-block;
 }
-img{
+img {
   margin: 20px;
-  width:300px;
+  width: 300px;
   height: 300px;
 }
-h2{
+h2 {
   color: rgb(231, 67, 39);
 }
 
@@ -268,7 +279,7 @@ body {
 }
 
 /* Newsletter  */
-form  {
+form {
   display: flex;
   flex-wrap: wrap;
 }
@@ -287,17 +298,15 @@ input[type="submit"] {
   margin-top: 0.3125rem;
 }
 
-
-.socialmedia{
+.socialmedia {
   padding: 145rem;
   min-width: 12.5rem;
 }
-.bi{
+.bi {
   margin-right: 10px;
 }
-p{
+p {
   margin-top: 20px;
   margin-bottom: 20px;
 }
-
 </style>

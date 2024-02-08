@@ -57,13 +57,17 @@
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
-  <div class="empty-cart" v-else-if="this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'"
+  <div
+    class="empty-cart"
+    v-else-if="
+      this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'
+    "
   >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
   </div>
   <div class="empty-cart" v-else>
-    <br>
+    <br />
     Vous n'êtes pas autorisé à afficher cette page !
   </div>
 
@@ -109,7 +113,6 @@
       <input class="confirmation" type="submit" value="Confirmer commande" />
     </form>
   </div>
-
 </template>
 
 <script>
@@ -223,12 +226,13 @@ export default {
         for (let data of this.objectsInCart) {
           this.newOrder.titreProduits.push(data.titre);
           this.newOrder.prixUnitaire.push(data.prix);
-          this.newOrder.prixArticles.push(data.prix*data.quantity);
+          this.newOrder.prixArticles.push(data.prix * data.quantity);
           this.newOrder.quantité.push(data.quantity);
           this.newOrder.coutTotal += data.prix * data.quantity;
         }
 
         this.$store.dispatch("placeNewOrder", this.newOrder);
+        localStorage.setItem("orders", JSON.stringify(this.listOfOrders));
         this.modalToggle = false;
       }
     },
@@ -241,6 +245,10 @@ export default {
     },
   },
   created() {
+    let orders = localStorage.getItem("orders");
+    if (orders) {
+      this.$store.commit("SET_ORDERS");
+    }
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
       this.identite = JSON.parse(
@@ -301,7 +309,7 @@ export default {
       align-items: flex-start;
       flex-direction: column;
 
-      input{
+      input {
         width: 100%;
         padding: 5px 10px;
         border-radius: 5px;
@@ -324,7 +332,6 @@ export default {
       display: flex;
       flex-direction: column;
       gap: 10px;
-
     }
 
     .confirmation {

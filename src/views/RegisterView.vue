@@ -202,8 +202,7 @@ export default {
         this.msg8 = "Votre Mot De Passe doit être identique à cette confirmation. \u274C";
         this.validInput8 = false;
       } else {
-        this.msg8 =
-          "Votre Confirmation Mot De Passe doit contenir au moins 5 caractères. \u274C";
+        this.msg8 = "Votre Confirmation Mot De Passe doit contenir au moins 5 caractères. \u274C";
         this.validInput8 = false;
       }
     },
@@ -269,8 +268,9 @@ export default {
   width: 600px;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 50px;
   border: 1px solid rgb(231, 67, 39);
-  padding: 0 40px 30px 20px;
+  padding: 10px 40px 30px 20px;
 }
 
 .confirm {
