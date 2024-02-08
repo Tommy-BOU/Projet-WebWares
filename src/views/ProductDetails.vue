@@ -54,6 +54,7 @@ export default {
       identite: "guest",
       groupe: 'GUEST',
       disableButton: true,
+      // productId: this.$route.params.id
     };
   },
     components: {
@@ -129,9 +130,15 @@ export default {
       this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
 
       this.loadFavorites();
-
       this.loadCart();
-    }
+
+      const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
+        if (storedActualProducts) {
+            this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
+        } else {
+            this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
+        }
+      }
   },
 };
 </script>
