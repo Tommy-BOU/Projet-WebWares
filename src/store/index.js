@@ -334,6 +334,9 @@ export default createStore({
       state.actualProducts.splice(index, 1, product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
+    SET_ORDERS(state){
+      state.listOfOrders = JSON.parse(localStorage.getItem("orders"));
+    },
     ADD_NEW_CATEGORY(state, newCategory) {
       const id = state.categories[state.categories.length - 1].id + 1;
       state.categories.push({ id, name: newCategory });
