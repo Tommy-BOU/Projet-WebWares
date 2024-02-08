@@ -1,7 +1,7 @@
 <template>
   <div class="product-details-container">
     <div class="svg">
-      <svg v-if="!isFavorite(currentProduct)" @click="toggleFavorite(currentProduct)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+      <svg v-if="!isFavorite(currentProduct) || groupe != 'USER'" @click="toggleFavorite(currentProduct)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
       <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
       </svg>
       <svg v-else @click="toggleFavorite(currentProduct)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -56,45 +56,48 @@ export default {
       disableButton: true,
     };
   },
-    components: {
-        GeneralButton,
+
+  components: {
+    GeneralButton,
+  },
+
+  computed: {
+    ...mapState(['produits', 'cartItems', 'favorites', 'actualProducts']),
+    currentProduct() {
+      const productId = this.$route.params.id;
+      return this.actualProducts[productId];
+    }
+  },
+
+  methods: {
+    isInCart(item) {
+      return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
     },
     
-    computed: {
-        ...mapState(['produits', 'cartItems', 'favorites', 'actualProducts']),
-        currentProduct() {
-        const productId = this.$route.params.id;
-        return this.actualProducts[productId];
-        }
+    addOrRemove(product) {
+      const isInCart = this.isInCart(product);
+      const mutationType = isInCart ? 'REMOVE_FROM_CART' : 'ADD_TO_CART';
+      product.quantity = product.moq
+      this.$store.commit(mutationType, product);
     },
-    methods: {
-        isInCart(item) {
-            return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
-        },
-        addOrRemove(product) {
-            const isInCart = this.isInCart(product);
-            const mutationType = isInCart ? 'REMOVE_FROM_CART' : 'ADD_TO_CART';
-            product.quantity = product.moq
-            this.$store.commit(mutationType, product);
 
-      console.log(this.cartItems);
-      console.log(product.quantity);
-    },
     loadCart() {
       const storedCartItems = localStorage.getItem('cartItems');
       if (storedCartItems) {
         this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
       }
     },
+
     isFavorite(product) {
       return this.favorites.some(fav => fav.id === product.id);
     },
+
     toggleFavorite(product) {
       if (this.groupe !== 'USER') {
         alert('Vous devez être membre pour pouvoir créer des favoris.')
-      } else {
-
-      const index = this.favorites.findIndex((fav) => fav.id === product.id);
+      }
+      else {
+        const index = this.favorites.findIndex((fav) => fav.id === product.id);
 
         if (index === -1) {
           // If the product is not in favorites, add it
@@ -112,13 +115,15 @@ export default {
       localStorage.setItem('favorites', JSON.stringify(this.favorites));
       console.log('Saved Favorites:', this.favorites);
     },
+
     loadFavorites() {
       const storedFavorites = localStorage.getItem('favorites');
       if (storedFavorites) {
         this.$store.commit('SET_FAVORITES', JSON.parse(storedFavorites));
       }
-    },
+    }
   },
+
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
@@ -132,7 +137,15 @@ export default {
 
       this.loadCart();
     }
-  },
+    
+    const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
+    if (storedActualProducts) {
+      this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
+    }
+    else {
+      this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
+    }
+  }
 };
 </script>
 
