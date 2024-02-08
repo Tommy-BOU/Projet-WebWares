@@ -1,3 +1,4 @@
+
 <template>
   <div class="products-section">
     <h2> {{ chosenCategory }} </h2>
