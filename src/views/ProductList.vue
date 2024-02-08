@@ -1,4 +1,3 @@
-
 <template>
   <div class="products-section">
     <h2> {{ chosenCategory }} </h2>
@@ -168,6 +167,15 @@ export default {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
+
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+    }
+    
+    const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
+    if (storedActualProducts) {
+        this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
+    } else {
+        this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
     }
 
     this.$store.dispatch('initializeActualProducts');
@@ -206,9 +214,6 @@ export default {
   border-radius: 8px;
   overflow: hidden;
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .product img {
@@ -220,9 +225,6 @@ export default {
 
 .product-info {
   padding: 0 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 
 .product:hover {

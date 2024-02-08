@@ -19,7 +19,7 @@
 
   <!-- ---------Nos meilleures ventes -->
 
-  <div>
+  <div class="best">
     <h2>NOS MEILLEURES VENTES</h2>
   </div>
   <div class="bloc-images">
@@ -170,6 +170,11 @@ export default {
   width: 100%;
   height: auto;
 }
+
+.best {
+  margin-top: 50px;
+}
+
 button {
   transition: all 0.7s ease;
   color: rgb(231, 67, 39);

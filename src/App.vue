@@ -107,7 +107,7 @@ html {
 
   .nav-container {
     width: 100%;
-    height: 10%;
+    height: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
