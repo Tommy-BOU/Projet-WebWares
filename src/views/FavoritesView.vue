@@ -25,7 +25,7 @@
           </div>
           <div>
               <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(favorite)" v-if="!isInCart(favorite)"/>
-              <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(favorite)" class="removeFromCartBtn" v-if="isInCart(favorite)"/>
+              <GeneralButton label="Retirer du panier" @generalEvent="addOrRemove(favorite)" class="removeFromCartBtn" v-if="isInCart(favorite)"/>
           </div>  
         </div>
       </div>

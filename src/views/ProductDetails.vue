@@ -36,7 +36,7 @@
         @generalEvent="addOrRemove(currentProduct)"/>
 
         <GeneralButton v-else
-        label="Remove from Cart"
+        label="Retirer du panier"
         @generalEvent="addOrRemove(currentProduct)"
         class="removeFromCartBtn"/>
       </div>

@@ -44,7 +44,7 @@
         </div>
         <div v-else>
           <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
-          <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-if="isInCart(produit)"/>
+          <GeneralButton label="Retirer du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-if="isInCart(produit)"/>
         </div>
       
         <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
