@@ -81,7 +81,7 @@
         </div>
         <div class="prices">
           <p v-for="prix in this.currentOrder.prixArticles" :key="prix">
-            Total : €{{ prix }}
+            Total HT : €{{ prix }}
           </p>
         </div>
       </div>
@@ -125,8 +125,64 @@
 <script>
 import { mapState } from "vuex";
 export default {
+  data() {
+    return {
+      currentOrder: {
+        orderNumber: 0,
+        titreProduits: [],
+        prixUnitaire: [],
+        prixArticles: [],
+        quantité: [],
+        coutTotal: 0,
+        entreprise: "",
+        adresse: "",
+        codePostal: "",
+        ville: "",
+        delivered: false,
+      },
+      toggleCard: false,
+      ordersList: [],
+      groupe: "GUEST",
+      identite: "guest",
+    };
+  },
+  methods: {
+    reverseOrders() {
+      // Create a copy of the array using spread syntax
+      const reversedOrders = [...this.listOfOrders];
+      // Reverse the copied array
+      this.ordersList = reversedOrders.reverse();
+    },
+    confirmDelivery() {
+      if (confirm("Êtes-vous sûr de vouloir valider cette commande ?")) {
+        this.currentOrder.delivered = true;
+      }
+    },
+    showDetail(orderId) {
+      this.toggleCard = !this.toggleCard;
+      for (let order of this.listOfOrders) {
+        if (order.orderNumber === orderId) {
+          this.currentOrder = order;
+        }
+      }
+    },
+  },
   computed: {
     ...mapState(["listOfOrders"]),
+  },
+  created() {
+    this.reverseOrders();
+
+    let identity = localStorage.getItem("myIdentity");
+    if (identity) {
+      this.identite = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).raisonSociale;
+      this.$store.commit("CHANGE_IDENTITY", this.identite);
+
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
+      this.$store.commit("CHANGE_GROUP", this.groupe);
+    }
   },
 };
 </script>
@@ -219,7 +275,7 @@ export default {
     .order-recap {
       display: flex;
       justify-content: center;
-      gap: 50px;
+      gap: 25px;
     }
 
     .status-pending {

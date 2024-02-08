@@ -1,6 +1,7 @@
 <template>
   <div class="products-section">
     <h2> {{ chosenCategory }} </h2>
+
     <div class="filter-section">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag" viewBox="0 0 16 16">
         <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0"/>
@@ -20,6 +21,7 @@
           <input v-model="searchTerm" @input="handleSearch()" type="text" id="searchInput" placeholder="Rechercher par nom de produit">
       </div>
     </div>
+
     <div class="products-grid">
       <div v-for="(produit, index) in filteredProducts" :key="index" class="product">
         <svg v-if="!isFavorite(produit)" @click="toggleFavorite(produit)" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
@@ -31,13 +33,20 @@
         <img :src="produit.image" :alt="produit.titre">
         <div class="product-info">
           <h4>{{ produit.titre }}</h4>
-          <p v-if="identite !== 'guest'">{{ produit.prix }} €</p>
+          <br>
+          <p v-if="groupe !== 'GUEST'">{{ produit.prix }} €</p>
           <p>Commande minimum : {{ produit.moq }}</p>
         </div>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
-        <p v-if="identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-else-if="!isInCart(produit)"/>
-        <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-else/>
+
+        <div v-if="groupe !== 'USER'">
+          <GeneralButton label="Ajouter au panier" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est disponible que pour nos membres."/>
+          <p v-if="identite === 'guest'" class="guestMessage">Vous devez être membre pour pouvoir commander.</p>
+        </div>
+        <div v-else>
+          <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
+          <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-if="isInCart(produit)"/>
+        </div>
+      
         <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
       </div>
     </div>
@@ -64,7 +73,10 @@ export default {
 
   data() {
     return {
+      identite: 'guest',
+      groupe: 'GUEST',
       searchTerm: '',
+      actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
       chosenCategory: 'Tous produits',
       disableButton: true
@@ -72,7 +84,6 @@ export default {
   },
 
   methods: {
-    
     isInCart(item) {
             return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
         },
@@ -91,9 +102,8 @@ export default {
       return this.favorites.some(fav => fav.id === product.id);
     },
     toggleFavorite(product) {
-      if (this.identite === 'guest') {
-        alert('Vous devez être connecté pour accéder aux Favoris ; veuillez vous connecter.')
-        return
+      if (this.groupe !== 'USER') {
+        alert('Vous devez être membre pour pouvoir créer des favoris.')
       } else {
 
       const index = this.favorites.findIndex((fav) => fav.id === product.id);
@@ -144,23 +154,26 @@ export default {
     },
     loadCart() {
       const storedCartItems = localStorage.getItem('cartItems');
-    if (storedCartItems) {
-      this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
-    }
+      if (storedCartItems) {
+        this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
+      }
     }
   },
 
   created() {
+    console.log('Component created');
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
       this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
+
+      this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
     }
-    this.filteredProducts = this.produits;
+    this.filteredProducts = this.actualProducts;
     this.loadFavorites();
     this.loadCart();
-  }
+  },
 }
 </script>
 

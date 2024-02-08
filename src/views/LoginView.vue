@@ -16,24 +16,24 @@
     <a @click="openModal()">Mot De Passe oublié</a>
 
     <!-- MODAL  -->
-    <div id="editModal" class="modal" v-if="openedModal" v-cloak>
-        <div class="modal-content">
-          <span class="close" @click="closeModal">X</span>
-          <div v-if="success === ''">
-            <h2>Mot De Passe oublié</h2>
-            <form v-on:submit.prevent="forgot">
-              <label for="email">Email :</label> <input type="email" id="email2" name="email2" v-model="email2" style="width:460px" placeholder="Veuillez saisir votre Email" @input="verifEmail" required />
-              <span v-html="msg" v-if="msg != ''"></span>
-              <br><br>
-              <p>Un nouveau mot de passe ainsi que le lien pour l'activer vont être envoyés à cette adresse.</p>
-              <br>
-              <input type="submit" value="Envoyer l'email">
-            </form>
-          </div>
-          <div v-else>
-            <span :style="{ color: textColor }"><br>{{ success }}</span>
-          </div>
+    <div class="modal" v-if="openedModal" v-cloak>
+      <div class="modal-content">
+        <span class="close" @click="closeModal">X</span>
+        <div v-if="success === ''">
+          <h2>Mot De Passe oublié</h2>
+          <form v-on:submit.prevent="forgot">
+            <label for="email">Email :</label> <input type="email" id="email2" name="email2" v-model="email2" style="width:460px" placeholder="Veuillez saisir votre Email" @input="verifEmail" required />
+            <span v-html="msg" v-if="msg != ''"></span>
+            <br><br>
+            <p>Un nouveau mot de passe ainsi que le lien pour l'activer vont être envoyés à cette adresse.</p>
+            <br>
+            <input type="submit" value="Envoyer l'email">
+          </form>
         </div>
+        <div v-else>
+          <span :style="{ color: textColor }"><br>{{ success }}</span>
+        </div>
+      </div>
     </div>
     <!-- MODAL  -->
 
@@ -73,15 +73,15 @@ function checkEntries(tableau, email, password) {
     if (tableau[i]["email"].toLowerCase() === email.toLowerCase()) {
       if (tableau[i]["motDePasse"] === password) {
         let utilisateur = {
-            id: tableau[i]["id"],
-            raisonSociale: tableau[i]["raisonSociale"],
-            siret: tableau[i]["siret"],
-            adresse: tableau[i]["adresse"],
-            codePostal: tableau[i]["codePostal"],
-            ville: tableau[i]["ville"],
-            email: tableau[i]["email"],
-            motDePasse: tableau[i]["motDePasse"],
-            role: tableau[i]["role"]
+          id: tableau[i]["id"],
+          raisonSociale: tableau[i]["raisonSociale"],
+          siret: tableau[i]["siret"],
+          adresse: tableau[i]["adresse"],
+          codePostal: tableau[i]["codePostal"],
+          ville: tableau[i]["ville"],
+          email: tableau[i]["email"],
+          motDePasse: tableau[i]["motDePasse"],
+          role: tableau[i]["role"]
         }
         localStorage.setItem('myIdentity', JSON.stringify(utilisateur));
         return "Connected";
@@ -261,5 +261,9 @@ a:hover {
   font-size: 18px;
   color: #333;
   z-index: 2; 
+}
+
+[v-cloak] {
+  display: none;
 }
 </style>

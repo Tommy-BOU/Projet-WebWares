@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import MainPage from '../views/MainPage.vue'
 import ProductList from '../views/ProductList.vue'
+import ProfileView from '../views/ProfileView.vue'
 import LoginView from '../views/LoginView.vue'
 import LogoutView from '../views/LogoutView.vue'
 import RegisterView from '../views/RegisterView.vue'
@@ -10,12 +11,21 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 import ManageCategory from '../views/ManageCategory.vue'
+import TermesConditions from '../views/TermesConditions.vue'
+import PolitiqueDeConfidentialite from '../views/PolitiqueDeConfidentialite.vue'
+import MentionsLegales from '../views/MentionsLegales.vue'
+
 
 const routes = [
   {
     path: '/',
     name: 'accueil',
     component: MainPage
+  },
+  {
+    path: '/profil',
+    name: 'profil',
+    component: ProfileView
   },
   {
     path: '/produits',
@@ -58,14 +68,29 @@ const routes = [
     component: ManageUsers
   },
   {
-    path: '/gestion-produits' ,
-    name: 'gestion-produits' ,
+    path: '/gestion-produits',
+    name: 'gestion-produits',
     component: ManageProducts
   },
   {
-    path: '/gestion-categories' ,
-    name: 'gestion-categories' ,
+    path: '/gestion-categories',
+    name: 'gestion-categories',
     component: ManageCategory
+  },
+  {
+    path: '/termes-conditions',
+    name: 'termes-conditions',
+    component: TermesConditions
+  },
+  {
+    path: '/politique-de-confidentialite',
+    name: 'politique-de-confidentialite',
+    component: PolitiqueDeConfidentialite
+  },
+  {
+    path: '/mentions-legales',
+    name: 'mentions-legales',
+    component: MentionsLegales
   },
 ]
 
