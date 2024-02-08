@@ -58,6 +58,7 @@ export default createStore({
     cartCount: 0,
     favorites: [],
     actualProducts: [],
+    productIdCounter: 20,
     produits: [
       {
         id: 1,
@@ -248,6 +249,7 @@ export default createStore({
       { id: 3, name: 'Tapis' },
       { id: 4, name: 'Objets de décoration' }
     ],
+    categoriesV: []
     // Etat global -> propriété de données partagées par tous les composants 
 
   },
@@ -318,17 +320,31 @@ export default createStore({
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
     },
     ADD_NEW_PRODUCT(state, newProduct) {
-      const id = state.actualProducts.length + 1;
+      const id = parseInt(localStorage.getItem('productIdCounter')) + 1;
       const product = {
         id,
         ...newProduct,
       };
       state.actualProducts.push(product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+      localStorage.setItem('productIdCounter', id);
     },
+    
     EDIT_PRODUCT(state, { index, product }) {
       state.actualProducts.splice(index, 1, product);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
+    },
+    ADD_NEW_CATEGORY(state, newCategory) {
+      const id = state.categories[state.categories.length - 1].id + 1;
+      state.categories.push({ id, name: newCategory });
+      localStorage.setItem('categories', JSON.stringify(state.categories));
+    },
+    REMOVE_CATEGORY(state, index) {
+      state.categories.splice(index, 1);
+      localStorage.setItem('categories', JSON.stringify(state.categories));
+    },
+    SET_CATEGORIES(state, newCategories) {
+      state.categoriesV = newCategories;
     },
 
   },
@@ -341,10 +357,21 @@ export default createStore({
       commit('PLACE_NEW_ORDER', orderData);
       commit('EMPTY_CART');
     },
+    initializeActualProducts({ commit, state }) {
+      if (!state.actualProducts.length) {
+        commit('SET_ACTUAL_PRODUCTS', [...state.produits]);
+      }
+    },
     setActualProducts({ commit, state }, newActualProducts) {
       commit('SET_ACTUAL_PRODUCTS', newActualProducts);
       localStorage.setItem('actualProducts', JSON.stringify(state.actualProducts));
-    }
+    },
+    initializeCategories({ commit }) {
+      const storedCategories = JSON.parse(localStorage.getItem('categories'));
+      if (storedCategories) {
+        commit('SET_CATEGORIES', storedCategories);
+      }
+    },
   },
   getters: {
     // Getters -> propriétés calculées partagées par tous les composants ( computed)

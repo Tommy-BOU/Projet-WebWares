@@ -58,7 +58,7 @@ import { mapState } from 'vuex';
 export default {
   data() {
     return {
-      categories: this.$store.state.categories,
+      // categoriesV: this.$store.state.categories,
       openedModal: false,
       newCategory: {
           categorieId: ''
@@ -68,7 +68,7 @@ export default {
   },
 
   computed: {
-    ...mapState(['categories'])
+    ...mapState(['categories', 'categoriesV'])
   },
 
   methods: {
@@ -91,9 +91,9 @@ export default {
       setTimeout(() => this.openedModal = !this.openedModal, 1000);
     },
 
-    saveToLocalStorage() {
-      localStorage.setItem("categories", JSON.stringify(this.categories));
-    },
+    // saveToLocalStorage() {
+    //   localStorage.setItem("categories", JSON.stringify(this.categories));
+    // },
 
     openModal(index) {
       this.openedModal = true;
@@ -115,20 +115,21 @@ export default {
     },
   },
 
-  watch: {
-    categories: {
-      deep: true,
-      handler() {
-        this.saveToLocalStorage();
-      }
-    }
-  },
+  // watch: {
+  //   categories: {
+  //     deep: true,
+  //     handler() {
+  //       this.saveToLocalStorage();
+  //     }
+  //   }
+  // },
 
   created() {
     let storedCategories = localStorage.getItem("categories");
     if (storedCategories) {
       this.categories = JSON.parse(storedCategories);
     }
+    this.$store.dispatch('initializeCategories');
   }
 }
 </script>

@@ -1,3 +1,4 @@
+
 <template>
   <div class="products-section">
     <h2> {{ chosenCategory }} </h2>
@@ -33,13 +34,20 @@
         <img :src="produit.image" :alt="produit.titre">
         <div class="product-info">
           <h4>{{ produit.titre }}</h4>
-          <p v-if="identite !== 'guest'">{{ produit.prix }} €</p>
+          <br>
+          <p v-if="groupe !== 'GUEST'">{{ produit.prix }} €</p>
           <p>Commande minimum : {{ produit.moq }}</p>
         </div>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="identite === 'guest'" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est pas disponible en mode 'Guest'; veuillez vous connecter."/>
-        <p v-if="identite === 'guest'" class="guestMessage">Vous connecter pour accéder au panier.</p>
-        <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-else-if="!isInCart(produit)"/>
-        <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-else/>
+
+        <div v-if="groupe !== 'USER'">
+          <GeneralButton label="Ajouter au panier" :disabled="disableButton" class="disabledButton" title="Cette fonctionnalité n'est disponible que pour nos membres."/>
+          <p v-if="identite === 'guest'" class="guestMessage">Vous devez être membre pour pouvoir commander.</p>
+        </div>
+        <div v-else>
+          <GeneralButton label="Ajouter au panier" @generalEvent="addOrRemove(produit)" v-if="!isInCart(produit)"/>
+          <GeneralButton label="Enlever du panier" @generalEvent="addOrRemove(produit)" class="removeFromCartBtn" v-if="isInCart(produit)"/>
+        </div>
+      
         <router-link :to="{ name: 'produits-details', params: { id: index } }" class="details-link">Détails du produit</router-link>
       </div>
     </div>
@@ -67,6 +75,7 @@ export default {
   data() {
     return {
       identite: 'guest',
+      groupe: 'GUEST',
       searchTerm: '',
       actualProducts: [...this.$store.state.produits],
       filteredProducts: [],
@@ -76,7 +85,6 @@ export default {
   },
 
   methods: {
-    
     isInCart(item) {
             return this.cartItems.find(cartItem => cartItem.id === item.id) !== undefined;
         },
@@ -95,9 +103,8 @@ export default {
       return this.favorites.some(fav => fav.id === product.id);
     },
     toggleFavorite(product) {
-      if (this.identite === 'guest') {
-        alert('Vous devez être connecté pour accéder aux Favoris ; veuillez vous connecter.')
-        return
+      if (this.groupe !== 'USER') {
+        alert('Vous devez être membre pour pouvoir créer des favoris.')
       } else {
 
       const index = this.favorites.findIndex((fav) => fav.id === product.id);
@@ -148,9 +155,9 @@ export default {
     },
     loadCart() {
       const storedCartItems = localStorage.getItem('cartItems');
-    if (storedCartItems) {
-      this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
-    }
+      if (storedCartItems) {
+        this.$store.commit('SET_CART_ITEMS', JSON.parse(storedCartItems));
+      }
     }
   },
 
@@ -162,6 +169,8 @@ export default {
 
       this.$store.commit('CHANGE_IDENTITY', this.identite);
     }
+
+    this.$store.dispatch('initializeActualProducts');
     this.filteredProducts = this.actualProducts;
     this.loadFavorites();
     this.loadCart();

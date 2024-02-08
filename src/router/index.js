@@ -11,6 +11,14 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 import ManageCategory from '../views/ManageCategory.vue'
+import FavoritesView from '../views/FavoritesView.vue'
+
+import TermesConditions from '../views/TermesConditions.vue'
+import PolitiqueDeConfidentialite from '../views/PolitiqueDeConfidentialite.vue'
+import MentionsLegales from '../views/MentionsLegales.vue'
+
+
+
 
 const routes = [
   {
@@ -64,15 +72,37 @@ const routes = [
     component: ManageUsers
   },
   {
-    path: '/gestion-produits' ,
-    name: 'gestion-produits' ,
+
+    path: '/gestion-produits',
+    name: 'gestion-produits',
     component: ManageProducts
   },
   {
-    path: '/gestion-categories' ,
-    name: 'gestion-categories' ,
+    path: '/gestion-categories',
+    name: 'gestion-categories',
     component: ManageCategory
   },
+  {
+    path: '/termes-conditions',
+    name: 'termes-conditions',
+    component: TermesConditions
+  },
+  {
+    path: '/politique-de-confidentialite',
+    name: 'politique-de-confidentialite',
+    component: PolitiqueDeConfidentialite
+  },
+  {
+    path: '/mentions-legales',
+    name: 'mentions-legales',
+    component: MentionsLegales
+  },
+  {
+    path: '/favoris' ,
+    name: 'favoris' ,
+    component: FavoritesView
+  },
+
 ]
 
 const router = createRouter({
