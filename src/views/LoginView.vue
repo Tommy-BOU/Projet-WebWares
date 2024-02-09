@@ -1,18 +1,33 @@
 <template>
-
   <div v-if="identite === 'guest'" class="connect">
     <h1>Connexion</h1>
     <div v-if="error">
       <span :style="{ color: textColor }">{{ error }}</span>
     </div>
     <form v-on:submit.prevent="login">
-      <label for="email">Email :</label> <input type="email" id="email" name="email" v-model="connectUser.email" placeholder="Veuillez saisir votre Email" required />
-      <br><br>
-      <label for="motDePasse">Mot De Passe :</label> <input type="password" id="motDePasse" name="motDePasse" v-model="connectUser.motDePasse" placeholder="Veuillez saisir votre Mot De Passe" required />
-      <br><br><br>
-      <input type="submit" value="Se connecter">
+      <label for="email">Email :</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        v-model="connectUser.email"
+        placeholder="Veuillez saisir votre Email"
+        required
+      />
+      <br /><br />
+      <label for="motDePasse">Mot De Passe :</label>
+      <input
+        type="password"
+        id="motDePasse"
+        name="motDePasse"
+        v-model="connectUser.motDePasse"
+        placeholder="Veuillez saisir votre Mot De Passe"
+        required
+      />
+      <br /><br /><br />
+      <input type="submit" value="Se connecter" />
     </form>
-    <br><br>
+    <br /><br />
     <a @click="openModal()">Mot De Passe oublié</a>
 
     <!-- MODAL  -->
@@ -22,42 +37,52 @@
         <div v-if="success === ''">
           <h2>Mot De Passe oublié</h2>
           <form v-on:submit.prevent="forgot">
-            <label for="email">Email :</label> <input type="email" id="email2" name="email2" v-model="email2" style="width:460px" placeholder="Veuillez saisir votre Email" @input="verifEmail" required />
+            <label for="email">Email :</label>
+            <input
+              type="email"
+              id="email2"
+              name="email2"
+              v-model="email2"
+              style="width: 460px"
+              placeholder="Veuillez saisir votre Email"
+              @input="verifEmail"
+              required
+            />
             <span v-html="msg" v-if="msg != ''"></span>
-            <br><br>
-            <p>Un nouveau mot de passe ainsi que le lien pour l'activer vont être envoyés à cette adresse.</p>
-            <br>
-            <input type="submit" value="Envoyer l'email">
+            <br /><br />
+            <p>
+              Un nouveau mot de passe ainsi que le lien pour l'activer vont être
+              envoyés à cette adresse.
+            </p>
+            <br />
+            <input type="submit" value="Envoyer l'email" />
           </form>
         </div>
         <div v-else>
-          <span :style="{ color: textColor }"><br>{{ success }}</span>
+          <span :style="{ color: textColor }"><br />{{ success }}</span>
         </div>
       </div>
     </div>
     <!-- MODAL  -->
-
   </div>
   <div v-else class="connect">
     <div v-if="success">
-      <span :style="{ color: textColor }"><br>{{ success }}</span>
-      <br><br>
-      Bonjour <b>{{ identite }}</b>
-      <br><br>
+      <span :style="{ color: textColor }"><br />{{ success }}</span>
+      <br /><br />
+      Bonjour <b>{{ identite }}</b> <br /><br />
       Redirection en cours ...
     </div>
     <div v-else>
-      <br>
+      <br />
       Vous êtes déjà connecté sous l'identité <b>{{ identite }}</b>
     </div>
   </div>
-
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from "vuex";
 
-const regexMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const regexMail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function existeDeja(tableau, mail) {
   for (let i = 0; i < tableau.length; i++) {
@@ -81,12 +106,11 @@ function checkEntries(tableau, email, password) {
           ville: tableau[i]["ville"],
           email: tableau[i]["email"],
           motDePasse: tableau[i]["motDePasse"],
-          role: tableau[i]["role"]
-        }
-        localStorage.setItem('myIdentity', JSON.stringify(utilisateur));
+          role: tableau[i]["role"],
+        };
+        localStorage.setItem("myIdentity", JSON.stringify(utilisateur));
         return "Connected";
-      }
-      else {
+      } else {
         return "ErrorPassword";
       }
     }
@@ -99,19 +123,19 @@ export default {
     return {
       users: this.$store.state.listOfUsers,
       connectUser: {},
-      error: '',
-      success: '',
-      textColor: '',
-      identite: 'guest',
-      groupe: 'GUEST',
+      error: "",
+      success: "",
+      textColor: "",
+      identite: "guest",
+      groupe: "GUEST",
       openedModal: false,
-      msg: '',
-      validEmail: false
+      msg: "",
+      validEmail: false,
     };
   },
 
   computed: {
-    ...mapState(['listOfUsers']),
+    ...mapState(["listOfUsers"]),
   },
 
   methods: {
@@ -125,67 +149,80 @@ export default {
 
     verifEmail() {
       if (regexMail.test(this.email2) && !existeDeja(this.users, this.email2)) {
-        this.msg = "L'Email que vous avez saisi ne correspond à aucun compte. \u274C";
+        this.msg =
+          "L'Email que vous avez saisi ne correspond à aucun compte. \u274C";
         this.validEmail = false;
-      }
-      else {
-        this.msg = '';
+      } else {
+        this.msg = "";
         this.validEmail = true;
       }
     },
-    
+
     forgot() {
       if (this.validEmail) {
-        this.success = "Un Email avec un nouveau mot de passe ainsi que le lien pour l'activer vient de vous être envoyé.";
+        this.success =
+          "Un Email avec un nouveau mot de passe ainsi que le lien pour l'activer vient de vous être envoyé.";
         this.textColor = "green";
       }
     },
 
     login() {
-      if (checkEntries(this.users, this.connectUser.email, this.connectUser.motDePasse) === "ErrorPassword") {
+      if (
+        checkEntries(
+          this.users,
+          this.connectUser.email,
+          this.connectUser.motDePasse
+        ) === "ErrorPassword"
+      ) {
         this.error = "Erreur : Ce mot de passe est erroné.";
         this.textColor = "red";
-      }
-      else if (checkEntries(this.users, this.connectUser.email, this.connectUser.motDePasse) === "UserNotExist") {
+      } else if (
+        checkEntries(
+          this.users,
+          this.connectUser.email,
+          this.connectUser.motDePasse
+        ) === "UserNotExist"
+      ) {
         this.error = "Erreur : Ce compte utilisateur n'existe pas.";
         this.textColor = "red";
-      }
-      else {
+      } else {
         this.success = "Connexion réussie.";
         this.textColor = "green";
 
-        this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
-        this.$store.commit('CHANGE_IDENTITY', this.identite);
+        this.identite = JSON.parse(
+          localStorage.getItem("myIdentity")
+        ).raisonSociale;
+        this.$store.commit("CHANGE_IDENTITY", this.identite);
 
         this.groupe = JSON.parse(localStorage.getItem("myIdentity")).role;
-        this.$store.commit('CHANGE_GROUP', this.groupe);
+        this.$store.commit("CHANGE_GROUP", this.groupe);
 
         // Transmission du groupe de l'utilisateur dans App.vue
-        this.$emit('updateGroup', this.groupe);
+        this.$emit("updateGroup", this.groupe);
 
         // Redirection vers l'accueil
-        setTimeout( () => this.$router.push({ path: '/'}), 2000);
+        setTimeout(() => this.$router.push({ path: "/" }), 2000);
       }
-    }
+    },
   },
 
   created() {
     let identity = localStorage.getItem("myIdentity");
     if (identity) {
-      this.identite = JSON.parse(localStorage.getItem("myIdentity")).raisonSociale;
-      
-      this.$store.commit('CHANGE_IDENTITY', this.identite);
+      this.identite = JSON.parse(
+        localStorage.getItem("myIdentity")
+      ).raisonSociale;
+
+      this.$store.commit("CHANGE_IDENTITY", this.identite);
     }
 
     let storedUsers = localStorage.getItem("users");
     if (storedUsers) {
       this.users = JSON.parse(storedUsers);
-    }
-    else
-    {
+    } else {
       localStorage.setItem("users", JSON.stringify(this.users));
     }
-  }
+  },
 };
 </script>
 
@@ -213,7 +250,7 @@ input {
 input[type="submit"] {
   width: unset;
   padding: 5px 15px;
-  color: #FFF;
+  color: #fff;
   font-weight: bold;
   cursor: pointer;
   border-radius: 5px;
@@ -230,15 +267,15 @@ a:hover {
 }
 
 .modal {
-  display: flex; 
+  display: flex;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); 
-  z-index: 1; 
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
   justify-content: center;
   align-items: center;
 }
@@ -260,7 +297,7 @@ a:hover {
   cursor: pointer;
   font-size: 18px;
   color: #333;
-  z-index: 2; 
+  z-index: 2;
 }
 
 [v-cloak] {
@@ -268,7 +305,7 @@ a:hover {
 }
 
 @media screen and (max-width: 400px) {
-  .connect{
+  .connect {
     width: 300px;
   }
 }

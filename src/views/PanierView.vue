@@ -1,7 +1,11 @@
 <template>
   <div
     class="panier-container"
-    v-if="this.$store.getters.getItemsInCart.length !== 0 && groupe === 'USER'"
+    v-if="
+      this.$store.getters.getItemsInCart.length !== 0 &&
+      groupe === 'USER' &&
+      success === ''
+    "
   >
     <div
       class="panier-item-card"
@@ -18,53 +22,73 @@
           Supprimer
         </button>
         <div class="quantity-container">
-          <button
-            @click="
-              product.quantity <= product.moq
-                ? (product.quantity = product.moq)
-                : modifyQuantity(product, -1);
-              product.quantity--;
-            "
-            :class="product.quantity === product.moq ? 'greyed' : ' '"
-          >
-            -
-          </button>
-          <p>{{ product.quantity }}</p>
-          <button
-            @click="
-              modifyQuantity(product, 1);
-              product.quantity++;
-            "
-          >
-            +
-          </button>
+          <div class="quantity-manager">
+            <div class="buttons">
+              <button
+                @click="
+                  product.quantity <= product.moq
+                    ? (product.quantity = product.moq)
+                    : modifyQuantity(product, -1);
+                  product.quantity--;
+                "
+                :class="product.quantity === product.moq ? 'greyed' : ' '"
+              >
+                -
+              </button>
+              <p>{{ product.quantity }}</p>
+              <button
+                @click="
+                  product.quantity >= product.stock
+                    ? (product.quantity = product.stock)
+                    : modifyQuantity(product, 1);
+                  product.quantity++;
+                "
+                :class="product.quantity === product.stock ? 'greyed' : ' '"
+              >
+                +
+              </button>
+            </div>
+            <p
+              :class="product.quantity >= product.stock ? 'maxStock' : 'faded'"
+            >
+              Stock maximal atteint
+            </p>
+          </div>
           <div class="total-article">
             <p class="totalHT">
-              Total article HT €
-              {{ (product.quantity * product.prix).toFixed(2) }}
+              Total article HT
+              {{ (product.quantity * product.prix).toFixed(2) }} €
             </p>
             <p class="totalTTC">
-              Total article TTC €
-              {{ (product.quantity * product.prix * 1.2).toFixed(2) }}
+              Total article TTC
+              {{ (product.quantity * product.prix * 1.2).toFixed(2) }} €
             </p>
           </div>
         </div>
       </div>
     </div>
     <div class="total-container">
-      <p>Grand total HT : € {{ this.priceTotal.toFixed(2) }}</p>
-      <p>Grand total TTC : € {{ (this.priceTotal * 1.2).toFixed(2) }}</p>
+      <p>Grand total HT : {{ this.priceTotal.toFixed(2) }} €</p>
+      <p>Grand total TTC : {{ (this.priceTotal * 1.2).toFixed(2) }} €</p>
       <button @click="modalToggle = !modalToggle">Commander</button>
     </div>
   </div>
   <div
     class="empty-cart"
     v-else-if="
-      this.$store.getters.getItemsInCart.length === 0 && groupe === 'USER'
+      this.$store.getters.getItemsInCart.length === 0 &&
+      groupe === 'USER' &&
+      success === ''
     "
   >
     Pas encore de produits dans le panier. Rendez vous sur notre page
     <router-link to="/produits">Produits</router-link>
+  </div>
+  <div class="success" v-else-if="success != ''">
+    <br />
+    <span style="color: green">{{ success }}</span>
+    <br /><br />
+    Redirection en cours ...
   </div>
   <div class="empty-cart" v-else>
     <br />
@@ -107,8 +131,8 @@
         <span v-html="msg5" v-if="msg5 != ''"></span>
       </div>
       <div class="modal-total">
-        <p>Grand total HT : € {{ this.priceTotal.toFixed(2) }}</p>
-        <p>Grand total TTC : € {{ (this.priceTotal * 1.2).toFixed(2) }}</p>
+        <p>Grand total HT : {{ this.priceTotal.toFixed(2) }} €</p>
+        <p>Grand total TTC : {{ (this.priceTotal * 1.2).toFixed(2) }} €</p>
       </div>
       <input class="confirmation" type="submit" value="Confirmer commande" />
     </form>
@@ -136,6 +160,7 @@ export default {
       msg5: " ",
       newOrder: {
         orderNumber: null,
+        date: "",
         titreProduits: [],
         prixUnitaire: [],
         prixArticles: [],
@@ -152,6 +177,7 @@ export default {
       adresse: "",
       postCode: "",
       city: "",
+      success: "",
     };
   },
   computed: {
@@ -222,6 +248,7 @@ export default {
         confirm("Voulez-vous valider la commande ?")
       ) {
         this.newOrder.orderNumber = this.listOfOrders.length + 1;
+        this.newOrder.date = new Date().toLocaleDateString();
         this.newOrder.entreprise = this.identite;
         for (let data of this.objectsInCart) {
           this.newOrder.titreProduits.push(data.titre);
@@ -229,11 +256,16 @@ export default {
           this.newOrder.prixArticles.push(data.prix * data.quantity);
           this.newOrder.quantité.push(data.quantity);
           this.newOrder.coutTotal += data.prix * data.quantity;
+          this.$store.commit("UPDATE_STOCK", data);
         }
 
         this.$store.dispatch("placeNewOrder", this.newOrder);
         localStorage.setItem("orders", JSON.stringify(this.listOfOrders));
         this.modalToggle = false;
+        this.success = "Commande enregistrée.";
+
+        setTimeout(() => (this.success = ""), 2500);
+        setTimeout(() => this.$router.push({ path: "/mes-commandes" }), 2500);
       }
     },
     loadCart() {
@@ -285,7 +317,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.success {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgb(231, 67, 39);
+  padding: 0 40px 30px 20px;
+}
+
 .confirmation-modal {
+  .close-modal {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 200;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 35px;
+  }
   form {
     position: fixed;
     top: 0;
@@ -314,17 +365,6 @@ export default {
         padding: 5px 10px;
         border-radius: 5px;
       }
-    }
-
-    .close-modal {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: none;
-      border: none;
-      cursor: pointer;
-      margin: 10px;
-      font-size: 35px;
     }
 
     .modal-total {
@@ -363,7 +403,7 @@ export default {
   .text-container {
     p {
       margin: 0 25px;
-      width: 500px;
+      width: 400px;
     }
 
     .product-title {
@@ -391,26 +431,43 @@ export default {
   flex-direction: column;
   align-items: flex-end;
   height: 100%;
-  width: 33%;
+  width: 50%;
 
   .quantity-container {
     width: 100%;
     display: flex;
     justify-content: flex-end;
 
-    button {
-      width: 25px;
-      height: 20px;
-      border-radius: 3px;
-      align-self: center;
-      background-color: rgb(228, 228, 228);
-      border: 1px solid black;
-      cursor: pointer;
-    }
+    .quantity-manager {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
 
-    .greyed {
-      border: 1px solid lightgrey;
-      color: lightgrey;
+      .maxStock {
+        color: rgb(231, 67, 39);
+      }
+      .faded {
+        opacity: 0;
+      }
+      .buttons {
+        display: flex;
+        justify-content: center;
+
+        button {
+          width: 25px;
+          height: 20px;
+          border-radius: 3px;
+          align-self: center;
+          background-color: rgb(228, 228, 228);
+          border: 1px solid black;
+          cursor: pointer;
+        }
+
+        .greyed {
+          border: 1px solid lightgrey;
+          color: lightgrey;
+        }
+      }
     }
 
     p {
@@ -418,6 +475,7 @@ export default {
       margin: 0 5px;
     }
     .total-article {
+      text-align: right;
       margin-left: 25px;
       line-height: 200%;
       font-size: 0.8em;
@@ -427,7 +485,7 @@ export default {
 }
 
 .total-container {
-  width: 66%;
+  width: 69%;
   display: flex;
   gap: 15px;
   font-weight: bold;
@@ -498,7 +556,8 @@ export default {
 
 @media screen and (max-width: 600px) {
   .empty-cart {
-    width: 80%;
+    padding-top: 50px;
+    width: 100%;
   }
 
   .panier-item-card {

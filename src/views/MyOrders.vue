@@ -1,13 +1,11 @@
 <template>
   <div class="order-container">
     <div class="order-list" v-if="!toggleCard">
-      <h1>Commandes</h1>
+      <h1>Mes Commandes</h1>
       <table>
         <thead>
           <tr>
-            <th>Numéro de commande</th>
             <th>Date de la commande</th>
-            <th>Identité de l'acheteur</th>
             <th>Total commande TTC</th>
             <th>État de la commande</th>
             <th></th>
@@ -15,11 +13,12 @@
         </thead>
         <tbody>
           <tr v-for="(data, index) in ordersList" :key="index">
-            <td>{{ data.orderNumber }}</td>
-            <td>{{ data.date }}</td>
-            <td>{{ data.entreprise }}</td>
-            <td>{{ (data.coutTotal * 1.2).toFixed(2) }} €</td>
+            <td v-if="data.entreprise === identite">{{ data.date }}</td>
+            <td v-if="data.entreprise === identite">
+              {{ (data.coutTotal * 1.2).toFixed(2) }} €
+            </td>
             <td
+              v-if="data.entreprise === identite"
               class="status-pending"
               :class="
                 data.delivered === false ? 'status-pending' : 'status-delivered'
@@ -30,7 +29,7 @@
                   : 'Commande livrée'
               "
             ></td>
-            <td>
+            <td v-if="data.entreprise === identite">
               <button
                 @click="
                   showDetail(data.orderNumber);
@@ -47,10 +46,7 @@
 
     <div class="order-card" v-if="toggleCard">
       <button class="close-card" @click="toggleCard = !toggleCard">X</button>
-      <h2>
-        Commande N° {{ this.currentOrder.orderNumber }} du
-        {{ this.currentOrder.date }}
-      </h2>
+      <h2>Commande du {{ this.currentOrder.date }}</h2>
       <div class="client">
         <div class="entreprise">
           <p class="bold">Commanditaire :</p>
@@ -117,13 +113,6 @@
           "
         ></p>
       </div>
-      <button
-        class="delivery-btn"
-        v-if="this.currentOrder.delivered === false"
-        @click="confirmDelivery()"
-      >
-        Confirmer la livraison
-      </button>
     </div>
   </div>
 </template>

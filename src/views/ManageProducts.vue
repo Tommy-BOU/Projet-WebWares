@@ -3,7 +3,11 @@
     <div class="product-inventory-container">
       <h1>Produits</h1>
       <div class="top-button">
-          <GeneralButton label="Ajouter un produit" @generalEvent="openModal" class="admin-general" />
+        <GeneralButton
+          label="Ajouter un produit"
+          @generalEvent="openModal"
+          class="admin-general"
+        />
       </div>
       <table>
         <thead>
@@ -14,6 +18,7 @@
             <th>Prix</th>
             <th>MOQ</th>
             <th>Catégorie</th>
+            <th>Stock restant</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -24,9 +29,10 @@
             </td>
             <td>{{ actualProduct.id }}</td>
             <td>{{ actualProduct.titre }}</td>
-            <td>{{ actualProduct.prix }}</td>
+            <td>{{ actualProduct.prix }} €</td>
             <td>{{ actualProduct.moq }}</td>
             <td>{{ actualProduct.categorieId }}</td>
+            <td>{{ actualProduct.stock }}</td>
             <td>
               <button
                 class="action-btns modify"
@@ -47,11 +53,11 @@
         </tbody>
       </table>
       <div class="top-button">
-      <GeneralButton
-              class="admin-general"
-                label="Ajouter un produit"
-                @generalEvent="openModal"
-              />
+        <GeneralButton
+          class="admin-general"
+          label="Ajouter un produit"
+          @generalEvent="openModal"
+        />
       </div>
     </div>
 
@@ -77,19 +83,39 @@
             required
           ></textarea>
           <br />
-          <label for="productPrice">Prix:</label>
-          <br>
-          <input type="number" id="productPrice" v-model="form.prix" step=".01" required>
-            <br>
+          <label for="productPrice">Prix (€):</label>
+          <br />
+          <input
+            type="number"
+            id="productPrice"
+            v-model="form.prix"
+            step=".01"
+            required
+          />
+          <br />
           <label for="productMoq">MOQ (Quantité minimale de commande):</label>
           <br />
           <input type="number" id="productMoq" v-model="form.moq" required />
           <br />
+          <label for="productStock">Stock :</label>
+          <br />
+          <input
+            type="number"
+            id="productStock"
+            v-model="form.stock"
+            required
+          />
+          <br />
           <label for="productCategory">Catégorie:</label>
           <br />
-          <select name="category" id="category" v-model="form.categorieId">
+          <select
+            name="category"
+            id="category"
+            v-model="form.categorieId"
+            class="category-options"
+          >
             <option
-              v-for="category in categories"
+              v-for="category in categoriesV"
               :key="category.id"
               :value="category.id"
             >
@@ -108,10 +134,15 @@
             type="file"
             id="productImage"
             @change="convertImageToBase64"
-            accept="image/*" />
+            accept="image/*"
+          />
           <br />
-          <textarea id="productImageBase64" v-model="form.image" hidden></textarea>
-        
+          <textarea
+            id="productImageBase64"
+            v-model="form.image"
+            hidden
+          ></textarea>
+
           <br />
           <button id="addButton" type="submit">
             {{ editingProduct ? "Modifier" : "Ajouter" }}
@@ -123,123 +154,130 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex';
-import GeneralButton from '@/components/GeneralButton.vue';
+import { mapState } from "vuex";
+import GeneralButton from "@/components/GeneralButton.vue";
 
 export default {
-    components: {
-        GeneralButton,
-    },
-    data() {
-        return {
-            openedModal: false,
-            editingProduct: false,
-            productIdCounter: 20,
-            // actualProducts: [...this.$store.state.produits],
-            form: {
-                id: null,
-                image: null,
-                titre: '',
-                description: '',
-                prix: null,
-                moq: null,
-                categorieId: null
-            },
-        }
-    },
-    computed: {
-        ...mapState(['produits', 'categories', 'actualProducts'])
-    },
-    methods: {
-        convertImageToBase64(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
+  components: {
+    GeneralButton,
+  },
+  data() {
+    return {
+      openedModal: false,
+      editingProduct: false,
+      productIdCounter: 20,
+      // actualProducts: [...this.$store.state.produits],
+      form: {
+        id: null,
+        image: null,
+        titre: "",
+        description: "",
+        prix: null,
+        moq: null,
+        categorieId: null,
+      },
+    };
+  },
+  computed: {
+    ...mapState(["produits", "categoriesV", "actualProducts"]),
+  },
+  methods: {
+    convertImageToBase64(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
 
-            reader.onload = () => {
-                const base64String = reader.result;
-                this.form.image = base64String;
-            };
+      reader.onload = () => {
+        const base64String = reader.result;
+        this.form.image = base64String;
+      };
 
-            if (file) {
-                reader.readAsDataURL(file);
-            }
-        },
-
-        remove(index) {
-            if (confirm("Etes-vous certain de vouloir supprimer ce produit ?")) {
-            this.$store.commit('REMOVE_FROM_STOCK', index);
-            }
-        },
-        add() {
-            this.$store.commit('ADD_NEW_PRODUCT', this.form);
-            this.closeModal();
-        },
-        edit() {
-            const index = this.actualProducts.findIndex(product => product.id === this.form.id);
-            if (index !== -1) {
-                this.$store.commit('EDIT_PRODUCT', { index, product: this.form });
-            }
-            this.closeModal();
-        },
-        openModal(index) {
-        if (index !== undefined) {
-            this.editingProduct = true;
-            const product = this.actualProducts[index];
-            this.form = { ...product }; // populates form with product data, enters edit mode
-        } else {
-            this.editingProduct = false;
-            this.form = { // Reset form for adding new product
-            // id: null,
-            image: null,
-            titre: '',
-            description: '',
-            prix: null,
-            moq: null,
-            categorieId: null,
-            };
-        }
-        this.openedModal = true;
-        },
-        closeModal() {
-        this.openedModal = false;
-        },
+      if (file) {
+        reader.readAsDataURL(file);
+      }
     },
-    // initializeActualProducts({ commit, state }) {
-    //   if (!state.actualProducts.length) {
-    //     commit('SET_ACTUAL_PRODUCTS', [...state.produits]);
-    //   }
-    // },
-    created() {
-        const storedActualProducts = JSON.parse(localStorage.getItem('actualProducts'));
-        if (storedActualProducts) {
-            this.$store.commit('SET_ACTUAL_PRODUCTS', storedActualProducts);
-        } else {
-            this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
-        }
-        let productIdCounter = localStorage.getItem("productIdCounter");
-        if (productIdCounter) {
-            productIdCounter = JSON.parse(localStorage.getItem("productIdCounter")).value
-        } else {
-            localStorage.setItem('productIdCounter', 20)
-        }
+
+    remove(index) {
+      if (confirm("Etes-vous certain de vouloir supprimer ce produit ?")) {
+        this.$store.commit("REMOVE_FROM_STOCK", index);
+      }
+    },
+    add() {
+      this.$store.commit("ADD_NEW_PRODUCT", this.form);
+      this.closeModal();
+    },
+    edit() {
+      const index = this.actualProducts.findIndex(
+        (product) => product.id === this.form.id
+      );
+      if (index !== -1) {
+        this.$store.commit("EDIT_PRODUCT", { index, product: this.form });
+      }
+      this.closeModal();
+    },
+    openModal(index) {
+      if (index !== undefined) {
+        this.editingProduct = true;
+        const product = this.actualProducts[index];
+        this.form = { ...product }; // populates form with product data, enters edit mode
+      } else {
+        this.editingProduct = false;
+        this.form = {
+          // Reset form for adding new product
+          // id: null,
+          image: null,
+          titre: "",
+          description: "",
+          prix: null,
+          moq: null,
+          categorieId: null,
+        };
+      }
+      this.openedModal = true;
+    },
+    closeModal() {
+      this.openedModal = false;
+    },
+  },
+  // initializeActualProducts({ commit, state }) {
+  //   if (!state.actualProducts.length) {
+  //     commit('SET_ACTUAL_PRODUCTS', [...state.produits]);
+  //   }
+  // },
+  created() {
+    const storedActualProducts = JSON.parse(
+      localStorage.getItem("actualProducts")
+    );
+    if (storedActualProducts) {
+      this.$store.commit("SET_ACTUAL_PRODUCTS", storedActualProducts);
+    } else {
+      this.$store.commit("SET_ACTUAL_PRODUCTS", [
+        ...this.$store.state.produits,
+      ]);
+    }
+    let productIdCounter = localStorage.getItem("productIdCounter");
+    if (productIdCounter) {
+      productIdCounter = JSON.parse(
+        localStorage.getItem("productIdCounter")
+      ).value;
+    } else {
+      localStorage.setItem("productIdCounter", 20);
     }
 
-
-}
+    this.$store.dispatch("updateCategoriesV");
+  },
+};
 </script>
 
 <style scoped>
-
-.admin-general{
-    background: none;
-    color: #4caf50;
-    border: 1px solid #4caf50;
+.admin-general {
+  background: none;
+  color: #4caf50;
+  border: 1px solid #4caf50;
 }
 
-.top-button{
-    width: 20%;
-    margin: 10px auto;
+.top-button {
+  width: 20%;
+  margin: 10px auto;
 }
 
 table {
@@ -324,10 +362,8 @@ button {
   border: 1px solid rgb(231, 67, 39);
 }
 
-
-
 #productInventory {
-    border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid lightgrey;
 }
 
 .modal {

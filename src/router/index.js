@@ -11,14 +11,12 @@ import ManageOrders from '../views/ManageOrders.vue'
 import ManageUsers from '../views/ManageUsers.vue'
 import ManageProducts from '../views/ManageProducts.vue'
 import ManageCategory from '../views/ManageCategory.vue'
-import FavoritesView from '../views/FavoritesView.vue'
+import MyFavorites from '../views/MyFavorites.vue'
+import MyOrders from '../views/MyOrders.vue'
 
 import TermesConditions from '../views/TermesConditions.vue'
 import PolitiqueDeConfidentialite from '../views/PolitiqueDeConfidentialite.vue'
 import MentionsLegales from '../views/MentionsLegales.vue'
-
-
-
 
 const routes = [
   {
@@ -72,7 +70,6 @@ const routes = [
     component: ManageUsers
   },
   {
-
     path: '/gestion-produits',
     name: 'gestion-produits',
     component: ManageProducts
@@ -98,11 +95,15 @@ const routes = [
     component: MentionsLegales
   },
   {
-    path: '/favoris' ,
-    name: 'favoris' ,
-    component: FavoritesView
+    path: '/mes-favoris',
+    name: 'mes-favoris',
+    component: MyFavorites
   },
-
+  {
+    path: '/mes-commandes',
+    name: 'mes-commandes',
+    component: MyOrders
+  }
 ]
 
 const router = createRouter({
