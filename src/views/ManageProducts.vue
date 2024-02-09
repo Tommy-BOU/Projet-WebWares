@@ -89,13 +89,14 @@
             type="number"
             id="productPrice"
             v-model="form.prix"
+            min="0.01"
             step=".01"
             required
           />
           <br />
           <label for="productMoq">MOQ (Quantité minimale de commande):</label>
           <br />
-          <input type="number" id="productMoq" v-model="form.moq" required />
+          <input type="number" id="productMoq" min="0" v-model="form.moq" required />
           <br />
           <label for="productStock">Stock :</label>
           <br />
@@ -103,6 +104,7 @@
             type="number"
             id="productStock"
             v-model="form.stock"
+            min="0"
             required
           />
           <br />
