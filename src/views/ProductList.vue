@@ -187,6 +187,7 @@ export default {
         this.$store.commit('SET_ACTUAL_PRODUCTS', [...this.$store.state.produits]);
     }
 
+    this.$store.dispatch('initializeCategories');
     this.$store.dispatch('initializeActualProducts');
     this.filteredProducts = this.actualProducts;
     this.$store.dispatch('updateCategoriesV');

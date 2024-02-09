@@ -185,7 +185,9 @@ export default {
     {
       localStorage.setItem("users", JSON.stringify(this.users));
     }
+    this.$store.dispatch('initializeCategories');
   }
+  
 };
 </script>
 

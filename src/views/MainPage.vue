@@ -143,6 +143,7 @@ export default {
 
       this.$store.commit("CHANGE_IDENTITY", this.identite);
     }
+    this.$store.dispatch('initializeCategories');
   },
 };
 </script>

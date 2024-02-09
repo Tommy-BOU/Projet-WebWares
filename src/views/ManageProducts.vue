@@ -225,6 +225,7 @@ export default {
         }
 
         this.$store.dispatch('updateCategoriesV');
+        this.$store.dispatch('initializeCategories');
     }
 
 
