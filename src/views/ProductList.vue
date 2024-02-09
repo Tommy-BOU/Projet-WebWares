@@ -326,6 +326,7 @@ export default {
       ]);
     }
 
+    this.$store.dispatch('initializeCategories');
     this.$store.dispatch("initializeActualProducts");
     this.filteredProducts = this.actualProducts;
     this.$store.dispatch("updateCategoriesV");

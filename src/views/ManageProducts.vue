@@ -265,6 +265,8 @@ export default {
       localStorage.setItem("productIdCounter", 20);
     }
 
+    this.$store.dispatch('initializeCategories');
+  
     this.$store.dispatch("updateCategoriesV");
   },
 };
